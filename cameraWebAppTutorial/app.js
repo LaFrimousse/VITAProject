@@ -24,3 +24,5 @@ cameraTrigger.onclick = function() {
     cameraOutput.src = cameraSensor.toDataURL("image/webp");
     cameraOutput.classList.add("taken");
 };
+
+window.addEventListener("load", cameraStart, false);
