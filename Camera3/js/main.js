@@ -7,6 +7,8 @@
  */
 'use strict';
 
+document.getElementById("jsIdentifier").innerHTML = "js Identifer : 23"
+
 // Put variables in global scope to make them available to the browser console.
 const constraints = window.constraints = {
   audio: false,
@@ -43,6 +45,7 @@ function errorMsg(msg, error) {
 }
 
 async function init(e) {
+  console.log("Intialisation")
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     handleSuccess(stream);
