@@ -1,8 +1,10 @@
 'use strict'
 
 /*The 3 html objects that appear until now*/
-let startStopRecordingButton = document.getElementById("startStopRecordingButton")
-let mirrorVideoButton = document.getElementById("mirrorVideoButton")
+var startStopRecordingButton = document.getElementById("startStopRecordingButton")
+var mirrorVideoButton = document.getElementById("mirrorVideoButton")
+var takePictureButton = document.getElementById("takePicture")
+var photo = document.getElementById("monImage")
 
 
 
@@ -28,4 +30,12 @@ mirrorVideoButton.addEventListener("click", function(){
   }else{
     videoElement.classList.add("mirrored");
   }
+})
+
+takePictureButton.addEventListener("click", function(){
+  var data = cameraModule.takePicture()
+  if(data != null){
+    photo.setAttribute('src', data);
+  }
+
 })

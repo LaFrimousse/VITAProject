@@ -2,7 +2,8 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/camera.css" />
     <title>Camera Try</title>
     <!--A <meta> viewport element gives the browser instructions on how to control the page's dimensions and scaling.
     -->
@@ -10,9 +11,18 @@
   </head>
   <body>
 
-    <video id="videoElement" autoplay playsinline poster="images/src.png"></video>
+    <video id="videoElement" autoplay playsinline poster="images/videoElementPoster.jpg"></video>
+    <canvas id="videoBackedUpCanvas" width="300" height="300"></canvas>
+    <img id = "monImage" src="images/src.png" alt="Photo de montagne"/>
+    <p>
     <button id="startStopRecordingButton">Open camera</button>
     <button id="mirrorVideoButton">Mirror video</button>
+    <button id="takePicture">Take a Picture</button>
+    </p>
+
+
+
+
 
 
   <script src="cameraModule.js"></script>
