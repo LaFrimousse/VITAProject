@@ -172,3 +172,7 @@ var loadPhotosToPictureTaken = function(datas){
 
     }
   }
+
+  for (var i = 0; i<100;i++){
+    addAPhotoToPicturesTaken("images/cat0.png")
+  }

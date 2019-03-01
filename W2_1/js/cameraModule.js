@@ -17,7 +17,7 @@ var cameraModule = (function () {
   const vgaConstraints = {
     video: {width: {exact: 640}, height: {exact: 480}}
   };
-  const hdConstraints = {
+  const hdconstraints = {
     video: {width: {min: 1280}, height: {min: 720}}
   };
 
@@ -45,7 +45,7 @@ var cameraModule = (function () {
       }
       /*With the following three lines of code we can already film ourself */
 
-      navigator.mediaDevices.getUserMedia(constraints).//or vgaConstraints or hd Constraints
+      navigator.mediaDevices.getUserMedia(hdconstraints).//or vgaConstraints or hd Constraints
       then((stream) => {
         videoElement.srcObject = stream
         this.isCameraOpen = true

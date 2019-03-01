@@ -4,14 +4,17 @@
 
 #pictureTakenPerCategory{
   border: 1px solid ;
-  height: 100px;
+  /*height: 200px;*/
   display: flex;
-  overflow: -moz-scrollbars-vertical;
-  overflow-y: scroll;
+  flex-wrap: wrap-reverse;
+  /*justify-content: center;*/
+  /*overflow: -moz-scrollbars-vertical;
+  overflow-y: scroll;*/
   padding: 5px;
 }
 
 #pictureTakenPerCategory * {
   display: block;
   margin-right: 5px;
+  margin-bottom: 5px;
 }
