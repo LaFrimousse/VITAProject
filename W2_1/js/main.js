@@ -13,6 +13,7 @@ var categorySelectedImg = document.getElementById("categoryChoosenImg")
 /*Some helpers variables*/
 var timeIntervalBetweenPictures = 1.0
 var isActuallyTakingPicture = false
+var pictureAutomaticInterval = null
 var indexOfCategorySelected = -1
 
 
@@ -113,6 +114,12 @@ var startTakingPictures = function(){
   isActuallyTakingPicture  = true
   startStopTakingPicturesButton.innerHTML = "stop taking pictures"
   console.log("starting to take pictures")
+   pictureAutomaticInterval = window.setInterval(function(){
+    var data = cameraModule.takePicture()
+    if(data != null){
+      photo.setAttribute('src', data);
+    }
+  }, 1000);
 }
 var stopTakingPictures = function(){
   if(!isActuallyTakingPicture){
@@ -121,6 +128,7 @@ var stopTakingPictures = function(){
   isActuallyTakingPicture = false
   startStopTakingPicturesButton.innerHTML = "start taking pictures"
   console.log("stop taking pictures")
+  window.clearInterval(pictureAutomaticInterval)
 }
 
 
