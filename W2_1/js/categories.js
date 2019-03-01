@@ -16,15 +16,23 @@ var categories = (function () {
     }
   ]
 
+  var empty2DArray = function(){
+    var emptyArray = []
+    allCategories.forEach(function(element) {
+      emptyArray.push([])
+    })
+    return emptyArray
+  }
+
   /*empty initialized*/
-  var picturesTakenPerCategory = [[]]
+  var picturesTakenPerCategory = empty2DArray()
 
   /* When the camera module took a picture, we can decide to save it in this class under a particular category*/
   var appendPictureToACat = function(atIndex, picture){
-      picturesTakenPerCategory[atIndex].push(picture)
+    picturesTakenPerCategory[atIndex].push(picture)
   }
 
- /*Return all the pictures that were previously stored for a particula category*/
+  /*Return all the pictures that were previously stored for a particula category*/
   var pictureTakenForACat = function(catIndex){
     return picturesTakenPerCategory[catIndex]
   }

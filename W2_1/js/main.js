@@ -7,11 +7,10 @@ var startStopTakingPicturesButton = document.getElementById("startStopTakingPict
 var categorySelector = document.getElementById("categorySelector")
 
 /*Other DOM elements*/
-var photo = document.getElementById("monImage")
 var categorySelectedImg = document.getElementById("categoryChoosenImg")
 
 /*Some helpers variables*/
-var timeIntervalBetweenPictures = 1.0
+var timeIntervalBetweenPictures = 1000/*1 sec*/
 var isActuallyTakingPicture = false
 var pictureAutomaticInterval = null
 var indexOfCategorySelected = -1
@@ -30,6 +29,12 @@ categorySelector.addEventListener("change", function(){
   categorySelectedImg.setAttribute('src', categories.allCategories[indexOfCategorySelected].imageURL);
   /*set the startStopTakingPicturesButton visible if it was not before*/
   startStopTakingPicturesButton.style.visibility = "visible";
+  /*stop to take pictures if the user was trying it...*/
+  stopTakingPictures()
+  /*load the previously taken photos*/
+
+  var datas = categories.pictureTakenForACat(indexOfCategorySelected)
+  loadPhotosToPictureTaken(datas)
 });
 
 /*open the camera and change the text of the openCloseCameraButton accordingly*/
@@ -107,19 +112,16 @@ var startTakingPictures = function(){
   if(isActuallyTakingPicture){
     return
   }
-  /*var data = cameraModule.takePicture()
+
+isActuallyTakingPicture  = true
+startStopTakingPicturesButton.innerHTML = "stop taking pictures"
+console.log("starting to take pictures")
+pictureAutomaticInterval = window.setInterval(function(){
+  var data = cameraModule.takePicture()
   if(data != null){
-    photo.setAttribute('src', data);
-  }*/
-  isActuallyTakingPicture  = true
-  startStopTakingPicturesButton.innerHTML = "stop taking pictures"
-  console.log("starting to take pictures")
-   pictureAutomaticInterval = window.setInterval(function(){
-    var data = cameraModule.takePicture()
-    if(data != null){
-      photo.setAttribute('src', data);
-    }
-  }, 1000);
+    proceedPhotoTakenForCreatingTrainingSet(data)
+  }
+}, timeIntervalBetweenPictures);
 }
 var stopTakingPictures = function(){
   if(!isActuallyTakingPicture){
@@ -139,3 +141,34 @@ mirrorVideoButton.addEventListener("click", function(){
     videoElement.classList.add("mirrored");
   }
 })
+
+var proceedPhotoTakenForCreatingTrainingSet = function(data){
+  var actualCategory = categories.allCategories[indexOfCategorySelected].title
+  console.log("Should send a picture to the server now for the category " +actualCategory)
+  categories.appendPictureToACat(indexOfCategorySelected, data)
+  /*save the points from the server here also once you get the server answer*/
+  addAPhotoToPicturesTaken(data)
+}
+
+
+
+
+var pictureTakenPerCategoryDiv = document.getElementById("pictureTakenPerCategory")
+
+var addAPhotoToPicturesTaken = function(data){
+  var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
+  newImg.src = data
+  pictureTakenPerCategoryDiv.appendChild(newImg)
+}
+
+var loadPhotosToPictureTaken = function(datas){
+  //empty the existing pictures
+  while (pictureTakenPerCategoryDiv.firstChild) {
+    pictureTakenPerCategoryDiv.removeChild(pictureTakenPerCategoryDiv.firstChild);
+}
+  if(Array.isArray(datas)){
+    datas.forEach(function(data){
+      addAPhotoToPicturesTaken(data)})
+
+    }
+  }
