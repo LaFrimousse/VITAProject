@@ -1,0 +1,10 @@
+#videoElement{
+  border: 1px solid ;
+  width: 33%;
+  display: block;
+  margin: auto;
+}
+
+#videoBackedUpCanvas{
+  display: none;
+}
