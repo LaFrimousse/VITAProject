@@ -1,3 +1,8 @@
+#startStopRecordingButton{
+  display: block;
+  margin: auto;
+}
+
 #videoElement{
   border: 1px solid ;
   width: 33%;
@@ -7,4 +12,11 @@
 
 #videoBackedUpCanvas{
   display: none;
+}
+
+
+#startStopTakingPictures{
+  display: block;
+  visibility: hidden;
+  margin: auto;
 }

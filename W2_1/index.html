@@ -12,17 +12,20 @@
   </head>
   <body>
 
+    <button id="startStopRecordingButton">Open camera</button>
     <!--For the camera module: the videoElement is the DOM element in which the video stream captured by
       the camera is rendered-->
     <video id="videoElement" autoplay playsinline poster="images/videoElementPoster.jpg"></video>
     <!--For the camera module: the videoBackedUpCanvas is the DOM element in which a particular frame of the video stream is rendered before getting turned into a data each time the camera module is asked to take a picture.
     This element is not visible on the html page because its display style is none.-->
     <canvas id="videoBackedUpCanvas" width="300" height="300"></canvas>
+    
+    <button id="startStopTakingPictures">Take Pictures</button>
     <img id = "monImage" src="images/src.png" alt="Photo de montagne"/>
     <p>
-    <button id="startStopRecordingButton">Open camera</button>
+
     <button id="mirrorVideoButton">Mirror video</button>
-    <button id="takePicture">Take a Picture</button>
+
     </p>
 
     <p>
@@ -36,8 +39,8 @@
 
 
 
-  <script src="categories.js"></script>
-  <script src="cameraModule.js"></script>
-  <script src="main.js"></script>
+  <script src="js/cameraModule.js"></script>
+  <script src="js/categories.js"></script>
+  <script src="js/main.js"></script>
   </body>
 </html>

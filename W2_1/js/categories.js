@@ -3,16 +3,16 @@
 var categories = (function () {
   var allCategories  = [
     {
+      "title":"Categorie0",
+      "imageURL":"images/cat0.png"
+    },
+    {
       "title":"Categorie1",
       "imageURL":"images/cat1.png"
     },
     {
       "title":"Categorie2",
       "imageURL":"images/cat2.png"
-    },
-    {
-      "title":"Categorie3",
-      "imageURL":"images/cat3.png"
     }
   ]
 
@@ -36,15 +36,3 @@ var categories = (function () {
   }
 
 })();
-
-var categorySelector = document.getElementById("categorySelector")
-categories.allCategories.forEach(function (cat) {
-  categorySelector.insertAdjacentHTML("beforeend", '<option>'+cat.title+'</option>')
-})
-
-
-var categoryChoosenImg = document.getElementById("categoryChoosenImg")
-categorySelector.addEventListener("change", function(){
-categoryChoosenImg.setAttribute('src', categories.allCategories[categorySelector.selectedIndex-1].imageURL);
-  console.log(categorySelector.selectedIndex)
-});
