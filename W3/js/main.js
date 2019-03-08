@@ -147,6 +147,11 @@ mirrorVideoButton.addEventListener("click", function(){
   }else{
     videoElement.classList.add("mirrored");
   }
+  if(mirrorVideoButton.classList.contains("mirrored")){
+    mirrorVideoButton.classList.remove("mirrored");
+  }else{
+    mirrorVideoButton.classList.add("mirrored");
+  }
 })
 
 var proceedPhotoTakenForCreatingTrainingSet = function(data){

@@ -35,6 +35,17 @@
 
 }
 
+#mirrorVideoButton{
+  opacity: 0.8;
+  padding: 2px;
+  position: absolute;
+  bottom:0px;
+  left:0px;
+  width:35px;
+  height: 35px;
+
+}
+
 /*The canvas in the one the picture taken are rendered before being turned in an image*/
 #videoBackedUpCanvas{
   display: none;
