@@ -120,19 +120,7 @@
 
 
 
-  var proceedPhotoTakenForCreatingTrainingSet = function(data) {
-    var actualCategory = categoriesStorage.allCategories[indexOfCategorySelected].title
-    console.log("Should send a picture to the server now for the category " + actualCategory)
-    categoriesStorage.appendPictureToACat(indexOfCategorySelected, data)
-    /*save the points from the server here also once you get the server answer*/
-    addAPhotoToPicturesTaken(data)
-  }
-
-  var addAPhotoToPicturesTaken = function(data) {
-    var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
-    newImg.src = data
-    //pictureTakenPerCategoryDiv.appendChild(newImg)
-  }
+  
 
 
 })(window);

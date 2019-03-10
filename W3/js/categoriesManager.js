@@ -42,11 +42,18 @@
       if (elemToHide.classList.contains("notDisplayed")) {
         elemToHide.classList.remove("notDisplayed");
       }
+      showPicturesTakenForACategory();
     }
 
 
 
-    var loadPhotosToPictureTaken = function() {
+    var showPicturesTakenForACategory = function() {
+
+      if (indexOfCategorySelected == -1){
+        console.error("CategoriesManager: no picture to show for a category of index -1")
+        return ;
+      }
+
       //empty the existing pictures
       while (pictureTakenPerCategoryDiv.firstChild) {
         pictureTakenPerCategoryDiv.removeChild(pictureTakenPerCategoryDiv.firstChild);
@@ -54,11 +61,24 @@
 
       var datas = categoriesStorage.pictureTakenForACat(indexOfCategorySelected)
       //and fill with the new pictures if availables
-      if (Array.isArray(datas)) {
         datas.forEach(function(data) {
           addAPhotoToPicturesTaken(data)
         })
-      }
+
+
+        if (datas.length > 0){
+          pictureTakenPerCategoryDiv.style.display = "flex"
+        }else{
+          pictureTakenPerCategoryDiv.style.display = "none"
+        }
+
+
+    }
+
+    var addAPhotoToPicturesTaken = function(data) {
+      var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
+      newImg.src = data
+      pictureTakenPerCategoryDiv.appendChild(newImg)
     }
 
 
@@ -69,7 +89,7 @@
       categorySelectedImg.setAttribute('src', categoriesStorage.categories[indexOfCategorySelected].imageURL);
 
       /*load the previously taken photos in the div element*/
-      loadPhotosToPictureTaken()
+      showPicturesTakenForACategory()
     });
 
 

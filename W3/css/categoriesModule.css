@@ -16,7 +16,7 @@ border: 1px solid green;
 #pictureTakenPerCategory{
   border: 1px solid ;
   /*height: 200px;*/
-  display: flex;
+  display: none;
   flex-wrap: wrap-reverse;
   /*justify-content: center;*/
   /*overflow: -moz-scrollbars-vertical;
