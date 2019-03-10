@@ -48,7 +48,7 @@
       if (hasMedia) {
         return true
       } else {
-        alert("getUserMedia() is not supported by your browser, you won't be able to use this web page!");
+        alert("getUserMedia() is not supported by your browser, you won't be able to use this web application!");
         return false
       }
     }
@@ -58,9 +58,7 @@
     var openCamera = function(callback) {
 
       if (this.isCameraOpen || !hasUserMedia()) {
-        if (verbose) {
-          console.log("Cannot open the camera if it is already open or doesn't have a camera")
-        }
+        console.error("Camera: Cannot open the camera if it is already open or not available")
         if (typeof(callback) != "undefined") {
           callback(false)
         }
@@ -76,16 +74,14 @@
           callback(true)
         }
         if (verbose) {
-          console.log("Just opened the camera")
+          console.log("Camera: Just opened the camera")
         }
       }).catch(function(error) {
-        console.error("Error: Promise Rejected", error)
+        console.error("Camera: Error: Promise Rejected", error)
         if (typeof(callback) != "undefined") {
           callback(false)
         }
-        if (verbose) {
-          console.log("Failed to open the camera")
-        }
+        console.error("Camera: Failed to open the camera")
       });
     }
 
@@ -96,9 +92,8 @@
         if (typeof(callback) != "undefined") {
           callback(false)
         }
-        if (verbose) {
-          console.log("Cannot close the camera that is already closed")
-        }
+        console.error("Camera: Cannot close the camera that is already closed")
+
         return
       }
 
@@ -115,16 +110,15 @@
         callback(true)
       }
       if (verbose) {
-        console.log("Just closed the camera")
+        console.log("Camera: Just closed the camera")
       }
     }
 
     var takePicture = function() {
       //cannot take picture if camera is closed
       if (!this.isCameraOpen) {
-        if (verbose) {
-          console.log("Cannot take a picture if the camera is closed")
-        }
+        console.error("Camera: Cannot take a picture if the camera is closed")
+
         return null
       }
 
@@ -140,7 +134,7 @@
       var data = canvas.toDataURL('image/jpeg', 1.0)
 
       if (verbose) {
-        console.log("Took a picture, rendered it in a canvas of size" + width +
+        console.log("Camera: Took a picture, rendered it in a canvas of size" + width +
           " (width) X " + height + " (height)")
       }
 

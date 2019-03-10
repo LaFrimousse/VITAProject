@@ -17,6 +17,10 @@
     /*open the camera and change the image and alpha of the openCloseCameraButton accordingly*/
     var openCamera = function(callback) {
 
+      if (verbose) {
+        console.log("CameraManager: Was asked to open the camera");
+      }
+
       var cb = function(success) {
         if (success) {
           openCloseCameraButton.src = "images/closeCameraButton.png"
@@ -40,6 +44,10 @@
     /*close the camera and change the image and alpha of the openCloseCameraButton accordingly*/
     var closeCamera = function(callback) {
 
+      if (verbose) {
+        console.log("CameraManager: Was asked to close the camera");
+      }
+
       var cb = function(success) {
         if (success) {
           openCloseCameraButton.src = "images/openCameraButton.png"
@@ -60,14 +68,20 @@
     }
 
     var showMirrorButton = function() {
-      if (mirrorVideoButton.classList.contains("hidden")) {
-        mirrorVideoButton.classList.remove("hidden");
+      if (verbose) {
+        console.log("CameraManager: Will show the mirror button");
+      }
+      if (mirrorVideoButton.classList.contains("notDisplayed")) {
+        mirrorVideoButton.classList.remove("notDisplayed");
       }
     }
 
     var hideMirrorButton = function() {
-      if (!mirrorVideoButton.classList.contains("hidden")) {
-        mirrorVideoButton.classList.add("hidden");
+      if (verbose) {
+        console.log("CameraManager: Will hide the mirror button");
+      }
+      if (!mirrorVideoButton.classList.contains("notDisplayed")) {
+        mirrorVideoButton.classList.add("notDisplayed");
       }
     }
 
@@ -100,19 +114,20 @@
 
     /*open the camera if not and then take some pictures*/
     var willStartTakingPictures = function(timeIntervalBetweenPictures, callback) {
+
       if (Camera.isCameraOpen) {
-        if(verbose){
-          console.log("The camera is open, let's start to take pictures")
+        if (verbose) {
+          console.log("CameraManager: Was asked to start taking pictures");
         }
         startTakingPictures(timeIntervalBetweenPictures, callback)
       } else {
-        if(verbose){
-          console.log("The camera not is open, let's start to open it before taking pictures")
+        if (verbose) {
+          console.log("CameraManager: Was asked to start taking pictures, but before we need to open the camera");
         }
         var cb = function(success) {
           if (success) {
-            if(verbose){
-              console.log("The camera is open, let's start to take pictures")
+            if (verbose) {
+              console.log("CameraManager: The camera is open, let's start to take pictures")
             }
             startTakingPictures(timeIntervalBetweenPictures, callback)
           }
@@ -122,16 +137,14 @@
     }
 
     var startTakingPictures = function(timeIntervalBetweenPictures, callback) {
-      if(pictureAutomaticInterval != null){
-        if (verbose){
-          console.log("Cannot start to take pictures if it is already taking pictures")
-        }
+      if (pictureAutomaticInterval != null) {
+        console.error("CameraManager: Cannot start to take pictures if it is already taking pictures")
         return;
       }
 
       startStopTakingPicturesButton.innerHTML = "stop taking pictures"
       if (verbose) {
-        console.log("starting to take pictures")
+        console.log("CameraManager: creating an interval to take pictures each " + timeIntervalBetweenPictures +" ms")
       }
       pictureAutomaticInterval = window.setInterval(function() {
         var data = Camera.takePicture()
@@ -144,11 +157,10 @@
     var stopTakingPictures = function() {
       startStopTakingPicturesButton.innerHTML = "start taking pictures"
       if (verbose) {
-        console.log("stop taking pictures")
+        console.log("CameraManager: killing the interval that took automatically pictures")
       }
       window.clearInterval(pictureAutomaticInterval)
       pictureAutomaticInterval = null
-      console.log("Now the interval is " + pictureAutomaticInterval)
     }
 
     var showReadyToRecordButton = function() {
