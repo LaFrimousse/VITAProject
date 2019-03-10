@@ -4,7 +4,7 @@
 #videoElementContainer{
   /*No padding or margin in this element since the 2 children are abolutely align.
   But can create a parent div if a external border is really wanted*/
-  background: red;
+  background: white;
   position: relative;
   width: 50%;
   margin: auto;

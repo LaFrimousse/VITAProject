@@ -26,9 +26,23 @@
       categoriesStorage.appendPictureToACat(indexOfCategorySelected, picture);
     }
 
+    var appendPointsToACat = function(points) {
+      categoriesStorage.appendPointsToACat(indexOfCategorySelected, points);
+    }
 
-    var hide = 'undefined'
-    var show = 'undefined'
+
+    var hide = function(){
+      var elemToHide = document.getElementById("categoriesModule")
+      if (!elemToHide.classList.contains("notDisplayed")) {
+        elemToHide.classList.add("notDisplayed");
+      }
+    }
+    var show = function(){
+      var elemToHide = document.getElementById("categoriesModule")
+      if (elemToHide.classList.contains("notDisplayed")) {
+        elemToHide.classList.remove("notDisplayed");
+      }
+    }
 
 
 
@@ -61,9 +75,10 @@
 
 
     return {
-      hide: hide,
-      show: show,
-      appendPictureToACat: appendPictureToACat
+      hideElements: hide,
+      showElements: show,
+      appendPictureToACat: appendPictureToACat,
+      appendPointsToACat: appendPointsToACat
     }
   })();
 

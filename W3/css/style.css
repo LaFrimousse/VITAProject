@@ -8,8 +8,12 @@
    opacity: 0.8;
 }
 
-.notDisplayed{ 
+.notDisplayed{
   display: none;
+}
+
+.hidden{
+  visibility: hidden;
 }
 
 img{

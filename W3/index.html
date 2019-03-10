@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/cameraModule.css" />
-  <link rel="stylesheet" href="css/categories.css" />
+  <link rel="stylesheet" href="css/categoriesModule.css" />
   <title>Camera Try</title>
   <!--A <meta> viewport element gives the browser instructions on how to control the page's dimensions and scaling.
     -->
@@ -29,7 +29,7 @@
 
     <img id="openCloseCameraButton" src="images/openCameraButton.png" />
 
-    <img id="mirrorVideoButton" src="images/mirror.png" class="notDisplayed"/>
+    <img id="mirrorVideoButton" src="images/mirror.png" class="notDisplayed" />
 
   </div>
 
@@ -40,15 +40,14 @@
   <button id="startStopTakingPictures">Take Pictures</button>
 
 
-  <p>
-    <select name="categoryChoosen" id="categorySelector">
-      <option disabled selected value> -- Please select a category -- </option>
-    </select>
-  </p>
-  <img id="categoryChoosenImg" src="images/questionMark.jpg" />
-
-  <div id="pictureTakenPerCategory">
-
+  <div id="categoriesModule">
+    <div id="categorySelected">
+      <select name="categoryChoosen" id="categorySelector">
+        <option disabled selected value> -- Please select a category -- </option>
+      </select>
+      <img id="categoryChoosenImg" src="images/questionMark.jpg" />
+    </div>
+    <div id="pictureTakenPerCategory"></div>
   </div>
 
 
@@ -61,6 +60,7 @@
   <script src="js/cameraManager.js"></script>
   <script src="js/categoriesStorage.js"></script>
   <script src="js/CategoriesManager.js"></script>
+  <script src="js/server.js"></script>
   <script src="js/main.js"></script>
 </body>
 

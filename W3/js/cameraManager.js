@@ -11,11 +11,13 @@
     var openCloseCameraButton = document.getElementById("openCloseCameraButton")
     var mirrorVideoButton = document.getElementById("mirrorVideoButton")
     var startStopTakingPicturesButton = document.getElementById("startStopTakingPictures")
-    var mirrorVideoButton = document.getElementById("mirrorVideoButton")
+    //(needed for the animation only)
+    var videoElement = document.getElementById("videoElement")
+
 
 
     /*open the camera and change the image and alpha of the openCloseCameraButton accordingly*/
-    var openCamera = function(callback) {
+    var openCamera = function(callback, showMirror) {
 
       if (verbose) {
         console.log("CameraManager: Was asked to open the camera");
@@ -31,7 +33,9 @@
           if (typeof(callback) != "undefined") {
             callback(true)
           }
-          showMirrorButton()
+          if (showMirror != false) {
+            showMirrorButton()
+          }
         } else {
           if (typeof(callback) != "undefined") {
             callback(false)
@@ -132,11 +136,12 @@
             startTakingPictures(timeIntervalBetweenPictures, callback)
           }
         }
-        openCamera(cb)
+        openCamera(cb, false)
       }
     }
 
     var startTakingPictures = function(timeIntervalBetweenPictures, callback) {
+      hideMirrorAndOpenCloseButton()
       if (pictureAutomaticInterval != null) {
         console.error("CameraManager: Cannot start to take pictures if it is already taking pictures")
         return;
@@ -144,10 +149,11 @@
 
       startStopTakingPicturesButton.innerHTML = "stop taking pictures"
       if (verbose) {
-        console.log("CameraManager: creating an interval to take pictures each " + timeIntervalBetweenPictures +" ms")
+        console.log("CameraManager: creating an interval to take pictures each " + timeIntervalBetweenPictures + " ms")
       }
       pictureAutomaticInterval = window.setInterval(function() {
         var data = Camera.takePicture()
+        animePictureTaken()
         if (data != null) {
           callback(data)
         }
@@ -155,6 +161,7 @@
     }
 
     var stopTakingPictures = function() {
+      showMirrorAndOpenCloseButton()
       startStopTakingPicturesButton.innerHTML = "start taking pictures"
       if (verbose) {
         console.log("CameraManager: killing the interval that took automatically pictures")
@@ -165,6 +172,35 @@
 
     var showReadyToRecordButton = function() {
       startStopTakingPicturesButton.style.visibility = "visible";
+    }
+
+    var animePictureTaken = function() {
+
+      if (!videoElement.classList.contains("hidden")) {
+        videoElement.classList.add("hidden");
+      }
+
+      var myTimeout = window.setTimeout(function() {
+        if (videoElement.classList.contains("hidden")) {
+          videoElement.classList.remove("hidden");
+        }
+      }, 50);
+    }
+
+    var hideMirrorAndOpenCloseButton = function() {
+      [mirrorVideoButton, openCloseCameraButton].forEach(function(element) {
+        if (!element.classList.contains("notDisplayed")) {
+          element.classList.add("notDisplayed");
+        }
+      })
+    }
+
+    var showMirrorAndOpenCloseButton = function() {
+      [mirrorVideoButton, openCloseCameraButton].forEach(function(element) {
+        if (element.classList.contains("notDisplayed")) {
+          element.classList.remove("notDisplayed");
+        }
+      })
     }
 
 

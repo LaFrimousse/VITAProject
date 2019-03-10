@@ -4,6 +4,7 @@
   var App = window.App;
   var CategoriesManager = App.CategoriesManager;
   var CameraManager = App.CameraManager;
+  var Server = App.Server;
 
   var StateEnum = Object.freeze({
     INITIAL: 0,
@@ -54,10 +55,17 @@
 
           case UserInteraction.START_STOP_TAKING_PICTURE:
             CameraManager.startTakingPictures(1000, function(data) {
-              if(verbose){
-                console.log("a data has been received in main.js")
+              var callback = function(pointsFromServer){
+                if(pointsFromServer == 'undefined' || pointsFromServer == null){
+                  log.console.error("Main: the server was not able to proceed an image and turning back an array of points as expected");
+                }else{
+                  CategoriesManager.appendPictureToACat(data);
+                  CategoriesManager.appendPointsToACat(pointsFromServer);
+                }
               }
+              Server.getPointsForImage(data,callback)
             })
+            CategoriesManager.hideElements()
             actualState = StateEnum.TAKING_PICTURE;
             break;
           default:
@@ -72,6 +80,7 @@
           case UserInteraction.OPEN_OR_CLOSE_CAMERA:
           case UserInteraction.START_STOP_TAKING_PICTURE:
             CameraManager.stopTakingPictures()
+            CategoriesManager.showElements()
             actualState = StateEnum.CATEGORY_CHOOSEN;
             break;
           default:

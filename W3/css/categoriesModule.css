@@ -1,3 +1,14 @@
+#categoriesModule{
+border: 1px solid green;
+}
+
+#categorySelected{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 #categoryChoosenImg{
   height: 200px;
 }
