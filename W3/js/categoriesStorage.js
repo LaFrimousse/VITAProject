@@ -1,60 +1,60 @@
-'use strict'
+(function(window) {
+  'use strict';
 
-var categoriesStorage = (function () {
-  var allCategories  = [
-    {
-      "title":"Categorie0",
-      "imageURL":"images/cat0.png"
-    },
-    {
-      "title":"Categorie1",
-      "imageURL":"images/cat1.png"
-    },
-    {
-      "title":"Categorie2",
-      "imageURL":"images/cat2.png"
-    }
-  ]
+  var App = window.App || {};
 
-/*return an empty 2d array of same lenght than allcategories, in order to add pictures and point later at the same indexes than the categories allows to*/
-  var empty2DArray = function(){
+  /*return an empty 2d array of same lenght than allcategories, in order to add pictures and point later at the same indexes than the categories allows to*/
+  function empty2DArray(categories) {
     var emptyArray = []
-    allCategories.forEach(function(element) {
+    categories.forEach(function(element) {
       emptyArray.push([])
     })
     return emptyArray
   }
 
-  /*empty initialized*/
-  var picturesTakenPerCategory = empty2DArray()
-  var pointsTakenPerCategory = empty2DArray()
+
+  function CategoriesStorage() {
+    this.categories = [{
+        "title": "Categorie0",
+        "imageURL": "images/cat0.png"
+      },
+      {
+        "title": "Categorie1",
+        "imageURL": "images/cat1.png"
+      },
+      {
+        "title": "Categorie2",
+        "imageURL": "images/cat2.png"
+      }
+    ]
+
+    /*empty initialized*/
+    this.picturesTakenPerCategory = empty2DArray(this.categories);
+    /*empty initialized*/
+    this.pointsTakenPerCategory = empty2DArray(this.categories);
+  }
 
   /* When the camera module took a picture, we can decide to save it in this class under a particular category*/
-  var appendPictureToACat = function(atIndex, picture){
-    picturesTakenPerCategory[atIndex].push(picture)
+  CategoriesStorage.prototype.appendPictureToACat = function(atIndex, picture) {
+    this.picturesTakenPerCategory[atIndex].push(picture)
   }
 
   /* When the server parsed some points for an image, we can decide to save them in this class under a particular category*/
-  var appendPointsToACat = function(atIndex, points){
-    pointsTakenPerCategory[atIndex].push(points)
+  CategoriesStorage.prototype.appendPointsToACat = function(atIndex, points) {
+    this.pointsTakenPerCategory[atIndex].push(points)
   }
 
   /*Return all the pictures that were previously stored for a particula category*/
-  var pictureTakenForACat = function(catIndex){
-    return picturesTakenPerCategory[catIndex]
+  CategoriesStorage.prototype.pictureTakenForACat = function(catIndex) {
+    return this.picturesTakenPerCategory[catIndex]
   }
 
   /*Return all the pictures that were previously stored for a particula category*/
-  var pointsTakenForACat = function(catIndex){
-    return pointsTakenPerCategory[catIndex]
+  CategoriesStorage.prototype.pointsTakenForACat = function(catIndex) {
+    return this.pointsTakenPerCategory[catIndex]
   }
 
-  return {
-    allCategories: allCategories,
-    appendPictureToACat: appendPictureToACat,
-    appendPointsToACat: appendPointsToACat,
-    pictureTakenForACat: pictureTakenForACat,
-    pointsTakenForACat: pointsTakenForACat
-  }
+  App.CategoriesStorage = CategoriesStorage;
+  window.App = App;
 
-})();
+})(window);
