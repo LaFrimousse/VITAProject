@@ -1,0 +1,25 @@
+.mirrored{
+  transform: rotateY(180deg);
+   -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+   -moz-transform:rotateY(180deg); /* Firefox */
+}
+
+.alpha08{
+   opacity: 0.8;
+}
+
+.notDisplayed{
+  display: none;
+}
+
+.hidden{
+  visibility: hidden;
+}
+
+img{
+  height: 100px;
+}
+
+body{
+  background-color: blue;
+}
