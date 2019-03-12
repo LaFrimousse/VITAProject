@@ -5,6 +5,7 @@
   var CategoriesManager = App.CategoriesManager;
   var CameraManager = App.CameraManager;
   var Server = App.Server;
+  var PointsDrawing = App.PointsDrawing;
 
   var StateEnum = Object.freeze({
     INITIAL: 0,
@@ -59,8 +60,11 @@
                 if(pointsFromServer == 'undefined' || pointsFromServer == null){
                   log.console.error("Main: the server was not able to proceed an image and turning back an array of points as expected");
                 }else{
-                  CategoriesManager.appendPictureToACat(data);
-                  CategoriesManager.appendPointsToACat(pointsFromServer);
+                  PointsDrawing.addPointsInImage(data,points, function(data){
+                    CategoriesManager.appendPictureToACat(data);
+                    CategoriesManager.appendPointsToACat(pointsFromServer);
+                  })
+
                 }
               }
               Server.getPointsForImage(data,callback)
@@ -117,10 +121,19 @@
 
 
 
+  var points = [
+    [50, 150, 3],
+    [150, 50, 3],
+    [25, 45, 3],
+    [2, 0, 3]
+  ]
+
+  App.PointsDrawing.addPointsOverVideo(points)
 
 
 
-  
+
+
 
 
 })(window);

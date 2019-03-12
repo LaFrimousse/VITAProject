@@ -52,10 +52,10 @@ function ajaxGet(url, callback) {
 
 
 
-console.log("here we go")
+/*console.log("here we go")
     ajaxGet(URL, function(data){
       console.log(data)
-    })
+    })*/
 
 
 
