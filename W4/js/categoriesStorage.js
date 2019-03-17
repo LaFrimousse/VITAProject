@@ -56,6 +56,20 @@
     }
   }
 
+  CategoriesStorage.prototype.deleteAPictureFromACat = function(categoryIndex, elementIndex) {
+    this.picturesTakenPerCategory[categoryIndex].splice(elementIndex,1);
+    if(verbose){
+      console.log("Categories: just deleted a picture for category " + categoryIndex + " at index" + elementIndex);
+    }
+  }
+
+  CategoriesStorage.prototype.deleteAPointFromACat = function(categoryIndex, elementIndex) {
+    this.pointsTakenPerCategory[categoryIndex].splice(elementIndex,1);
+    if(verbose){
+      console.log("Categories: just deleted the points for category " + categoryIndex + " at index" + elementIndex);
+    }
+  }
+
   /*Return all the pictures that were previously stored for a particula category*/
   CategoriesStorage.prototype.pictureTakenForACat = function(catIndex) {
     if(verbose){

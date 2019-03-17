@@ -28,6 +28,16 @@ border: 1px solid green;
   display: block;
   margin-right: 5px;
   margin-bottom: 5px;
+  padding: 3px;
+  background-color: black;
+}
+
+#pictureTakenPerCategory .selected {
+  display: block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 3px;
+  background-color: red;
 }
 
 #categoriesModule img{
