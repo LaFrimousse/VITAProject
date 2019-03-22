@@ -62,8 +62,7 @@
                   log.console.error("Main: the server was not able to proceed an image and turning back an array of points as expected");
                 }else{
                   PointsDrawing.addPointsInImage(data,points, function(data){
-                    CategoriesManager.appendPictureToACat(data);
-                    CategoriesManager.appendPointsToACat(pointsFromServer);
+                    CategoriesManager.appendPictureWrapperToACat(null,null,points,data);
                   })
 
                 }

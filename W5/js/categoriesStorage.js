@@ -5,6 +5,30 @@
 
   var verbose = true
 
+  function guid() {
+    //https://codepen.io/Jvsierra/pen/BNbEjW
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
+  }
+
+
+  function PictureWrapper(uuid, points, picture) {
+    var myUid = null;
+    if (uuid) {
+      myUid = uuid;
+    } else {
+      myUid = guid();
+    }
+    this.uuid = myUid;
+    this.points = points;
+    this.picture = picture;
+  }
+
   /*return an empty 2d array of same lenght than allcategories, in order to add pictures and point later at the same indexes than the categories allows to*/
   function empty2DArray(categories) {
     var emptyArray = []
@@ -44,59 +68,91 @@
     ]
 
     /*empty initialized*/
-    this.picturesTakenPerCategory = empty2DArray(this.categories);
-    /*empty initialized*/
-    this.pointsTakenPerCategory = empty2DArray(this.categories);
+    this.picturesWrappers = empty2DArray(this.categories);
 
-    if(verbose){
+    if (verbose) {
       console.log("Categories: just initialized a new categoriesStorage instance");
     }
   }
 
+  /*Given a label name, outputs the integer in which to store these picturesWrappers*/
+  CategoriesStorage.prototype.indexForLabel = function(label) {
+    for (var i in this.categories){
+      if(this.categories[i].label == label){
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  CategoriesStorage.prototype.labelForIndex = function(index) {
+    return this.categories[index].label
+  }
+
   /* When the camera module took a picture, we can decide to save it in this class under a particular category*/
-  CategoriesStorage.prototype.appendPictureToACat = function(atIndex, picture) {
-    this.picturesTakenPerCategory[atIndex].push(picture)
-    if(verbose){
-      console.log("Categories: just appened a picture at index" + atIndex);
+  CategoriesStorage.prototype.appendPictureWrapperToACat = function(catIndexOrLabelName, uuid, points, picture) {
+    var catIndex = -1;
+    if (Number.isInteger(catIndexOrLabelName)){
+      catIndex = catIndexOrLabelName;
+    }else{
+      catIndex = this.indexForLabel(catIndexOrLabelName);
+    }
+
+    var wrapper = new PictureWrapper(uuid, points, picture);
+
+
+    this.picturesWrappers[catIndex].push(wrapper)
+    if (verbose) {
+      console.log("Categories: just appened a picture wrapper for the category \""
+      + this.labelForIndex(catIndex)+"\"");
     }
   }
 
-  /* When the server parsed some points for an image, we can decide to save them in this class under a particular category*/
-  CategoriesStorage.prototype.appendPointsToACat = function(atIndex, points) {
-    this.pointsTakenPerCategory[atIndex].push(points)
-    if(verbose){
-      console.log("Categories: just appened some points at index" + atIndex);
+
+  CategoriesStorage.prototype.deleteAPictureWrapperFromACat = function(catIndexOrLabelName, elementIndex) {
+    var catIndex = -1;
+    if (Number.isInteger(catIndexOrLabelName)){
+      catIndex = catIndexOrLabelName;
+    }else{
+      catIndex = this.indexForLabel(catIndexOrLabelName);
+    }
+    this.picturesWrappers[catIndex].splice(elementIndex, 1);
+    if (verbose) {
+      console.log("Categories: just deleted a picture wrapper for the category \""
+      + this.labelForIndex(catIndex)+"\"");
     }
   }
 
-  CategoriesStorage.prototype.deleteAPictureFromACat = function(categoryIndex, elementIndex) {
-    this.picturesTakenPerCategory[categoryIndex].splice(elementIndex,1);
-    if(verbose){
-      console.log("Categories: just deleted a picture for category " + categoryIndex + " at index" + elementIndex);
-    }
-  }
-
-  CategoriesStorage.prototype.deleteAPointFromACat = function(categoryIndex, elementIndex) {
-    this.pointsTakenPerCategory[categoryIndex].splice(elementIndex,1);
-    if(verbose){
-      console.log("Categories: just deleted the points for category " + categoryIndex + " at index" + elementIndex);
-    }
-  }
 
   /*Return all the pictures that were previously stored for a particula category*/
   CategoriesStorage.prototype.pictureTakenForACat = function(catIndex) {
-    if(verbose){
-      console.log("Categories: returning the pictures taken for category of index " + catIndex);
+
+    var picturesTaken = []
+    this.picturesWrappers[catIndex].forEach(function(pw){
+      if(pw.picture){
+        picturesTaken.push(pw.picture)
+      }
+    })
+    if (verbose) {
+      console.log("Categories: returning the pictures taken for category of index " + catIndex + "("
+    + picturesTaken.lenght+" pictures)");
     }
-    return this.picturesTakenPerCategory[catIndex]
+    return picturesTaken;
   }
 
   /*Return all the pictures that were previously stored for a particula category*/
   CategoriesStorage.prototype.pointsTakenForACat = function(catIndex) {
-    if(verbose){
-      console.log("Categories: returning the points taken for category of index " + catIndex);
+    var pointsTaken = []
+    this.picturesWrappers[catIndex].forEach(function(pw){
+      if(pw.points){
+        pointsTaken.push(pw.points)
+      }
+    })
+    if (verbose) {
+      console.log("Categories: returning the points taken for category of index " + catIndex + "("
+    + pointsTaken.lenght+" points)");
     }
-    return this.pointsTakenPerCategory[catIndex]
+    return pointsTaken;
   }
 
   App.CategoriesStorage = CategoriesStorage;

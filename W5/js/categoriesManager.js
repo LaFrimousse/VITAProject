@@ -26,21 +26,27 @@
     })
 
 
-    var appendPictureToACat = function(picture) {
-      categoriesStorage.appendPictureToACat(indexOfCategorySelected, picture);
+    var appendPictureWrapperToACat = function(categoryIndex, uuid, points, picture) {
+      var catIndex = -1;
+      if(categoryIndex){
+        catIndex = categoryIndex;
+      }else{
+        catIndex = indexOfCategorySelected;
+      }
+      categoriesStorage.appendPictureWrapperToACat(catIndex, uuid, points, picture);
     }
 
-    var appendPointsToACat = function(points) {
-      categoriesStorage.appendPointsToACat(indexOfCategorySelected, points);
+
+    var deleteAPictureWrapperFromACat = function(categoryIndex, index) {
+      var catIndex = -1;
+      if(categoryIndex){
+        catIndex = categoryIndex;
+      }else{
+        catIndex = indexOfCategorySelected;
+      }
+      categoriesStorage.deleteAPictureWrapperFromACat(catIndex, index);
     }
 
-    var deleteAPictureFromACat = function(index) {
-      categoriesStorage.deleteAPictureFromACat(indexOfCategorySelected, index);
-    }
-
-    var deleteAPointFromACat = function(index) {
-      categoriesStorage.deleteAPointFromACat(indexOfCategorySelected, index);
-    }
 
 
     var hide = function(el) {
@@ -151,8 +157,7 @@
         }
       });
       indexes.reverse().forEach(function(nb){
-        deleteAPictureFromACat(nb)
-        deleteAPointFromACat(nb)
+        deleteAPictureWrapperFromACat(null,nb)
       })
       //reload the UI
       showPicturesTakenForACategory()
@@ -163,8 +168,7 @@
     return {
       hideElements: hide,
       showElements: show,
-      appendPictureToACat: appendPictureToACat,
-      appendPointsToACat: appendPointsToACat,
+      appendPictureWrapperToACat: appendPictureWrapperToACat,
     }
   })();
 
