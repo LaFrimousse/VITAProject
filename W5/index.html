@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/cameraModule.css" />
+  <link rel="stylesheet" href="css/categoriesModule.css" />
+  <title>Camera Try</title>
+  <!--A <meta> viewport element gives the browser instructions on how to control the page's dimensions and scaling.
+    -->
+  <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+</head>
+
+<body>
+
+  <div id="videoElementContainer">
+
+    <!--For the camera module: the videoBackedUpCanvas is the DOM element in which a particular frame of the video stream is rendered before getting turned into a data each time the camera module is asked to take a picture.
+      This element is not visible on the html page because its display style is none.-->
+    <canvas id="videoBackedUpCanvas"></canvas>
+
+    <!--For the camera module: the videoElement is the DOM element in which the video stream captured by
+      the camera is rendered-->
+    <video id="videoElement" autoplay playsinline poster="images/videoElementPoster.jpg"></video>
+
+    <!--For the pointsOverVideo module: this canvas is the DOM element in which points and lines are going to be drawn over the video frame.-->
+    <canvas id="videoPointsCanvas"></canvas>
+
+    <img id="openCloseCameraButton" src="images/openCameraButton.png" />
+
+    <img id="mirrorVideoButton" src="images/mirror.png" class="notDisplayed" />
+
+  </div>
+
+
+
+
+
+  <button id="startStopTakingPictures">Take Pictures</button>
+
+
+  <div id="categoriesModule">
+    <div id="categorySelected">
+      <select name="categoryChoosen" id="categorySelector">
+        <option disabled selected value> -- Please select a category -- </option>
+      </select>
+      <img id="categoryChoosenImg" src="images/questionMark.jpg" />
+    </div>
+    <button id="deletePicturesFromTrainingSetButton" class="notDisplayed">Delete Pictures</button>
+    <div id="pictureTakenPerCategory"></div>
+  </div>
+
+
+<canvas id="usedToDrawPointsInPictures" style="display: none;"></canvas>
+
+
+
+  <script src="js/pointsDrawing.js"></script>
+
+  <script src="js/cameraModule.js"></script>
+  <script src="js/cameraManager.js"></script>
+  <script src="js/categoriesStorage.js"></script>
+  <script src="js/CategoriesManager.js"></script>
+  <script src="js/server.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
