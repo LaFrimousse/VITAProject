@@ -23,6 +23,19 @@
         console.log("CameraManager: Was asked to open the camera");
       }
 
+      if(Camera.isCameraOpen){
+        if (verbose) {
+          console.log("CameraManager: Was asked to open the camera that was already open");
+        }
+        if (callback) {
+          callback(true);
+        }
+        if (showMirror != false) {
+          showMirrorButton();
+        }
+        return;
+      }
+
       var cb = function(success) {
         if (success) {
           openCloseCameraButton.src = "images/closeCameraButton.png"
@@ -30,14 +43,14 @@
             openCloseCameraButton.classList.add("alpha08");
           }
 
-          if (typeof(callback) != "undefined") {
+          if (callback) {
             callback(true)
           }
           if (showMirror != false) {
             showMirrorButton()
           }
         } else {
-          if (typeof(callback) != "undefined") {
+          if (callback) {
             callback(false)
           }
         }
@@ -174,6 +187,10 @@
       startStopTakingPicturesButton.style.visibility = "visible";
     }
 
+    var hideReadyToRecordButton = function() {
+      startStopTakingPicturesButton.style.visibility = "hidden";
+    }
+
     var animePictureTaken = function() {
 
       if (!videoElement.classList.contains("hidden")) {
@@ -206,8 +223,12 @@
 
     return {
       showReadyToRecordButton: showReadyToRecordButton,
+      hideReadyToRecordButton: hideReadyToRecordButton,
       startTakingPictures: willStartTakingPictures,
-      stopTakingPictures: stopTakingPictures
+      stopTakingPictures: stopTakingPictures,
+      hideMirrorAndOpenCloseButton:hideMirrorAndOpenCloseButton,
+      showMirrorAndOpenCloseButton:showMirrorAndOpenCloseButton,
+      openCamera: openCamera
     }
 
   })();

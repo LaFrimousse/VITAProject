@@ -48,7 +48,7 @@
     }
 
 
-
+    /*Hide the div element on index html that show what category is currently selected and displays the pictures*/
     var hide = function(el) {
 
       var elemToHide = el
@@ -61,6 +61,7 @@
       }
     }
 
+    /*Show the div element on index html that show what category is currently selected and displays the pictures*/
     var show = function(el) {
       var elemToShow = el
       var willShow = false
@@ -78,6 +79,7 @@
     }
 
 
+    /*Delete all pictures that are actually presented for the picture taken per category, and reload them from the memory*/
     var showPicturesTakenForACategory = function() {
 
       if (indexOfCategorySelected == -1) {
@@ -108,6 +110,7 @@
 
     }
 
+    /*Append a picture to the DOM element that show them*/
     var addAPhotoToPicturesTaken = function(data, index) {
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
       newImg.src = data
@@ -133,7 +136,6 @@
       indexOfCategorySelected = categorySelector.selectedIndex - 1
       /*change the image accordingly that show the category actually selected*/
       categorySelectedImg.setAttribute('src', categoriesStorage.categories[indexOfCategorySelected].imageURL);
-
 
       /*load the previously taken photos in the div element*/
       showPicturesTakenForACategory()
@@ -163,11 +165,23 @@
       showPicturesTakenForACategory()
     });
 
+    //----------Code for handling the server automatical training set creation
+    var startServerProposal = function(cameraManager){
+      cameraManager.hideMirrorAndOpenCloseButton();
+      cameraManager.hideReadyToRecordButton();
+      cameraManager.openCamera(null, false);
+    }
+    var stopServerProposal = function(cameraManager){
+      cameraManager.showMirrorAndOpenCloseButton();
+    }
+
 
 
     return {
       hideElements: hide,
       showElements: show,
+      startServerProposal: startServerProposal,
+      stopServerProposal: stopServerProposal,
       appendPictureWrapperToACat: appendPictureWrapperToACat,
     }
   })();
