@@ -6,6 +6,8 @@
 
   var CameraManager = (function() {
     var verbose = true
+    var counterDown = -1;
+
 
     /*Get access of the DOMs elements*/
     var openCloseCameraButton = document.getElementById("openCloseCameraButton")
@@ -13,6 +15,7 @@
     var startStopTakingPicturesButton = document.getElementById("startStopTakingPictures")
     //(needed for the animation only)
     var videoElement = document.getElementById("videoElement")
+    var countDownDOMElement = document.getElementById("countDownBeforePicture")
 
 
 
@@ -136,7 +139,7 @@
         if (verbose) {
           console.log("CameraManager: Was asked to start taking pictures");
         }
-        startTakingPictures(timeIntervalBetweenPictures, callback)
+        takePicturesInLoop(timeIntervalBetweenPictures, callback)
       } else {
         if (verbose) {
           console.log("CameraManager: Was asked to start taking pictures, but before we need to open the camera");
@@ -146,31 +149,47 @@
             if (verbose) {
               console.log("CameraManager: The camera is open, let's start to take pictures")
             }
-            startTakingPictures(timeIntervalBetweenPictures, callback)
+            takePicturesInLoop(timeIntervalBetweenPictures, callback)
           }
         }
         openCamera(cb, false)
       }
     }
 
-    var startTakingPictures = function(timeIntervalBetweenPictures, callback) {
+    var takePicturesInLoop = function(timeIntervalBetweenPictures, callback, showCounter) {
       hideMirrorAndOpenCloseButton()
       if (pictureAutomaticInterval != null) {
         console.error("CameraManager: Cannot start to take pictures if it is already taking pictures")
         return;
       }
 
-      startStopTakingPicturesButton.innerHTML = "stop taking pictures"
+      startStopTakingPicturesButton.innerHTML = "stop taking pictures in loop"
       if (verbose) {
         console.log("CameraManager: creating an interval to take pictures each " + timeIntervalBetweenPictures + " ms")
       }
+
+      counterDown = timeIntervalBetweenPictures;
+      var updateCounterTimeInterval = 1000
+      if(timeIntervalBetweenPictures <= 2000/*ms*/){
+        updateCounterTimeInterval = 100//ms
+      }
+
       pictureAutomaticInterval = window.setInterval(function() {
-        var data = Camera.takePicture()
-        animePictureTaken()
-        if (data != null) {
-          callback(data)
-        }
-      }, timeIntervalBetweenPictures);
+
+         counterDown = counterDown - updateCounterTimeInterval;
+         if(counterDown < 0){
+           counterDown = timeIntervalBetweenPictures;
+         }else if (counterDown == 0){
+           var data = Camera.takePicture()
+           animePictureTaken()
+           if (data != null) {
+             callback(data)
+           }
+         }
+
+         displayCounter();
+
+      }, updateCounterTimeInterval);
     }
 
     var stopTakingPictures = function() {
@@ -220,6 +239,12 @@
       })
     }
 
+    var displayCounter = function(){
+      if (countDownDOMElement.classList.contains("notDisplayed")) {
+        countDownDOMElement.classList.remove("notDisplayed");
+      }
+      countDownDOMElement.textContent = counterDown/1000
+    }
 
     return {
       showReadyToRecordButton: showReadyToRecordButton,

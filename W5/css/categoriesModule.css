@@ -43,3 +43,7 @@ border: 1px solid green;
 #categoriesModule img{
   height: 100px;
 }
+
+#postureWantedByServer {
+  height: 100px;
+}
