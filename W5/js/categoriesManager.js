@@ -11,6 +11,10 @@
     var deletePicturesButton = document.getElementById("deletePicturesFromTrainingSetButton")
     var pictureTakenPerCategoryDiv = document.getElementById("pictureTakenPerCategory")
 
+    var proposedByServerCategoryTitle =  document.getElementById("serverCateTitleProposal")
+    var proposedByServerCategoryImg =  document.getElementById("postureWantedByServer")
+
+
 
     /*the index actually selected of the categorySelector*/
     var indexOfCategorySelected = -1
@@ -166,13 +170,33 @@
     });
 
     //----------Code for handling the server automatical training set creation
+
+
     var startServerProposal = function(cameraManager){
       cameraManager.hideMirrorAndOpenCloseButton();
       cameraManager.hideReadyToRecordButton();
       cameraManager.openCamera(null, false);
+      proposeNextCategory();
     }
     var stopServerProposal = function(cameraManager){
       cameraManager.showMirrorAndOpenCloseButton();
+    }
+
+    var proposeNextCategory = function(){
+      var catLength = categoriesStorage.categories.length;
+      var randomIndex = Math.floor(Math.random() * catLength);
+      var pictureURL = categoriesStorage.categories[randomIndex].imageURL;
+      var label = categoriesStorage.categories[randomIndex].label;
+      var title = categoriesStorage.categories[randomIndex].title;
+
+      proposedByServerCategoryTitle.innerText = title
+      proposedByServerCategoryImg.src = pictureURL
+
+    }
+
+
+    var cameraOpenIsABackCamera = function(){
+      return false;
     }
 
 

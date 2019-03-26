@@ -26,7 +26,7 @@
         console.log("CameraManager: Was asked to open the camera");
       }
 
-      if(Camera.isCameraOpen){
+      if (Camera.isCameraOpen) {
         if (verbose) {
           console.log("CameraManager: Was asked to open the camera that was already open");
         }
@@ -134,12 +134,13 @@
 
     /*open the camera if not and then take some pictures*/
     var willStartTakingPictures = function(timeIntervalBetweenPictures, callback) {
+      timeIntervalBetweenPictures  = 3000
 
       if (Camera.isCameraOpen) {
         if (verbose) {
           console.log("CameraManager: Was asked to start taking pictures");
         }
-        takePicturesInLoop(timeIntervalBetweenPictures, callback)
+        takePicture(callback, timeIntervalBetweenPictures, true);
       } else {
         if (verbose) {
           console.log("CameraManager: Was asked to start taking pictures, but before we need to open the camera");
@@ -149,14 +150,14 @@
             if (verbose) {
               console.log("CameraManager: The camera is open, let's start to take pictures")
             }
-            takePicturesInLoop(timeIntervalBetweenPictures, callback)
+            takePicture(callback, timeIntervalBetweenPictures, true);
           }
         }
         openCamera(cb, false)
       }
     }
 
-    var takePicturesInLoop = function(timeIntervalBetweenPictures, callback, showCounter) {
+    var takePicture = function(callback, delay, inLoop){
       hideMirrorAndOpenCloseButton()
       if (pictureAutomaticInterval != null) {
         console.error("CameraManager: Cannot start to take pictures if it is already taking pictures")
@@ -164,32 +165,37 @@
       }
 
       startStopTakingPicturesButton.innerHTML = "stop taking pictures in loop"
-      if (verbose) {
-        console.log("CameraManager: creating an interval to take pictures each " + timeIntervalBetweenPictures + " ms")
+
+      updateCounter(delay , callback, inLoop, delay)
+    }
+
+    var updateCounter = function(remainingTime, callback, inLoop, totalInterval) {
+      counterDown = remainingTime;
+
+      if (counterDown <= 0) {
+        counterDown = 0;
+        displayCounter();
+        var data = Camera.takePicture()
+        animePictureTaken()
+        if (data != null) {
+          callback(data)
+        }
+        if (inLoop) {
+          updateCounter(totalInterval, callback, inLoop, totalInterval);
+        }
+        return;
+      }
+      displayCounter();
+
+      var nextUpdateIn = 1000;
+      if (remainingTime <= 1000) {
+        nextUpdateIn = 100;
       }
 
-      counterDown = timeIntervalBetweenPictures;
-      var updateCounterTimeInterval = 1000
-      if(timeIntervalBetweenPictures <= 2000/*ms*/){
-        updateCounterTimeInterval = 100//ms
-      }
+      pictureAutomaticInterval = window.setTimeout(function() {
+        updateCounter(remainingTime - nextUpdateIn, callback, inLoop, totalInterval)
+      }, nextUpdateIn);
 
-      pictureAutomaticInterval = window.setInterval(function() {
-
-         counterDown = counterDown - updateCounterTimeInterval;
-         if(counterDown < 0){
-           counterDown = timeIntervalBetweenPictures;
-         }else if (counterDown == 0){
-           var data = Camera.takePicture()
-           animePictureTaken()
-           if (data != null) {
-             callback(data)
-           }
-         }
-
-         displayCounter();
-
-      }, updateCounterTimeInterval);
     }
 
     var stopTakingPictures = function() {
@@ -198,8 +204,10 @@
       if (verbose) {
         console.log("CameraManager: killing the interval that took automatically pictures")
       }
-      window.clearInterval(pictureAutomaticInterval)
+      window.clearTimeout(pictureAutomaticInterval)
       pictureAutomaticInterval = null
+      counterDown = -1000;
+      displayCounter();
     }
 
     var showReadyToRecordButton = function() {
@@ -239,11 +247,11 @@
       })
     }
 
-    var displayCounter = function(){
+    var displayCounter = function() {
       if (countDownDOMElement.classList.contains("notDisplayed")) {
         countDownDOMElement.classList.remove("notDisplayed");
       }
-      countDownDOMElement.textContent = counterDown/1000
+      countDownDOMElement.textContent = counterDown / 1000
     }
 
     return {
@@ -251,8 +259,8 @@
       hideReadyToRecordButton: hideReadyToRecordButton,
       startTakingPictures: willStartTakingPictures,
       stopTakingPictures: stopTakingPictures,
-      hideMirrorAndOpenCloseButton:hideMirrorAndOpenCloseButton,
-      showMirrorAndOpenCloseButton:showMirrorAndOpenCloseButton,
+      hideMirrorAndOpenCloseButton: hideMirrorAndOpenCloseButton,
+      showMirrorAndOpenCloseButton: showMirrorAndOpenCloseButton,
       openCamera: openCamera
     }
 
