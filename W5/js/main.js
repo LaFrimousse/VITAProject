@@ -166,7 +166,7 @@
 
 
   //---Load the initial state:
-  //userInteractionCaptured(UserInteraction.START_STOP_TRAINING_SERVER);
+  userInteractionCaptured(UserInteraction.START_STOP_TRAINING_SERVER);
   //------------the rest has nothing to do here !!!
 
 

@@ -32,7 +32,7 @@
 
     var appendPictureWrapperToACat = function(categoryIndex, uuid, points, picture) {
       var catIndex = -1;
-      if(categoryIndex){
+      if(Number.isInteger(categoryIndex)){
         catIndex = categoryIndex;
       }else{
         catIndex = indexOfCategorySelected;
@@ -175,15 +175,15 @@
     var startServerProposal = function(cameraManager){
       cameraManager.hideMirrorAndOpenCloseButton();
       cameraManager.hideReadyToRecordButton();
-      cameraManager.openCamera(null, false);
-      proposeNextCategory();
+      proposeNextCategory(cameraManager);
     }
-    
+
     var stopServerProposal = function(cameraManager){
+      cameraManager.stopTakingPictures();
       cameraManager.showMirrorAndOpenCloseButton();
     }
 
-    var proposeNextCategory = function(){
+    var proposeNextCategory = function(cameraManager){
       var catLength = categoriesStorage.categories.length;
       var randomIndex = Math.floor(Math.random() * catLength);
       var pictureURL = categoriesStorage.categories[randomIndex].imageURL;
@@ -192,6 +192,17 @@
 
       proposedByServerCategoryTitle.innerText = title
       proposedByServerCategoryImg.src = pictureURL
+
+      if(cameraOpenIsABackCamera()){
+        cameraManager.openCamera()
+        /*TODO: prepare button here*/
+      }else{
+        var callback = function(data){
+        appendPictureWrapperToACat(randomIndex, null, null, data);
+        proposeNextCategory(cameraManager);
+        }
+        cameraManager.startTakingPictures(callback, 3000, false);
+      }
 
     }
 

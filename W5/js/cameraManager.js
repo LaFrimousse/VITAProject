@@ -149,6 +149,7 @@
           }
         }
         openCamera(cb, false)
+        return;
       }
 
       if (verbose) {
@@ -168,6 +169,7 @@
 
     var updateCounter = function(remainingTime, callback, inLoop, totalInterval) {
       counterDown = remainingTime;
+      pictureAutomaticInterval = null;
 
       if (counterDown <= 0) {
         counterDown = 0;
