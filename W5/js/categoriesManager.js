@@ -178,6 +178,7 @@
       cameraManager.openCamera(null, false);
       proposeNextCategory();
     }
+    
     var stopServerProposal = function(cameraManager){
       cameraManager.showMirrorAndOpenCloseButton();
     }

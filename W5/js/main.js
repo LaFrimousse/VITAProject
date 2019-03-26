@@ -63,7 +63,7 @@
         switch (interaction) {
 
           case UserInteraction.START_STOP_TAKING_PICTURE:
-            CameraManager.startTakingPictures(1000, function(data) {
+            CameraManager.startTakingPictures(function(data) {
               var callback = function(pointsFromServer) {
                 if (pointsFromServer == 'undefined' || pointsFromServer == null) {
                   log.console.error("Main: the server was not able to proceed an image and turning back an array of points as expected");
@@ -75,7 +75,7 @@
                 }
               }
               Server.getPointsForImage(data, callback)
-            })
+            }, 1000, true)
             CategoriesManager.hideElements()
             actualState = StateEnum.TAKING_PICTURE;
             break;

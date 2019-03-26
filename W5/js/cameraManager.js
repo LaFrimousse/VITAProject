@@ -132,32 +132,29 @@
     //---------------/*Some helpers variables*/
     var pictureAutomaticInterval = null
 
-    /*open the camera if not and then take some pictures*/
-    var willStartTakingPictures = function(timeIntervalBetweenPictures, callback) {
-      timeIntervalBetweenPictures  = 3000
+    var takePicture = function(callback, delay, inLoop){
 
-      if (Camera.isCameraOpen) {
+      /*First verify that the camera is open, if it is not the case, this function will be automatically called later once the camera will be open*/
+      if (!Camera.isCameraOpen) {
         if (verbose) {
-          console.log("CameraManager: Was asked to start taking pictures");
+          console.log("CameraManager: Was asked to start taking pictures but need to open the camera before that");
         }
-        takePicture(callback, timeIntervalBetweenPictures, true);
-      } else {
-        if (verbose) {
-          console.log("CameraManager: Was asked to start taking pictures, but before we need to open the camera");
-        }
+
         var cb = function(success) {
           if (success) {
             if (verbose) {
               console.log("CameraManager: The camera is open, let's start to take pictures")
             }
-            takePicture(callback, timeIntervalBetweenPictures, true);
+            takePicture(callback, delay, inLoop);
           }
         }
         openCamera(cb, false)
       }
-    }
 
-    var takePicture = function(callback, delay, inLoop){
+      if (verbose) {
+        console.log("CameraManager: Was asked to start taking pictures with a delay of " + delay + "and inLoop = "+ inLoop);
+      }
+
       hideMirrorAndOpenCloseButton()
       if (pictureAutomaticInterval != null) {
         console.error("CameraManager: Cannot start to take pictures if it is already taking pictures")
@@ -257,7 +254,7 @@
     return {
       showReadyToRecordButton: showReadyToRecordButton,
       hideReadyToRecordButton: hideReadyToRecordButton,
-      startTakingPictures: willStartTakingPictures,
+      startTakingPictures: takePicture,
       stopTakingPictures: stopTakingPictures,
       hideMirrorAndOpenCloseButton: hideMirrorAndOpenCloseButton,
       showMirrorAndOpenCloseButton: showMirrorAndOpenCloseButton,
