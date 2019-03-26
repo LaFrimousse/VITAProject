@@ -15,9 +15,7 @@
 
     /*some constraints about the video format that can still evolve, we can pick
     the one we want */
-    const constraints = {
-      video: true
-    };
+    const constraints = { video: { facingMode: "environment" } };
 
     const vgaConstraints = {
       video: {
@@ -37,7 +35,8 @@
         },
         height: {
           min: 720
-        }
+        },
+        facingMode:"environment"
       }
     };
 
@@ -66,7 +65,7 @@
       }
       /*With the following three lines of code we can already film ourself */
 
-      navigator.mediaDevices.getUserMedia(hdconstraints). //or vgaConstraints or hd Constraints
+      navigator.mediaDevices.getUserMedia(constraints). //or vgaConstraints or hd Constraints
       then((stream) => {
         videoElement.srcObject = stream
         this.isCameraOpen = true

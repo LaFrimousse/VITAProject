@@ -6,7 +6,7 @@
   But can create a parent div if a external border is really wanted*/
   background: white;
   position: relative;
-  width: 50%;
+  width: 95%;
   margin: auto;
 }
 
@@ -30,9 +30,8 @@
   position: absolute;
   top:0px;
   left:0px;
-  width:30px;
-  height: 30px;
-
+  width:25px;
+  height: 25px;
 }
 
 #mirrorVideoButton{
@@ -41,9 +40,8 @@
   position: absolute;
   bottom:0px;
   left:0px;
-  width:35px;
-  height: 35px;
-
+  width:30px;
+  height: 30px;
 }
 
 /*The canvas in the one the picture taken are rendered before being turned in an image*/
@@ -56,4 +54,23 @@
   display: block;
   visibility: hidden;
   margin: auto;
+}
+
+
+@media all and (min-width: 768px){
+  /*Does not target the phones*/
+  #videoElementContainer{
+    width: 50%;
+  }
+
+  #openCloseCameraButton{
+    width:30px;
+    height: 30px;
+  }
+
+  #mirrorVideoButton{
+    width:35px;
+    height: 35px;
+
+  }
 }
