@@ -181,6 +181,19 @@
   App.PointsDrawing.addPointsOverVideo(points)
 
 
+var videoDevices = []
+navigator.mediaDevices.enumerateDevices().then(function(devices){
+  const hasVideo = devices.some(device => device.kind === "videoinput");
+  console.log("has video", hasVideo);
+  devices.forEach(function(dev){
+    if(dev.kind === "videoinput"){
+      videoDevices.push(dev);
+    }
+  })
+  console.log(videoDevices.length)
+  console.log(videoDevices)
+});
+
 
 
 

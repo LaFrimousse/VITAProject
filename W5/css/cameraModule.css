@@ -1,12 +1,14 @@
-
-
 /*The div element in the one are the videoElement and the above canvas used to draw points en direct*/
+body{
+  margin: 0px;
+}
+
 #videoElementContainer{
   /*No padding or margin in this element since the 2 children are abolutely align.
   But can create a parent div if a external border is really wanted*/
   background: white;
   position: relative;
-  width: 95%;
+  width: 100%;
   margin: auto;
 }
 
@@ -59,6 +61,10 @@
 
 @media all and (min-width: 768px){
   /*Does not target the phones*/
+
+  body{
+    margin: 10px;
+  }
   #videoElementContainer{
     width: 50%;
   }
