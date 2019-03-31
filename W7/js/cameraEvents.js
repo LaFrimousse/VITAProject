@@ -1,30 +1,20 @@
-/*This module purpose is to deal with the layout all element that are related*/
 (function(window) {
   'use strict'
   var App = window.App;
   var Camera = App.Camera;
+  var CameraLayout = App.CameraLayout;
 
-  var CameraManager = (function() {
+  var CameraEvents = (function() {
     var verbose = true
-    var counterDown = -1;
+    var counterValue = -1;
 
 
     /*Get access of the DOMs elements*/
-    var openCloseCameraButton = document.getElementById("openCloseCameraButton")
+    var openOrCloseCameraButton = document.getElementById("openOrCloseCameraButton")
     var mirrorVideoButton = document.getElementById("mirrorVideoButton")
-    var startStopTakingPicturesButton = document.getElementById("startStopTakingPictures")
-    //(needed for the animation only)
-    var videoElement = document.getElementById("videoElement")
-    var countDownDOMElement = document.getElementById("countDownBeforePicture")
 
-
-
-    /*open the camera and change the image and alpha of the openCloseCameraButton accordingly*/
-    var openCamera = function(callback, showMirror) {
-
-      if (verbose) {
-        console.log("CameraManager: Was asked to open the camera");
-      }
+    /*open the camera and ask to update the UI accordingly*/
+    var openCamera = function(callback) {
 
       if (Camera.isCameraOpen) {
         if (verbose) {
@@ -33,36 +23,40 @@
         if (callback) {
           callback(true);
         }
-        if (showMirror != false) {
-          showMirrorButton();
-        }
         return;
+      }
+
+      if (verbose) {
+        console.log("CameraEvents: Was asked to open the camera");
       }
 
       var cb = function(success) {
         if (success) {
-          openCloseCameraButton.src = "images/closeCameraButton.png"
-          if (!openCloseCameraButton.classList.contains("alpha08")) {
-            openCloseCameraButton.classList.add("alpha08");
-          }
-
+          CameraLayout.setSrcForOpenCloseButton("images/closeCameraButton.png");
           if (callback) {
-            callback(true)
-          }
-          if (showMirror != false) {
-            showMirrorButton()
+            callback(true);
           }
         } else {
           if (callback) {
-            callback(false)
+            callback(false);
           }
         }
       }
-      Camera.open(cb)
+      Camera.open(cb);
     }
 
     /*close the camera and change the image and alpha of the openCloseCameraButton accordingly*/
     var closeCamera = function(callback) {
+
+      if (!Camera.isCameraOpen) {
+        if (verbose) {
+          console.log("CameraManager: Was asked to close the camera that was already closed");
+        }
+        if (callback) {
+          callback(true);
+        }
+        return;
+      }
 
       if (verbose) {
         console.log("CameraManager: Was asked to close the camera");
@@ -70,16 +64,13 @@
 
       var cb = function(success) {
         if (success) {
-          openCloseCameraButton.src = "images/openCameraButton.png"
-          if (openCloseCameraButton.classList.contains("alpha08")) {
-            openCloseCameraButton.classList.remove("alpha08");
-          }
-          if (typeof(callback) != "undefined") {
+          CameraLayout.setSrcForOpenCloseButton("images/openCameraButton.png");
+          if (callback) {
             callback(true)
           }
-          hideMirrorButton()
+
         } else {
-          if (typeof(callback) != "undefined") {
+          if (callback) {
             callback(false)
           }
         }
@@ -87,39 +78,15 @@
       Camera.close(cb)
     }
 
-    var showMirrorButton = function() {
-      if (verbose) {
-        console.log("CameraManager: Will show the mirror button");
-      }
-      if (mirrorVideoButton.classList.contains("notDisplayed")) {
-        mirrorVideoButton.classList.remove("notDisplayed");
-      }
-    }
 
-    var hideMirrorButton = function() {
-      if (verbose) {
-        console.log("CameraManager: Will hide the mirror button");
-      }
-      if (!mirrorVideoButton.classList.contains("notDisplayed")) {
-        mirrorVideoButton.classList.add("notDisplayed");
-      }
-    }
 
     /*Add an event listener on the mirror button that mirrors some elements*/
     mirrorVideoButton.addEventListener("click", function() {
-      var elemsToMirror = [videoElement, mirrorVideoButton, document.getElementById("videoPointsCanvas")]
-
-      elemsToMirror.forEach(function(domElement) {
-        if (domElement.classList.contains("mirrored")) {
-          domElement.classList.remove("mirrored");
-        } else {
-          domElement.classList.add("mirrored");
-        }
-      })
+      CameraLayout.mirrorElements();
     })
 
     /*add an event listener on the openCloseCameraButton to open or close the camera*/
-    openCloseCameraButton.addEventListener("click", function() {
+    openOrCloseCameraButton.addEventListener("click", function() {
       if (Camera.isCameraOpen) {
         closeCamera()
       } else {
@@ -132,7 +99,7 @@
     //---------------/*Some helpers variables*/
     var pictureAutomaticInterval = null
 
-    var takePicture = function(callback, delay, inLoop){
+    var takePicture = function(callback, delay, inLoop) {
 
       /*First verify that the camera is open, if it is not the case, this function will be automatically called later once the camera will be open*/
       if (!Camera.isCameraOpen) {
@@ -153,7 +120,7 @@
       }
 
       if (verbose) {
-        console.log("CameraManager: Was asked to start taking pictures with a delay of " + delay + "and inLoop = "+ inLoop);
+        console.log("CameraManager: Was asked to start taking pictures with a delay of " + delay + "and inLoop = " + inLoop);
       }
 
       hideMirrorAndOpenCloseButton()
@@ -164,7 +131,7 @@
 
       startStopTakingPicturesButton.innerHTML = "stop taking pictures in loop"
 
-      updateCounter(delay , callback, inLoop, delay)
+      updateCounter(delay, callback, inLoop, delay)
     }
 
     var updateCounter = function(remainingTime, callback, inLoop, totalInterval) {
@@ -217,34 +184,6 @@
       startStopTakingPicturesButton.style.visibility = "hidden";
     }
 
-    var animePictureTaken = function() {
-
-      if (!videoElement.classList.contains("hidden")) {
-        videoElement.classList.add("hidden");
-      }
-
-      var myTimeout = window.setTimeout(function() {
-        if (videoElement.classList.contains("hidden")) {
-          videoElement.classList.remove("hidden");
-        }
-      }, 50);
-    }
-
-    var hideMirrorAndOpenCloseButton = function() {
-      [mirrorVideoButton, openCloseCameraButton].forEach(function(element) {
-        if (!element.classList.contains("notDisplayed")) {
-          element.classList.add("notDisplayed");
-        }
-      })
-    }
-
-    var showMirrorAndOpenCloseButton = function() {
-      [mirrorVideoButton, openCloseCameraButton].forEach(function(element) {
-        if (element.classList.contains("notDisplayed")) {
-          element.classList.remove("notDisplayed");
-        }
-      })
-    }
 
     var displayCounter = function() {
       if (countDownDOMElement.classList.contains("notDisplayed")) {
@@ -254,18 +193,12 @@
     }
 
     return {
-      showReadyToRecordButton: showReadyToRecordButton,
-      hideReadyToRecordButton: hideReadyToRecordButton,
-      startTakingPictures: takePicture,
-      stopTakingPictures: stopTakingPictures,
-      hideMirrorAndOpenCloseButton: hideMirrorAndOpenCloseButton,
-      showMirrorAndOpenCloseButton: showMirrorAndOpenCloseButton,
       openCamera: openCamera
     }
 
   })();
 
-  App.CameraManager = CameraManager;
+  App.CameraEvents = CameraEvents;
   window.App = App;
 
 })(window);

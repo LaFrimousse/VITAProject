@@ -15,6 +15,7 @@ This module is never responsible for any Layout*/
 
   var Camera = (function() {
     var verbose = true
+    var actuallyOpeningOrClosing = false;
 
     //the DOM element in which the video is displayed
     var videoElement = document.getElementById("videoElement")
@@ -72,7 +73,12 @@ This module is never responsible for any Layout*/
         }
         return
       }
-      /*With the following three lines of code we can already film ourself */
+
+      if(actuallyOpeningOrClosing){
+        console.error("The user should not click so quickly on the buttons")
+        return;
+      }
+      actuallyOpeningOrClosing = true;
 
       navigator.mediaDevices.getUserMedia(constraints). //or vgaConstraints or hd Constraints
       then((stream) => {
@@ -84,12 +90,14 @@ This module is never responsible for any Layout*/
         if (verbose) {
           console.log("Camera: Just opened the camera")
         }
+        actuallyOpeningOrClosing = false;
       }).catch(function(error) {
         console.error("Camera: Error: Promise Rejected", error)
         if (typeof(callback) != "undefined") {
           callback(false)
         }
-        console.error("Camera: Failed to open the camera")
+        console.error("Camera: Failed to open the camera");
+        actuallyOpeningOrClosing = false;
       });
     }
 
@@ -104,6 +112,12 @@ This module is never responsible for any Layout*/
 
         return
       }
+
+      if(actuallyOpeningOrClosing){
+        console.error("The user should not click so quickly on the buttons")
+        return;
+      }
+      actuallyOpeningOrClosing = true;
 
       let stream = videoElement.srcObject;
       let tracks = stream.getTracks();
@@ -120,6 +134,7 @@ This module is never responsible for any Layout*/
       if (verbose) {
         console.log("Camera: Just closed the camera")
       }
+      actuallyOpeningOrClosing = false;
     }
 
     var takePicture = function() {
