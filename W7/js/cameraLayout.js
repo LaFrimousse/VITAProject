@@ -95,11 +95,11 @@
       } else if (newCounterValue < 1) {
         show(counter);
         makeCounterRed();
-        counter.innerHTML = newCounterValue;
+        counter.innerHTML = newCounterValue.toFixed(1);
       } else {
         show(counter);
         makeCounterBlack();
-        counter.innerHTML = newCounterValue;
+        counter.innerHTML = newCounterValue.toFixed(1);
       }
     }
 
@@ -126,6 +126,7 @@
         }
       }, 50);
     }
+
 
 
     return {

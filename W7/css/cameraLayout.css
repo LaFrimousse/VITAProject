@@ -72,7 +72,6 @@
   left: 0px;
   width: 30px;
   height: 30px;
-  display: none;
 }
 
 #postureToAdoptImg {
@@ -89,13 +88,16 @@
   bottom: 0px;
   right: 0px;
   font-size: xx-large;
-  display: none;
 }
 
 #startStopTakingPictures {
   display: block;
   visibility: hidden;
   margin: auto;
+}
+
+.redCounter{
+  color: red;
 }
 
 /*@media all and (min-width: 768px) {*/

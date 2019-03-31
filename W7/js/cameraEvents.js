@@ -6,7 +6,6 @@
 
   var CameraEvents = (function() {
     var verbose = true
-    var counterValue = -1;
 
 
     /*Get access of the DOMs elements*/
@@ -18,7 +17,7 @@
 
       if (Camera.isCameraOpen) {
         if (verbose) {
-          console.log("CameraManager: Was asked to open the camera that was already open");
+          console.log("CameraEvents: Was asked to open the camera that was already open");
         }
         if (callback) {
           callback(true);
@@ -36,6 +35,8 @@
           if (callback) {
             callback(true);
           }
+          CameraLayout.showElement("mirrorButton");
+          noticeCameraJustOpenned();
         } else {
           if (callback) {
             callback(false);
@@ -50,7 +51,7 @@
 
       if (!Camera.isCameraOpen) {
         if (verbose) {
-          console.log("CameraManager: Was asked to close the camera that was already closed");
+          console.log("CameraEvents: Was asked to close the camera that was already closed");
         }
         if (callback) {
           callback(true);
@@ -59,7 +60,7 @@
       }
 
       if (verbose) {
-        console.log("CameraManager: Was asked to close the camera");
+        console.log("CameraEvents: Was asked to close the camera");
       }
 
       var cb = function(success) {
@@ -68,7 +69,8 @@
           if (callback) {
             callback(true)
           }
-
+          CameraLayout.hideElement("mirrorButton");
+          noticeCameraJustClosed();
         } else {
           if (callback) {
             callback(false)
@@ -78,6 +80,18 @@
       Camera.close(cb)
     }
 
+    var noticeCameraJustOpenned = function() {
+      console.log("CameraEvents: noticed that the camera just opened");
+      /*var monTimeout = window.setTimeout(function(){
+        takeInstantPicture(null, false)
+      }, 1000);*/
+      takePictureWithDelay(null, 3000, true);
+    }
+
+    var noticeCameraJustClosed = function() {
+      cancelTakingPictureWithDelay();
+      console.log("CameraEvents: noticed that the camera just closed")
+    }
 
 
     /*Add an event listener on the mirror button that mirrors some elements*/
@@ -94,86 +108,88 @@
       }
     })
 
+    var takeInstantPicture = function(callback, animated) {
+      Camera.takePicture(callback);
+      if (animated) {
+        CameraLayout.animePictureTaken();
+      }
+    }
 
 
-    //---------------/*Some helpers variables*/
-    var pictureAutomaticInterval = null
+    //---------------
+    /*Some helpers variables*/
+    var intervalBeforeCounterUpdate = null
 
-    var takePicture = function(callback, delay, inLoop) {
+    var takePictureWithDelay = function(callback, delay, inLoop) {
 
       /*First verify that the camera is open, if it is not the case, this function will be automatically called later once the camera will be open*/
       if (!Camera.isCameraOpen) {
         if (verbose) {
-          console.log("CameraManager: Was asked to start taking pictures but need to open the camera before that");
+          console.log("CameraEvents: Was asked take a Picture With Delay but need to open the camera before that");
         }
 
         var cb = function(success) {
           if (success) {
             if (verbose) {
-              console.log("CameraManager: The camera is open, let's start to take pictures")
+              console.log("CameraEvents: The camera is open, let's start to take pictures with delay")
             }
             takePicture(callback, delay, inLoop);
           }
         }
-        openCamera(cb, false)
+        openCamera(cb)
         return;
       }
 
       if (verbose) {
-        console.log("CameraManager: Was asked to start taking pictures with a delay of " + delay + "and inLoop = " + inLoop);
+        console.log("CameraEvents: Was asked to start taking pictures with a delay of " + delay + "and inLoop = " + inLoop);
       }
 
-      hideMirrorAndOpenCloseButton()
-      if (pictureAutomaticInterval != null) {
-        console.error("CameraManager: Cannot start to take pictures if it is already taking pictures")
+      if (intervalBeforeCounterUpdate != null) {
+        console.error("CameraEvents: Cannot start to take pictures if it is already taking pictures")
         return;
       }
-
-      startStopTakingPicturesButton.innerHTML = "stop taking pictures in loop"
 
       updateCounter(delay, callback, inLoop, delay)
     }
 
     var updateCounter = function(remainingTime, callback, inLoop, totalInterval) {
-      counterDown = remainingTime;
-      pictureAutomaticInterval = null;
 
-      if (counterDown <= 0) {
-        counterDown = 0;
-        displayCounter();
-        var data = Camera.takePicture()
-        animePictureTaken()
-        if (data != null) {
-          callback(data)
-        }
+      //kill the previous time interval
+      intervalBeforeCounterUpdate = null;
+
+      //display the counter
+      CameraLayout.updateCounter(remainingTime / 1000);
+
+      if (remainingTime <= 0) {
+        takeInstantPicture(callback, true);
+
         if (inLoop) {
           updateCounter(totalInterval, callback, inLoop, totalInterval);
+        } else {
+          //hide the counter
+          CameraLayout.updateCounter(null);
         }
         return;
       }
-      displayCounter();
 
       var nextUpdateIn = 1000;
       if (remainingTime <= 1000) {
         nextUpdateIn = 100;
       }
 
-      pictureAutomaticInterval = window.setTimeout(function() {
+      intervalBeforeCounterUpdate = window.setTimeout(function() {
         updateCounter(remainingTime - nextUpdateIn, callback, inLoop, totalInterval)
       }, nextUpdateIn);
 
     }
 
-    var stopTakingPictures = function() {
-      showMirrorAndOpenCloseButton()
-      startStopTakingPicturesButton.innerHTML = "start taking pictures"
+    var cancelTakingPictureWithDelay = function() {
       if (verbose) {
-        console.log("CameraManager: killing the interval that took automatically pictures")
+        console.log("CameraEvents: canceling the task of taking pictures with delay");
       }
-      window.clearTimeout(pictureAutomaticInterval)
-      pictureAutomaticInterval = null
-      counterDown = -1000;
-      displayCounter();
+      window.clearTimeout(intervalBeforeCounterUpdate);
+      intervalBeforeCounterUpdate = null;
+      CameraLayout.updateCounter(null);
     }
 
     var showReadyToRecordButton = function() {
@@ -185,12 +201,7 @@
     }
 
 
-    var displayCounter = function() {
-      if (countDownDOMElement.classList.contains("notDisplayed")) {
-        countDownDOMElement.classList.remove("notDisplayed");
-      }
-      countDownDOMElement.textContent = counterDown / 1000
-    }
+
 
     return {
       openCamera: openCamera
