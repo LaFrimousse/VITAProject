@@ -1,0 +1,49 @@
+#categoriesModule{
+border: 1px solid green;
+}
+
+#categorySelected{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#categoryChoosenImg{
+  height: 200px;
+}
+
+#pictureTakenPerCategory{
+  border: 1px solid ;
+  /*height: 200px;*/
+  display: none;
+  flex-wrap: wrap-reverse;
+  /*justify-content: center;*/
+  /*overflow: -moz-scrollbars-vertical;
+  overflow-y: scroll;*/
+  padding: 5px;
+}
+
+#pictureTakenPerCategory * {
+  display: block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 3px;
+  background-color: black;
+}
+
+#pictureTakenPerCategory .selected {
+  display: block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 3px;
+  background-color: red;
+}
+
+#categoriesModule img{
+  height: 100px;
+}
+
+#postureWantedByServer {
+  height: 100px;
+}
