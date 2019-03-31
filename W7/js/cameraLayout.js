@@ -127,12 +127,16 @@
       }, 50);
     }
 
+    var setGestureImg = function(src) {
+      postureToAdoptImg.src = src;
+    }
 
 
     return {
       hideElement: hideElement,
       showElement: showElement,
       setTitle: setTitle,
+      setGestureImg: setGestureImg,
       setSrcForOpenCloseButton: setSrcForOpenCloseButton,
       mirrorElements: mirrorElements,
       updateCounter: updateCounter,

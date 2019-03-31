@@ -204,7 +204,6 @@
 
 
     return {
-      openCamera: openCamera
     }
 
   })();

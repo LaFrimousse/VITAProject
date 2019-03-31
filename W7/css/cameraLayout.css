@@ -1,16 +1,6 @@
-/*The div element in the one are the videoElement and the above canvas used to draw points en direct*/
-
-
-
 #titleCameraButtonWrapper{
   background-color: yellow;
   padding: 1px;
-}
-
-#cameraRecordButtons{
-  background-color: green;
-  min-width: 100px;
-  min-height: 50px;
 }
 
 #postureToAdaptTitle{
@@ -103,6 +93,50 @@
   background-color: yellow;
   border: 1px solid black;
 }
+
+/*--------------------------------------------------------------------------------*/
+
+#cameraRecordButtons{
+  background-color: green;
+  min-width: 100px;
+  min-height: 50px;
+}
+
+#takePictureButton{
+  max-width: 40px;
+  max-height: 40px;
+  display: block;
+  margin: auto;
+}
+
+.delayAndLooping{
+  display: flex;
+  justify-content: space-around;
+  background-color: orange;
+  padding: 2px;
+}
+
+.delayp{
+  background-color: red;
+}
+
+#loopingWrapper{
+  background-color: brown;
+  margin: 0px;
+  padding: 0px;
+  margin-right: 0px;
+}
+
+#looping{
+  background-color: blue;
+}
+
+#delayRecordSlider{
+  display: block;
+  margin: auto;
+  width: 60%;
+}
+
 
 /*@media all and (min-width: 768px) {*/
 
