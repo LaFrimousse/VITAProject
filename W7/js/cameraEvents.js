@@ -80,12 +80,32 @@
       Camera.close(cb)
     }
 
+
+    var switchCamera = function(){
+      if(!Camera.isCameraOpen){
+        Camera.switchCamera();
+      }else{
+        var callback = function(success){
+          if(success){
+            Camera.switchCamera();
+            openCamera();
+          }
+        }
+        closeCamera(callback);
+      }
+    }
+
+    document.getElementById("switchCameraCheckBox").addEventListener("change", function(){
+      switchCamera();
+    })
+
+
     var noticeCameraJustOpenned = function() {
       console.log("CameraEvents: noticed that the camera just opened");
       /*var monTimeout = window.setTimeout(function(){
         takeInstantPicture(null, false)
       }, 1000);*/
-      takePictureWithDelay(null, 3000, true);
+      /*takePictureWithDelay(null, 3000, true);*/
     }
 
     var noticeCameraJustClosed = function() {

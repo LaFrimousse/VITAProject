@@ -22,10 +22,14 @@ This module is never responsible for any Layout*/
     var canvas = document.getElementById("videoBackedUpCanvas")
     //a helper variable that keeps track of the camera state
     var isCameraOpen = false
+    var isBackCamera = true
 
     /*some constraints about the video format that can still evolve, we can pick
     the one we want */
-    const constraints = { video: { facingMode: "environment" } };
+    const backConstraint = { video: { facingMode: "environment" } };
+    const frontConstraint = { video: { facingMode: "user" } };
+    var actualContraint = backConstraint;
+
 
     const vgaConstraints = {
       video: {
@@ -80,17 +84,20 @@ This module is never responsible for any Layout*/
       }
       actuallyOpeningOrClosing = true;
 
-      navigator.mediaDevices.getUserMedia(constraints). //or vgaConstraints or hd Constraints
-      then((stream) => {
+      navigator.mediaDevices.getUserMedia(actualContraint).then((stream) => {
         videoElement.srcObject = stream
         this.isCameraOpen = true
-        if (typeof(callback) != "undefined") {
-          callback(true)
-        }
+
         if (verbose) {
           console.log("Camera: Just opened the camera")
         }
+
         actuallyOpeningOrClosing = false;
+
+        if (typeof(callback) != "undefined") {
+          callback(true)
+        }
+
       }).catch(function(error) {
         console.error("Camera: Error: Promise Rejected", error)
         if (typeof(callback) != "undefined") {
@@ -128,13 +135,17 @@ This module is never responsible for any Layout*/
 
       videoElement.srcObject = null;
       this.isCameraOpen = false
-      if (typeof(callback) != "undefined") {
-        callback(true)
-      }
+
       if (verbose) {
         console.log("Camera: Just closed the camera")
       }
+
       actuallyOpeningOrClosing = false;
+
+      if (typeof(callback) != "undefined") {
+        callback(true)
+      }
+
     }
 
     var takePicture = function() {
@@ -164,6 +175,17 @@ This module is never responsible for any Layout*/
       return data
     }
 
+    var switchCamera = function(){
+      isBackCamera = !isBackCamera
+      if(verbose){
+        var camString = isBackCamera? "back camera" : "front camera"
+        console.log("Camera: Switching the camera to the " + camString);
+      }
+
+      actualContraint = isBackCamera ? backConstraint : frontConstraint;
+
+    }
+
     /*Explicitly reveal public pointers to the private functions
     that we want to reveal publicly*/
     return {
@@ -171,7 +193,8 @@ This module is never responsible for any Layout*/
       close: closeCamera,
       isCameraOpen: isCameraOpen,
       takePicture: takePicture,
-      verbose: verbose
+      verbose: verbose,
+      switchCamera:switchCamera
     }
   })();
 
