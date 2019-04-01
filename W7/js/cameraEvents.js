@@ -34,11 +34,13 @@
       var cb = function(success) {
         if (success) {
           CameraLayout.setSrcForOpenCloseButton("images/closeCameraButton.png");
+          CameraLayout.showElement("mirrorButton");
+          noticeCameraJustOpenned();
+
           if (callback) {
             callback(true);
           }
-          CameraLayout.showElement("mirrorButton");
-          noticeCameraJustOpenned();
+
         } else {
           if (callback) {
             callback(false);
@@ -72,11 +74,14 @@
       var cb = function(success) {
         if (success) {
           CameraLayout.setSrcForOpenCloseButton("images/openCameraButton.png");
+          CameraLayout.hideElement("mirrorButton");
+
+          noticeCameraJustClosed();
+
           if (callback) {
             callback(true)
           }
-          CameraLayout.hideElement("mirrorButton");
-          noticeCameraJustClosed();
+
         } else {
           if (callback) {
             callback(false)
@@ -146,39 +151,7 @@
     /*Some helpers variables*/
     var intervalBeforeCounterUpdate = null
 
-    var takePictureWithDelay = function(callback, delay, inLoop) {
-
-      /*First verify that the camera is open, if it is not the case, this function will be automatically called later once the camera will be open*/
-      if (!Camera.isCameraOpen) {
-        if (verbose) {
-          console.log("CameraEvents: Was asked take a Picture With Delay but need to open the camera before that");
-        }
-
-        var cb = function(success) {
-          if (success) {
-            if (verbose) {
-              console.log("CameraEvents: The camera is open, let's start to take pictures with delay")
-            }
-            takePicture(callback, delay, inLoop);
-          }
-        }
-        openCamera(cb)
-        return;
-      }
-
-      if (verbose) {
-        console.log("CameraEvents: Was asked to start taking pictures with a delay of " + delay + "and inLoop = " + inLoop);
-      }
-
-      if (intervalBeforeCounterUpdate != null) {
-        console.error("CameraEvents: Cannot start to take pictures if it is already taking pictures")
-        return;
-      }
-
-      updateCounter(delay, callback, inLoop, delay)
-    }
-
-    var updateCounter = function(remainingTime, callback, inLoop, totalInterval) {
+    var updateCounter = function(remainingTime) {
 
       //kill the previous time interval
       intervalBeforeCounterUpdate = null;
@@ -187,13 +160,20 @@
       CameraLayout.updateCounter(remainingTime / 1000);
 
       if (remainingTime <= 0) {
-        takeInstantPicture(callback, true);
+        takeInstantPicture(null, true);
 
-        if (inLoop) {
-          updateCounter(totalInterval, callback, inLoop, totalInterval);
+        if (RecordsButtons.isLooping()) {
+          var nextDelay = RecordsButtons.delay();
+          if(nextDelay > 0){
+            updateCounter(nextDelay);
+          }else{
+            CameraLayout.updateCounter(null);
+            stopTakingPicture();
+          }
         } else {
           //hide the counter
           CameraLayout.updateCounter(null);
+          stopTakingPicture();
         }
         return;
       }
@@ -204,7 +184,7 @@
       }
 
       intervalBeforeCounterUpdate = window.setTimeout(function() {
-        updateCounter(remainingTime - nextUpdateIn, callback, inLoop, totalInterval)
+        updateCounter(remainingTime - nextUpdateIn);
       }, nextUpdateIn);
 
     }
@@ -228,6 +208,8 @@
 
     var startTakingPicture = function() {
       isTakingPicture = true;
+      RecordsButtons.setButtonGray();
+      updateCounter(RecordsButtons.delay());
       if (verbose) {
         console.log("CameraEvents: just started taking pictures");
       }
@@ -235,24 +217,38 @@
     }
 
     var stopTakingPicture = function() {
+      cancelTakingPictureWithDelay();
       isTakingPicture = false;
+      RecordsButtons.setButtonRed();
       if (verbose) {
         console.log("CameraEvents: just stopped taking pictures");
       }
     }
 
     var userClickedRedButton = function() {
-
       if(isTakingPicture){
         stopTakingPicture();
       }else{
         var delay = RecordsButtons.delay();
-        var isLooping = RecordsButtons.isLooping();
-        console.log(delay)
-        console.log(isLooping)
 
+        if(!Camera.isCameraOpen){
+          if(delay == 0){
+            openCamera();
+            return;
+          }else{
+            openCamera(function(){
+              userClickedRedButton();
+            })
+          }
+        }else{
+          //the camera is open
+          if(delay > 0){
+            startTakingPicture();
+          }else{
+            takeInstantPicture(null, true);
+          }
+        }
       }
-
     }
 
 

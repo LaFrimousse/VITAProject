@@ -71,7 +71,15 @@
     }
 
     var getDelay = function(){
-      return delay;
+      return delay * 1000;
+    }
+
+    var setButtonRed = function(){
+      takePictureButton.src = "images/takePictureButton.png";
+    }
+
+    var setButtonGray = function(){
+      takePictureButton.src = "images/takePictureButtonGray.png";
     }
 
     /*Explicitly reveal public pointers to the private functions
@@ -79,7 +87,9 @@
     return {
       setCameraEventModule: setCameraEventModule,
       isLooping: getLooping,
-      delay: getDelay
+      delay: getDelay,
+      setButtonRed:setButtonRed,
+      setButtonGray:setButtonGray
     }
   })();
 
