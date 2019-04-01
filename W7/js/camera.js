@@ -26,8 +26,16 @@ This module is never responsible for any Layout*/
 
     /*some constraints about the video format that can still evolve, we can pick
     the one we want */
-    const backConstraint = { video: { facingMode: "environment" } };
-    const frontConstraint = { video: { facingMode: "user" } };
+    const backConstraint = {
+      video: {
+        facingMode: "environment"
+      }
+    };
+    const frontConstraint = {
+      video: {
+        facingMode: "user"
+      }
+    };
     var actualContraint = backConstraint;
 
 
@@ -50,7 +58,7 @@ This module is never responsible for any Layout*/
         height: {
           min: 720
         },
-        facingMode:"environment"
+        facingMode: "environment"
       }
     };
 
@@ -78,7 +86,7 @@ This module is never responsible for any Layout*/
         return
       }
 
-      if(actuallyOpeningOrClosing){
+      if (actuallyOpeningOrClosing) {
         console.error("The user should not click so quickly on the buttons")
         return;
       }
@@ -120,7 +128,7 @@ This module is never responsible for any Layout*/
         return
       }
 
-      if(actuallyOpeningOrClosing){
+      if (actuallyOpeningOrClosing) {
         console.error("The user should not click so quickly on the buttons")
         return;
       }
@@ -175,16 +183,40 @@ This module is never responsible for any Layout*/
       return data
     }
 
-    var switchCamera = function(){
+    var switchCamera = function() {
       isBackCamera = !isBackCamera
-      if(verbose){
-        var camString = isBackCamera? "back camera" : "front camera"
+      if (verbose) {
+        var camString = isBackCamera ? "back camera" : "front camera"
         console.log("Camera: Switching the camera to the " + camString);
       }
 
       actualContraint = isBackCamera ? backConstraint : frontConstraint;
-
     }
+
+    var hasMultipleCameraAvailable = function(callback) {
+      var videoDevices = []
+      navigator.mediaDevices.enumerateDevices().then(function(devices) {
+        /*const hasVideo = devices.some(device => device.kind === "videoinput");
+        console.log("has video", hasVideo);*/
+        devices.forEach(function(dev) {
+          if (dev.kind === "videoinput") {
+            videoDevices.push(dev);
+          }
+        })
+
+
+        var multipleAvailable = videoDevices.length > 1;
+        if (verbose) {
+          var negation = multipleAvailable? "" : " not";
+          console.log("Camera: We noticed that this device has" + negation + " multiple input video devices");
+        }
+        if (callback) {
+          callback(multipleAvailable);
+        }
+      });
+    }
+
+    hasMultipleCameraAvailable();
 
     /*Explicitly reveal public pointers to the private functions
     that we want to reveal publicly*/
@@ -194,7 +226,8 @@ This module is never responsible for any Layout*/
       isCameraOpen: isCameraOpen,
       takePicture: takePicture,
       verbose: verbose,
-      switchCamera:switchCamera
+      switchCamera: switchCamera,
+      hasMultipleCameraAvailable:hasMultipleCameraAvailable
     }
   })();
 

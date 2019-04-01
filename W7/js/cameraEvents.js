@@ -3,9 +3,11 @@
   var App = window.App;
   var Camera = App.Camera;
   var CameraLayout = App.CameraLayout;
+  var RecordsButtons = App.RecordsButtons;
 
   var CameraEvents = (function() {
     var verbose = true
+    var isTakingPicture = false
 
 
     /*Get access of the DOMs elements*/
@@ -49,6 +51,10 @@
     /*close the camera and change the image and alpha of the openCloseCameraButton accordingly*/
     var closeCamera = function(callback) {
 
+      if (isTakingPicture) {
+        stopTakingPicture();
+      }
+
       if (!Camera.isCameraOpen) {
         if (verbose) {
           console.log("CameraEvents: Was asked to close the camera that was already closed");
@@ -81,12 +87,12 @@
     }
 
 
-    var switchCamera = function(){
-      if(!Camera.isCameraOpen){
+    var switchCamera = function() {
+      if (!Camera.isCameraOpen) {
         Camera.switchCamera();
-      }else{
-        var callback = function(success){
-          if(success){
+      } else {
+        var callback = function(success) {
+          if (success) {
             Camera.switchCamera();
             openCamera();
           }
@@ -95,7 +101,7 @@
       }
     }
 
-    document.getElementById("switchCameraCheckBox").addEventListener("change", function(){
+    document.getElementById("switchCameraCheckBox").addEventListener("change", function() {
       switchCamera();
     })
 
@@ -220,14 +226,43 @@
       startStopTakingPicturesButton.style.visibility = "hidden";
     }
 
+    var startTakingPicture = function() {
+      isTakingPicture = true;
+      if (verbose) {
+        console.log("CameraEvents: just started taking pictures");
+      }
 
+    }
+
+    var stopTakingPicture = function() {
+      isTakingPicture = false;
+      if (verbose) {
+        console.log("CameraEvents: just stopped taking pictures");
+      }
+    }
+
+    var userClickedRedButton = function() {
+
+      if(isTakingPicture){
+        stopTakingPicture();
+      }else{
+        var delay = RecordsButtons.delay();
+        var isLooping = RecordsButtons.isLooping();
+        console.log(delay)
+        console.log(isLooping)
+
+      }
+
+    }
 
 
     return {
+      userClickedRedButton: userClickedRedButton
     }
 
   })();
 
+  RecordsButtons.setCameraEventModule(CameraEvents);
   App.CameraEvents = CameraEvents;
   window.App = App;
 

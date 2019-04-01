@@ -5,8 +5,9 @@
 
   var RecordsButtons = (function() {
     var verbose = true
-    var delay = 3
-    var manager = null;
+    var delay = 3;
+    var isLooping = false;
+    var cameraEventModule = null;
 
     var takePictureButton = document.getElementById("takePictureButton");
     var delayIndicator = document.getElementById("delayIndicator");
@@ -29,6 +30,13 @@
       }
     })
 
+    loopingCase.addEventListener("change", function(){
+      isLooping = loopingCase.checked;
+      if(verbose){
+        console.log("RecordsButtons: isLoopingg? "+ isLooping)
+      }
+    })
+
     var hideCheckBox = function() {
       if (!loopingWrapper.classList.contains("notDisplayed")) {
         loopingWrapper.classList.add("notDisplayed");
@@ -44,27 +52,34 @@
 
 
     takePictureButton.addEventListener("click", function() {
-      var looping = loopingCase.checked;
-      if (delay < 0.5) {
-        looping = false;
+
+      if (cameraEventModule) {
+        cameraEventModule.userClickedRedButton();
       }
 
-      var cameraEvent = new Object();
-      cameraEvent.delay = delay;
-      cameraEvent.looping = looping;
-      if (manager) {
-        manager.informUserPressedButton(cameraEvent);
-      }
     })
 
-    var setManager = function(m) {
-      manager = m;
+    var setCameraEventModule = function(cevm) {
+      if(verbose){
+        console.log("RecordsButtons: setting his cameraEventModule " + cevm);
+      }
+      cameraEventModule = cevm;
+    }
+
+    var getLooping = function(){
+      return isLooping;
+    }
+
+    var getDelay = function(){
+      return delay;
     }
 
     /*Explicitly reveal public pointers to the private functions
     that we want to reveal publicly*/
     return {
-      setManager: setManager
+      setCameraEventModule: setCameraEventModule,
+      isLooping: getLooping,
+      delay: getDelay
     }
   })();
 

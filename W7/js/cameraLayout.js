@@ -6,8 +6,6 @@
 
     //The DOMS elements
 
-    //the title of the posture to take
-    var postureToAdaptTitle = document.getElementById("postureToAdaptTitle");
     //the video element (needed in case we mirror it)
     var videoElement = document.getElementById("videoElement");
     //the canvas to display the points
@@ -15,7 +13,7 @@
     //in the videoElement
     var openOrCloseCameraButton = document.getElementById("openOrCloseCameraButton");
     var mirrorVideoButton = document.getElementById("mirrorVideoButton");
-    var postureToAdoptImg = document.getElementById("postureToAdoptImg");
+    var switchCameraWrapper = document.getElementById("switchCameraWrapper");
     var counter = document.getElementById("counter");
 
     var hideElement = function(toHide) {
@@ -34,13 +32,11 @@
 
     var getElementFromStringHelper = function(nameOfElement) {
       switch (nameOfElement) {
-        case "title":
-          return postureToAdaptTitle;
         case "openCloseButton":
           return openOrCloseCameraButton;
         case "mirrorButton":
           return mirrorVideoButton;
-        case "postureImage":
+        case "switchCameraWrapper":
           return postureToAdoptImg;
         case "counter":
           return counter;
@@ -59,15 +55,6 @@
     var show = function(element) {
       if (element.classList.contains("notDisplayed")) {
         element.classList.remove("notDisplayed");
-      }
-    }
-
-    var setTitle = function(newTitle) {
-      if (newTitle) {
-        postureToAdaptTitle.innerHTML = newTitle;
-        show(postureToAdaptTitle);
-      } else {
-        hide(postureToAdaptTitle);
       }
     }
 
@@ -127,16 +114,9 @@
       }, 50);
     }
 
-    var setGestureImg = function(src) {
-      postureToAdoptImg.src = src;
-    }
-
-
     return {
       hideElement: hideElement,
       showElement: showElement,
-      setTitle: setTitle,
-      setGestureImg: setGestureImg,
       setSrcForOpenCloseButton: setSrcForOpenCloseButton,
       mirrorElements: mirrorElements,
       updateCounter: updateCounter,
