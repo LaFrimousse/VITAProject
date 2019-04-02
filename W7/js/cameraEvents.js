@@ -33,6 +33,7 @@
 
       var cb = function(success) {
         if (success) {
+
           CameraLayout.setSrcForOpenCloseButton("images/closeCameraButton.png");
           CameraLayout.showElement("mirrorButton");
           noticeCameraJustOpenned();
@@ -78,6 +79,7 @@
 
           noticeCameraJustClosed();
 
+
           if (callback) {
             callback(true)
           }
@@ -113,6 +115,8 @@
 
     var noticeCameraJustOpenned = function() {
       console.log("CameraEvents: noticed that the camera just opened");
+      window.setTimeout(CameraLayout.replaceButtonInVideoElement, 150);
+
       /*var monTimeout = window.setTimeout(function(){
         takeInstantPicture(null, false)
       }, 1000);*/
@@ -121,6 +125,7 @@
 
     var noticeCameraJustClosed = function() {
       cancelTakingPictureWithDelay();
+      window.setTimeout(CameraLayout.replaceButtonInVideoElement, 0);
       console.log("CameraEvents: noticed that the camera just closed")
     }
 

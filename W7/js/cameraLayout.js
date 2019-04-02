@@ -114,13 +114,28 @@
       }, 50);
     }
 
+
+
+    var replaceButtonInVideoElement = function(){
+      console.log(getComputedStyle(videoElement).width)
+        
+    }
+    replaceButtonInVideoElement();
+
+    window.addEventListener("resize", function(){
+      console.log("resize");
+      replaceButtonInVideoElement();
+    })
+
+
     return {
       hideElement: hideElement,
       showElement: showElement,
       setSrcForOpenCloseButton: setSrcForOpenCloseButton,
       mirrorElements: mirrorElements,
       updateCounter: updateCounter,
-      animePictureTaken: animePictureTaken
+      animePictureTaken: animePictureTaken,
+      replaceButtonInVideoElement:replaceButtonInVideoElement
     }
   })();
 
