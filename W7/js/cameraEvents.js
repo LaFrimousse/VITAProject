@@ -247,7 +247,6 @@
       }
     }
 
-
     return {
       userClickedRedButton: userClickedRedButton
     }

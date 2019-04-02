@@ -54,6 +54,10 @@
   height: 25px;
 }
 
+#closeCameraButton:active {
+  transform: scale(.9);
+}
+
 #mirrorVideoButton {
   opacity: 0.8;
   padding: 2px;
@@ -62,6 +66,10 @@
   left: 0px;
   width: 30px;
   height: 30px;
+}
+
+#mirrorVideoButton:active {
+  transform: scale(.9);
 }
 
 .switchBoxWrapper {
@@ -87,7 +95,7 @@
   margin-right: 5px;
 }
 
-#switchBoxWrapper div{
+#switchBoxWrapper div {
   margin: 0px;
   padding: 0px;
 }
@@ -114,47 +122,49 @@
 
 /*--------------------------------------------------------------------------------*/
 #cameraRecordButtons {
-  background-color: green;
-  min-width: 100px;
-  min-height: 50px;
+  background-color: rgb(105, 109, 106);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+#delayButtonLooping {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 #takePictureButton {
   max-width: 40px;
   max-height: 40px;
   display: block;
-  margin: auto;
+  flex: 1;
 }
 
-.delayAndLooping {
-  display: flex;
-  justify-content: space-around;
-  background-color: orange;
-  padding: 2px;
+#takePictureButton:active {
+  transform: scale(.9);
 }
 
 .delayp {
-  background-color: red;
+  text-align: center;
+  flex: 1;
 }
 
 #loopingWrapper {
-  background-color: brown;
-  margin: 0px;
-  padding: 0px;
-  margin-right: 0px;
+  text-align: center;
+  flex: 1;
 }
 
-#looping {
-  background-color: blue;
-}
-
-#delayRecordSlider {
+#delaySlider {
   display: block;
-  margin: auto;
-  width: 60%;
+  max-width: 80%;
+  min-width: 50%;
 }
 
-.notDisplayed{
+.notDisplayed {
   display: none;
 }
 

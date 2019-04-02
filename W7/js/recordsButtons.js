@@ -6,8 +6,8 @@
 
   var RecordsButtons = (function() {
     var verbose = true
-    var delay = null;//number
-    var isLooping = null;//boolean
+    var delay = null; //number
+    var isLooping = null; //boolean
     var cameraEventModule = null;
 
     var takePictureButton = document.getElementById("takePictureButton");
@@ -28,22 +28,22 @@
       }
     })
 
-    loopingCase.addEventListener("change", function(){
+    loopingCase.addEventListener("change", function() {
       isLooping = loopingCase.checked;
-      if(verbose){
-        console.log("RecordsButtons: isLoopingg? "+ isLooping)
+      if (verbose) {
+        console.log("RecordsButtons: isLoopingg? " + isLooping)
       }
     })
 
     var hideCheckBox = function() {
-      if (!loopingWrapper.classList.contains("notDisplayed")) {
-        loopingWrapper.classList.add("notDisplayed");
+      if (!loopingWrapper.classList.contains("hidden")) {
+        loopingWrapper.classList.add("hidden");
       }
     }
 
     var showCheckBox = function() {
-      if (loopingWrapper.classList.contains("notDisplayed")) {
-        loopingWrapper.classList.remove("notDisplayed");
+      if (loopingWrapper.classList.contains("hidden")) {
+        loopingWrapper.classList.remove("hidden");
       }
     }
 
@@ -54,34 +54,34 @@
     })
 
     var setCameraEventModule = function(cevm) {
-      if(verbose){
+      if (verbose) {
         console.log("RecordsButtons: setting his cameraEventModule " + cevm);
       }
       cameraEventModule = cevm;
     }
 
-    var getLooping = function(){
+    var getLooping = function() {
       return isLooping;
     }
 
-    var getDelay = function(){
+    var getDelay = function() {
       return delay * 1000;
     }
 
-    var setButtonRed = function(){
+    var setButtonRed = function() {
       takePictureButton.src = "images/takePictureButton.png";
     }
 
-    var setButtonGray = function(){
+    var setButtonGray = function() {
       takePictureButton.src = "images/takePictureButtonGray.png";
     }
 
-    var setInitialValues = function(){
+    var setInitialValues = function() {
       var multCamera = Camera.hasMultipleCameraAvailable();
-      if(multCamera){
+      if (multCamera) {
         delay = 0;
         isLooping = false;
-      }else{
+      } else {
         isLooping = true;
         delay = 3;
       }
@@ -99,8 +99,8 @@
       setCameraEventModule: setCameraEventModule,
       isLooping: getLooping,
       delay: getDelay,
-      setButtonRed:setButtonRed,
-      setButtonGray:setButtonGray
+      setButtonRed: setButtonRed,
+      setButtonGray: setButtonGray
     }
   })();
 

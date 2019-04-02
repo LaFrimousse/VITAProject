@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/slider.css" />
   <link rel="stylesheet" href="css/gestureProposal.css" />
@@ -33,24 +33,20 @@
       <!--For the pointsOverVideo module: this canvas is the DOM element in which points and lines are going to be drawn over the video frame.-->
       <canvas id="canvasForLivePoints"></canvas>
 
-      <img id="closeCameraButton" src="images/closeCameraButton.png" />
+      <img id="closeCameraButton" class="notDisplayed" src="images/closeCameraButton.png" />
 
-      <div class= "switchBoxWrapper notDisplayed" id="switchBoxWrapper">
+      <div class="switchBoxWrapper notDisplayed" id="switchBoxWrapper">
         <p>Back camera</p>
         <div>
           <label class="switch">
-          <input type="checkbox" id="switchCameraCheckBox">
-          <span class="slider round"></span>
+            <input type="checkbox" id="switchCameraCheckBox">
+            <span class="slider round"></span>
           </label>
         </div>
         <p>Front camera</p>
       </div>
 
-
-
       <img id="mirrorVideoButton" src="images/mirror.png" class="notDisplayed" />
-
-
 
       <img id="postureToAdoptImg" src="images/questionMark.jpg" />
       <p id="counter" class="notDisplayed">-1</p>
@@ -59,18 +55,19 @@
 
     <div id="cameraRecordButtons">
 
+      <div id="delayButtonLooping">
+        <p class="delayp">Delay: <span id="delayIndicator"></span> sec</p>
+
         <img id="takePictureButton" src="images/takePictureButton.png" />
 
-        <div class="delayAndLooping">
-          <p class="delayp">Delay: <span id = "delayIndicator"></span> sec</p>
-          <div id="loopingWrapper">
-            <input type="checkbox" name="loopingBox" id="loopingBox"/>
-            <label for="loopingBox">Looping</label>
-          </div>
+        <div id="loopingWrapper">
+          <input type="checkbox" name="loopingBox" id="loopingBox" />
+          <label for="loopingBox">Looping</label>
         </div>
+      </div>
 
-       <input type="range" id="delaySlider" name="delaySlider"
-         min="0" max="10" step = "0.5">
+
+      <input type="range" id="delaySlider" name="delaySlider" min="0" max="10" step="0.5">
 
     </div>
 
