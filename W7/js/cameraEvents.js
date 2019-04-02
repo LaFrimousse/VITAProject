@@ -8,6 +8,10 @@
   var CameraEvents = (function() {
     var verbose = true
     var isTakingPicture = false
+    var manager = null;
+
+    var systemPictureInterval = null;
+    var systemPictureIntervalTime = 500;
 
 
     /*Get access of the DOMs elements*/
@@ -115,12 +119,21 @@
 
       window.setTimeout(CameraLayout.replaceButtonInVideoElement, 150);
 
+      if (systemPictureInterval != null) {
+        window.clearInterval(systemPictureInterval);
+      }
+
       console.log("CameraEvents: noticed that the camera just opened");
+      systemPictureInterval = window.setInterval(function(){
+        takeInstantPicture(false)
+      }, systemPictureIntervalTime);
 
     }
 
     var noticeCameraJustClosed = function() {
       cancelTakingPictureWithDelay();
+      window.clearInterval(systemPictureInterval);
+      systemPictureInterval = null;
 
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("mirrorButton");
@@ -144,11 +157,27 @@
       }
     })
 
-    var takeInstantPicture = function(callback, animated) {
-      Camera.takePicture(callback);
-      if (animated) {
+    var takeInstantPicture = function(userAction) {
+      var systemCallBack = function(data) {
+        if (manager) {
+          manager.systemTookPicture();
+        }
+      }
+
+      var userCallBack = function(data) {
+        if (manager) {
+          manager.userTookPicture();
+        }
+      }
+
+      var callback = userAction ? userCallBack : systemCallBack;
+      var data = Camera.takePicture();
+
+      if (userAction) {
         CameraLayout.animePictureTaken();
       }
+
+      callback(data);
     }
 
 
@@ -165,13 +194,13 @@
       CameraLayout.updateCounter(remainingTime / 1000);
 
       if (remainingTime <= 0) {
-        takeInstantPicture(null, true);
+        takeInstantPicture(true);
 
         if (RecordsButtons.isLooping()) {
           var nextDelay = RecordsButtons.delay();
-          if(nextDelay > 0){
+          if (nextDelay > 0) {
             updateCounter(nextDelay);
-          }else{
+          } else {
             CameraLayout.updateCounter(null);
             stopTakingPicture();
           }
@@ -237,26 +266,34 @@
     }
 
     var userClickedRedButton = function() {
-      if(isTakingPicture){
+      if (isTakingPicture) {
         stopTakingPicture();
-      }else{
+      } else {
         var delay = RecordsButtons.delay();
 
-        if(!Camera.isCameraOpen){
+        if (!Camera.isCameraOpen) {
           openCamera();
-        }else{
+        } else {
           //the camera is open
-          if(delay > 0){
+          if (delay > 0) {
             startTakingPicture();
-          }else{
-            takeInstantPicture(null, true);
+          } else {
+            takeInstantPicture(true);
           }
         }
       }
     }
 
+    var setManager = function(m) {
+      if (verbose) {
+        console.log("CameraEvents: setting his manager " + m);
+      }
+      manager = m;
+    }
+
     return {
-      userClickedRedButton: userClickedRedButton
+      userClickedRedButton: userClickedRedButton,
+      setManager: setManager
     }
 
   })();

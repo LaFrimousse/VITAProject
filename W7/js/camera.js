@@ -14,7 +14,7 @@ This module is never responsible for any Layout*/
   var App = window.App || {};
 
   var Camera = (function() {
-    var verbose = true
+    var verbose = false
     var actuallyOpeningOrClosing = false;
 
     //the DOM element in which the video is displayed
@@ -223,7 +223,6 @@ This module is never responsible for any Layout*/
       close: closeCamera,
       isCameraOpen: isCameraOpen,
       takePicture: takePicture,
-      verbose: verbose,
       switchCamera: switchCamera,
       hasMultipleCameraAvailable:hasMultipleCameraAvailable
     }
