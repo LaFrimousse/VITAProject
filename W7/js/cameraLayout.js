@@ -6,6 +6,8 @@
 
     //The DOMS elements
 
+    //usefull to layout the buttons
+    var videoElementContainer = document.getElementById("videoElementContainer");
     //the video element (needed in case we mirror it)
     var videoElement = document.getElementById("videoElement");
     //the canvas to display the points
@@ -117,8 +119,14 @@
 
 
     var replaceButtonInVideoElement = function(){
-      console.log(getComputedStyle(videoElement).width)
-        
+      var padding = 0;
+      var videoElementContainerWidth = parseInt(getComputedStyle(videoElementContainer).width);
+      var videoElementWidth = parseInt(getComputedStyle(videoElement).width);
+      var offsetForLeftButton = (videoElementContainerWidth - videoElementWidth)/2 + padding
+
+      openOrCloseCameraButton.style.left = offsetForLeftButton+"px";
+      mirrorVideoButton.style.left = offsetForLeftButton+"px";
+
     }
     replaceButtonInVideoElement();
 
