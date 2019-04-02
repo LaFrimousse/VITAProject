@@ -1,4 +1,5 @@
 .switch {
+  pointer-events:auto;
   position: relative;
   display: inline-block;
   width: 30px;

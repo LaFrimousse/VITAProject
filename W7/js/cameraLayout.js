@@ -17,6 +17,16 @@
     var mirrorVideoButton = document.getElementById("mirrorVideoButton");
     var switchCameraWrapper = document.getElementById("switchCameraWrapper");
     var counter = document.getElementById("counter");
+    //usefull only to resize
+    var postureToAdoptImg = document.getElementById("postureToAdoptImg");
+
+    postureToAdoptImg.addEventListener("click", function() {
+      if (postureToAdoptImg.classList.contains("alpha04")) {
+        postureToAdoptImg.classList.remove("alpha04");
+      } else {
+        postureToAdoptImg.classList.add("alpha04");
+      }
+    })
 
     var hideElement = function(toHide) {
       if (toHide == "points") {
@@ -118,19 +128,24 @@
 
 
 
-    var replaceButtonInVideoElement = function(){
-      var padding = 0;
+    var replaceButtonInVideoElement = function() {
       var videoElementContainerWidth = parseInt(getComputedStyle(videoElementContainer).width);
       var videoElementWidth = parseInt(getComputedStyle(videoElement).width);
-      var offsetForLeftButton = (videoElementContainerWidth - videoElementWidth)/2 + padding
+      var offsetForLeftButton = (videoElementContainerWidth - videoElementWidth) / 2
 
-      openOrCloseCameraButton.style.left = offsetForLeftButton+"px";
-      mirrorVideoButton.style.left = offsetForLeftButton+"px";
+      openOrCloseCameraButton.style.left = offsetForLeftButton + "px";
+      mirrorVideoButton.style.left = offsetForLeftButton + "px";
 
+      var offsetForRightButton = offsetForLeftButton + videoElementWidth;
+
+      postureToAdoptImg.style.right = offsetForLeftButton + "px";
+      postureToAdoptImg.style.maxWidth = videoElementWidth / 5 + "px";
+
+      counter.style.right = offsetForLeftButton + "px";
     }
     replaceButtonInVideoElement();
 
-    window.addEventListener("resize", function(){
+    window.addEventListener("resize", function() {
       console.log("resize");
       replaceButtonInVideoElement();
     })
@@ -143,7 +158,7 @@
       mirrorElements: mirrorElements,
       updateCounter: updateCounter,
       animePictureTaken: animePictureTaken,
-      replaceButtonInVideoElement:replaceButtonInVideoElement
+      replaceButtonInVideoElement: replaceButtonInVideoElement
     }
   })();
 

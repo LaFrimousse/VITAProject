@@ -1,14 +1,14 @@
-#titleCameraButtonWrapper{
+#titleCameraButtonWrapper {
   background-color: yellow;
   padding: 1px;
   width: 100%;
 }
 
-#postureToAdaptTitle{
-   font-size: large;
-   text-align: center;
-   margin: 0px;
-   font-family: Arial, Comic Sans MS, serif;
+#postureToAdaptTitle {
+  font-size: large;
+  text-align: center;
+  margin: 0px;
+  font-family: Arial, Comic Sans MS, serif;
 }
 
 #videoElementContainer {
@@ -19,7 +19,6 @@
   max-width: 100%;
   padding: 0px;
   /*https://stackoverflow.com/questions/20590239/maintain-aspect-ratio-of-div-but-fill-screen-width-and-height-in-css*/
-
 }
 
 /*The canvas in the one the picture taken are rendered before being turned in an image*/
@@ -31,7 +30,7 @@
 #videoElement {
   margin: auto;
   display: block;
-  max-width: 99%;
+  max-width: 100%;
   max-height: 60vh;
 }
 
@@ -43,7 +42,7 @@
   width: 100%;
   height: 100%;
   /*background-color: blue;
-  opacity: 0.1*/
+  opacity: 0.4*/
 }
 
 #openOrCloseCameraButton {
@@ -65,11 +64,39 @@
   height: 30px;
 }
 
+#switchBoxWrapper {
+  pointer-events: none;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+}
+
+#switchBoxWrapper p {
+  font-size: small;
+  padding: 0px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#switchBoxWrapper div{
+  margin: 0px;
+  padding: 0px;
+}
+
 #postureToAdoptImg {
   position: absolute;
   top: 0px;
   right: 0px;
-  display: none;
+  max-width: 50px;
 }
 
 #counter {
@@ -81,59 +108,55 @@
   font-size: xx-large;
 }
 
-
-.redCounter{
+.redCounter {
   color: red;
 }
 
-
 /*--------------------------------------------------------------------------------*/
-
-#cameraRecordButtons{
+#cameraRecordButtons {
   background-color: green;
   min-width: 100px;
   min-height: 50px;
 }
 
-#takePictureButton{
+#takePictureButton {
   max-width: 40px;
   max-height: 40px;
   display: block;
   margin: auto;
 }
 
-.delayAndLooping{
+.delayAndLooping {
   display: flex;
   justify-content: space-around;
   background-color: orange;
   padding: 2px;
 }
 
-.delayp{
+.delayp {
   background-color: red;
 }
 
-#loopingWrapper{
+#loopingWrapper {
   background-color: brown;
   margin: 0px;
   padding: 0px;
   margin-right: 0px;
 }
 
-#looping{
+#looping {
   background-color: blue;
 }
 
-#delayRecordSlider{
+#delayRecordSlider {
   display: block;
   margin: auto;
   width: 60%;
 }
 
-
 /*@media all and (min-width: 768px) {*/
-
-  /*Does not target the phones*//*
+/*Does not target the phones*/
+/*
   body {
     margin: 10px;
   }
