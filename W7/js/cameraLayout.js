@@ -69,7 +69,7 @@
         case "counter":
           return counter;
         default:
-          console.err("CameraLayoutModule: No element to select that corresponds to " + nameOfElement);
+          console.error("CameraLayoutModule: No element to select that corresponds to " + nameOfElement);
           return;
       }
     }

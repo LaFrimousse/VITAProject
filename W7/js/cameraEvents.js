@@ -214,6 +214,8 @@
     var startTakingPicture = function() {
       isTakingPicture = true;
       RecordsButtons.setButtonGray();
+      CameraLayout.hideElement("mirrorButton");
+      CameraLayout.hideElement("closeCameraButton");
       updateCounter(RecordsButtons.delay());
       if (verbose) {
         console.log("CameraEvents: just started taking pictures");
@@ -223,8 +225,10 @@
 
     var stopTakingPicture = function() {
       cancelTakingPictureWithDelay();
-      isTakingPicture = false;
+      CameraLayout.showElement("mirrorButton");
+      CameraLayout.showElement("closeCameraButton");
       RecordsButtons.setButtonRed();
+      isTakingPicture = false;
       if (verbose) {
         console.log("CameraEvents: just stopped taking pictures");
       }
