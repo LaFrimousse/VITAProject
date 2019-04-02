@@ -216,8 +216,6 @@ This module is never responsible for any Layout*/
       });
     }
 
-    hasMultipleCameraAvailable();
-
     /*Explicitly reveal public pointers to the private functions
     that we want to reveal publicly*/
     return {

@@ -216,6 +216,7 @@
       RecordsButtons.setButtonGray();
       CameraLayout.hideElement("mirrorButton");
       CameraLayout.hideElement("closeCameraButton");
+      CameraLayout.hideElement("switchCameraWrapper");
       updateCounter(RecordsButtons.delay());
       if (verbose) {
         console.log("CameraEvents: just started taking pictures");
@@ -227,6 +228,7 @@
       cancelTakingPictureWithDelay();
       CameraLayout.showElement("mirrorButton");
       CameraLayout.showElement("closeCameraButton");
+      CameraLayout.showElement("switchCameraWrapper");
       RecordsButtons.setButtonRed();
       isTakingPicture = false;
       if (verbose) {

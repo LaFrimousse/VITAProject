@@ -6,7 +6,10 @@
   var CameraLayout = (function() {
     var verbose = true;
 
-    var shouldDisplayCameraSwitch = Camera.hasMultipleCameraAvailable();
+    var shouldDisplayCameraSwitch = false;
+    Camera.hasMultipleCameraAvailable(function(multAvailable){
+      shouldDisplayCameraSwitch = multAvailable
+    });
 
     //The DOMS elements
     //usefull to layout the buttons
