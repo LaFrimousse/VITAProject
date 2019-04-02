@@ -23,13 +23,26 @@
     //usefull only to resize
     var postureToAdoptImg = document.getElementById("postureToAdoptImg");
 
-    postureToAdoptImg.addEventListener("click", function() {
+
+
+    var switchOpacityFunction = function(){
       if (postureToAdoptImg.classList.contains("alpha04")) {
         postureToAdoptImg.classList.remove("alpha04");
       } else {
         postureToAdoptImg.classList.add("alpha04");
       }
-    })
+    }
+
+    var addImageOpacityListener = function(){
+      postureToAdoptImg.addEventListener("click", switchOpacityFunction);
+    }
+
+    var removeImageOpacityListener = function(){
+      postureToAdoptImg.removeEventListener("click", switchOpacityFunction);
+      if (postureToAdoptImg.classList.contains("alpha04")) {
+        postureToAdoptImg.classList.remove("alpha04");
+      }
+    }
 
     var hideElement = function(toHide) {
       if (toHide == "points") {
@@ -164,7 +177,9 @@
       mirrorElements: mirrorElements,
       updateCounter: updateCounter,
       animePictureTaken: animePictureTaken,
-      replaceButtonInVideoElement: replaceButtonInVideoElement
+      replaceButtonInVideoElement: replaceButtonInVideoElement,
+      addImageOpacityListener:addImageOpacityListener,
+      removeImageOpacityListener:removeImageOpacityListener
     }
   })();
 

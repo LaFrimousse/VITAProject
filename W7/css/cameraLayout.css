@@ -1,7 +1,9 @@
 #titleCameraButtonWrapper {
   background-color: yellow;
-  padding: 1px;
+  border: 1px solid black;
+  padding: 0px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 #postureToAdaptTitle {
@@ -9,12 +11,12 @@
   text-align: center;
   margin: 0px;
   font-family: Arial, Comic Sans MS, serif;
+  border-bottom: 1px solid black;
 }
 
 #videoElementContainer {
   /*No padding or margin in this element since the 2 children are abolutely align.
   But can create a parent div if a external border is really wanted*/
-  background: red;
   position: relative;
   max-width: 100%;
   padding: 0px;

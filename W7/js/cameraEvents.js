@@ -111,6 +111,7 @@
       CameraLayout.showElement("closeCameraButton");
       CameraLayout.showElement("mirrorButton");
       CameraLayout.showElement("switchCameraWrapper");
+      CameraLayout.addImageOpacityListener();
 
       window.setTimeout(CameraLayout.replaceButtonInVideoElement, 150);
 
@@ -124,6 +125,7 @@
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("mirrorButton");
       CameraLayout.hideElement("switchCameraWrapper");
+      CameraLayout.removeImageOpacityListener();
 
       window.setTimeout(CameraLayout.replaceButtonInVideoElement, 0);
       console.log("CameraEvents: noticed that the camera just closed")
