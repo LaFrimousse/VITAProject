@@ -17,6 +17,7 @@
     /*Get access of the DOMs elements*/
     var closeCameraButton = document.getElementById("closeCameraButton")
     var mirrorVideoButton = document.getElementById("mirrorVideoButton")
+    var isMirrored = false;
 
     /*open the camera and ask to update the UI accordingly*/
     var openCamera = function(callback) {
@@ -139,6 +140,10 @@
       CameraLayout.hideElement("mirrorButton");
       CameraLayout.hideElement("switchCameraWrapper");
       CameraLayout.removeImageOpacityListener();
+      if(isMirrored){
+        CameraLayout.mirrorElements();
+        isMirrored = false;
+      }
 
       window.setTimeout(CameraLayout.replaceButtonInVideoElement, 0);
       console.log("CameraEvents: noticed that the camera just closed")
@@ -148,6 +153,7 @@
     /*Add an event listener on the mirror button that mirrors some elements*/
     mirrorVideoButton.addEventListener("click", function() {
       CameraLayout.mirrorElements();
+      isMirrored = !isMirrored;
     })
 
     /*add an event listener on the openCloseCameraButton to open or close the camera*/
