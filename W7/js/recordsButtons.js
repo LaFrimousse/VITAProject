@@ -76,8 +76,7 @@
       takePictureButton.src = "images/takePictureButtonGray.png";
     }
 
-    var setInitialValues = function() {
-      var multCamera = Camera.hasMultipleCameraAvailable();
+    var setInitialValues = function(multCamera) {
       if (multCamera) {
         delay = 0;
         isLooping = false;
@@ -90,7 +89,10 @@
       loopingCase.checked = isLooping;
     };
 
-    setInitialValues();
+    setInitialValues(false);
+    Camera.hasMultipleCameraAvailable(function(mult){
+      setInitialValues(mult);
+    })
 
 
     /*Explicitly reveal public pointers to the private functions
