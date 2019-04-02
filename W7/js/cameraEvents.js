@@ -11,7 +11,7 @@
 
 
     /*Get access of the DOMs elements*/
-    var openOrCloseCameraButton = document.getElementById("openOrCloseCameraButton")
+    var closeCameraButton = document.getElementById("closeCameraButton")
     var mirrorVideoButton = document.getElementById("mirrorVideoButton")
 
     /*open the camera and ask to update the UI accordingly*/
@@ -33,9 +33,6 @@
 
       var cb = function(success) {
         if (success) {
-
-          CameraLayout.setSrcForOpenCloseButton("images/closeCameraButton.png");
-          CameraLayout.showElement("mirrorButton");
           noticeCameraJustOpenned();
 
           if (callback) {
@@ -74,11 +71,7 @@
 
       var cb = function(success) {
         if (success) {
-          CameraLayout.setSrcForOpenCloseButton("images/openCameraButton.png");
-          CameraLayout.hideElement("mirrorButton");
-
           noticeCameraJustClosed();
-
 
           if (callback) {
             callback(true)
@@ -114,17 +107,24 @@
 
 
     var noticeCameraJustOpenned = function() {
-      console.log("CameraEvents: noticed that the camera just opened");
+
+      CameraLayout.showElement("closeCameraButton");
+      CameraLayout.showElement("mirrorButton");
+      CameraLayout.showElement("switchCameraWrapper");
+
       window.setTimeout(CameraLayout.replaceButtonInVideoElement, 150);
 
-      /*var monTimeout = window.setTimeout(function(){
-        takeInstantPicture(null, false)
-      }, 1000);*/
-      /*takePictureWithDelay(null, 3000, true);*/
+      console.log("CameraEvents: noticed that the camera just opened");
+
     }
 
     var noticeCameraJustClosed = function() {
       cancelTakingPictureWithDelay();
+
+      CameraLayout.hideElement("closeCameraButton");
+      CameraLayout.hideElement("mirrorButton");
+      CameraLayout.hideElement("switchCameraWrapper");
+
       window.setTimeout(CameraLayout.replaceButtonInVideoElement, 0);
       console.log("CameraEvents: noticed that the camera just closed")
     }
@@ -136,11 +136,9 @@
     })
 
     /*add an event listener on the openCloseCameraButton to open or close the camera*/
-    openOrCloseCameraButton.addEventListener("click", function() {
+    closeCameraButton.addEventListener("click", function() {
       if (Camera.isCameraOpen) {
         closeCamera()
-      } else {
-        openCamera()
       }
     })
 
@@ -237,14 +235,7 @@
         var delay = RecordsButtons.delay();
 
         if(!Camera.isCameraOpen){
-          if(delay == 0){
-            openCamera();
-            return;
-          }else{
-            openCamera(function(){
-              userClickedRedButton();
-            })
-          }
+          openCamera();
         }else{
           //the camera is open
           if(delay > 0){

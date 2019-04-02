@@ -1,12 +1,13 @@
 (function(window) {
   'use strict';
 
-  var App = window.App || {};
+  var App = window.App;
+  var Camera = App.Camera;
 
   var RecordsButtons = (function() {
     var verbose = true
-    var delay = 3;
-    var isLooping = false;
+    var delay = null;//number
+    var isLooping = null;//boolean
     var cameraEventModule = null;
 
     var takePictureButton = document.getElementById("takePictureButton");
@@ -15,9 +16,6 @@
     var loopingCase = document.getElementById("loopingBox");
     var loopingWrapper = document.getElementById("loopingWrapper");
 
-    //set the initialDelay of 3 sec
-    delayIndicator.innerHTML = delay.toFixed(1);
-    slider.value = delay;
 
     slider.addEventListener("input", function() {
       delay = parseFloat(slider.value);
@@ -49,14 +47,10 @@
       }
     }
 
-
-
     takePictureButton.addEventListener("click", function() {
-
       if (cameraEventModule) {
         cameraEventModule.userClickedRedButton();
       }
-
     })
 
     var setCameraEventModule = function(cevm) {
@@ -81,6 +75,23 @@
     var setButtonGray = function(){
       takePictureButton.src = "images/takePictureButtonGray.png";
     }
+
+    var setInitialValues = function(){
+      var multCamera = Camera.hasMultipleCameraAvailable();
+      if(multCamera){
+        delay = 0;
+        isLooping = false;
+      }else{
+        isLooping = true;
+        delay = 3;
+      }
+      delayIndicator.innerHTML = delay.toFixed(1);
+      slider.value = delay;
+      loopingCase.checked = isLooping;
+    };
+
+    setInitialValues();
+
 
     /*Explicitly reveal public pointers to the private functions
     that we want to reveal publicly*/

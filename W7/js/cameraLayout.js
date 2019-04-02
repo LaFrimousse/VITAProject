@@ -1,11 +1,14 @@
 (function(window) {
   'use strict';
-  var App = window.App || {};
+  var App = window.App;
+  var Camera = App.Camera;
 
   var CameraLayout = (function() {
+    var verbose = true;
+
+    var shouldDisplayCameraSwitch = Camera.hasMultipleCameraAvailable();
 
     //The DOMS elements
-
     //usefull to layout the buttons
     var videoElementContainer = document.getElementById("videoElementContainer");
     //the video element (needed in case we mirror it)
@@ -13,9 +16,9 @@
     //the canvas to display the points
     var canvasForLivePoints = document.getElementById("canvasForLivePoints");
     //in the videoElement
-    var openOrCloseCameraButton = document.getElementById("openOrCloseCameraButton");
+    var closeCameraButton = document.getElementById("closeCameraButton");
     var mirrorVideoButton = document.getElementById("mirrorVideoButton");
-    var switchCameraWrapper = document.getElementById("switchCameraWrapper");
+    var switchCameraWrapper = document.getElementById("switchBoxWrapper");
     var counter = document.getElementById("counter");
     //usefull only to resize
     var postureToAdoptImg = document.getElementById("postureToAdoptImg");
@@ -44,12 +47,12 @@
 
     var getElementFromStringHelper = function(nameOfElement) {
       switch (nameOfElement) {
-        case "openCloseButton":
-          return openOrCloseCameraButton;
+        case "closeCameraButton":
+          return closeCameraButton;
         case "mirrorButton":
           return mirrorVideoButton;
         case "switchCameraWrapper":
-          return postureToAdoptImg;
+          return switchCameraWrapper;
         case "counter":
           return counter;
         default:
@@ -65,14 +68,18 @@
     }
 
     var show = function(element) {
+      if(element == switchCameraWrapper && !shouldDisplayCameraSwitch){
+        if(verbose){
+          console.log("CameraLayout: not showing the switchCamera switch");
+        }
+        return;
+      }
+
       if (element.classList.contains("notDisplayed")) {
         element.classList.remove("notDisplayed");
       }
     }
 
-    var setSrcForOpenCloseButton = function(src) {
-      openOrCloseCameraButton.src = src;
-    }
 
     var mirrorElements = function() {
       var elemsToMirror = [videoElement, canvasForLivePoints, mirrorVideoButton, postureToAdoptImg];
@@ -133,7 +140,7 @@
       var videoElementWidth = parseInt(getComputedStyle(videoElement).width);
       var offsetForLeftButton = (videoElementContainerWidth - videoElementWidth) / 2
 
-      openOrCloseCameraButton.style.left = offsetForLeftButton + "px";
+      closeCameraButton.style.left = offsetForLeftButton + "px";
       mirrorVideoButton.style.left = offsetForLeftButton + "px";
 
       var offsetForRightButton = offsetForLeftButton + videoElementWidth;
@@ -154,7 +161,6 @@
     return {
       hideElement: hideElement,
       showElement: showElement,
-      setSrcForOpenCloseButton: setSrcForOpenCloseButton,
       mirrorElements: mirrorElements,
       updateCounter: updateCounter,
       animePictureTaken: animePictureTaken,

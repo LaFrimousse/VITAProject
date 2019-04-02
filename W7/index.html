@@ -18,13 +18,6 @@
 <body>
 
 
-
-
-
-
-
-
-
   <div id="titleCameraButtonWrapper">
     <p id="postureToAdaptTitle">Mon joli titre</p>
 
@@ -40,9 +33,9 @@
       <!--For the pointsOverVideo module: this canvas is the DOM element in which points and lines are going to be drawn over the video frame.-->
       <canvas id="canvasForLivePoints"></canvas>
 
-      <img id="openOrCloseCameraButton" src="images/openCameraButton.png" />
+      <img id="closeCameraButton" src="images/closeCameraButton.png" />
 
-      <div id="switchBoxWrapper">
+      <div class= "switchBoxWrapper notDisplayed" id="switchBoxWrapper">
         <p>Back camera</p>
         <div>
           <label class="switch">
@@ -106,6 +99,7 @@
   <script src="js/cameraLayout.js"></script>
   <script src="js/recordsButtons.js"></script>
   <script src="js/cameraEvents.js"></script>
+
 
 
   <!--
