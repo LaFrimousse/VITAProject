@@ -32,7 +32,6 @@
 
   }();
 
-  console.log(Manager);
   CameraEvents.setManager(Manager);
 
 })(window);
