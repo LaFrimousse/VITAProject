@@ -1,6 +1,40 @@
-#categoriesModule{
+.categoryDisplayWrapper{
 border: 1px solid green;
+min-height: 100px;
 }
+
+.categorySelectCheckBoxWrapper{
+  border: 1px solid blue;
+  display: flex;
+  justify-content: space-between;
+}
+
+.categoryModeCheckBoxWrapper{
+  background: yellow;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.categoryModeCheckBoxWrapper label{
+  background: blue;
+}
+
+.pictureDisplayWrapper{
+  border: 1px solid red;
+  min-height: 100px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 #categorySelected{
   display: flex;

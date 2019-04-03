@@ -20,7 +20,7 @@
 
 
   <div id="titleCameraButtonWrapper">
-    <p id="postureToAdaptTitle">Mon joli titre</p>
+    <p id="postureToAdaptTitle"></p>
 
     <div id="videoElementContainer">
       <!--For the camera module: the videoBackedUpCanvas is the DOM element in which a particular frame of the video stream is rendered before getting turned into a data each time the camera module is asked to take a picture.
@@ -74,13 +74,32 @@
 
   </div>
 
+  <div class="categoryDisplayWrapper">
+
+    <div class="categorySelectCheckBoxWrapper">
+      <select name="categoryChoosen" id="categorySelector">
+        <option disabled selected value> -- No category manually selected-- </option>
+      </select>
+      <div class="categoryModeCheckBoxWrapper">
+        <input type="checkbox" name="proposalModeCheckBox" id="proposalModeCheckBox" />
+        <label for="proposalModeCheckBox">Automatic Proposition</label>
+      </div>
+    </div>
+
+    <div class="pictureDisplayWrapper">
+
+    </div>
+
+
+  </div>
+
 
 
 
   <div id="categoriesModule">
     <div id="categorySelected">
       <select name="categoryChoosen" id="categorySelector">
-        <option disabled selected value> -- Please select a category -- </option>
+        <option disabled selected value> -- No category manually selected-- </option>
       </select>
       <img id="categoryChoosenImg" src="images/questionMark.jpg" />
     </div>

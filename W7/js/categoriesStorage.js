@@ -152,7 +152,7 @@
 
     var randomCategory = function(){
       var randomIndex = Math.floor(Math.random() * categories.length);
-      actualCategoryIndex = randomIndex;
+      return randomIndex;
     }
 
     var getCategorySuggestionFromServer = function(){
@@ -160,15 +160,60 @@
     }
 
     var proposeNextCategory = function(){
-      var fromServer = getCategorySuggestionFromServer();
-      if (Number.isInteger(fromServer)) {
-        actualCategoryIndex = fromServer;
+      if(selector.selectedIndex != 0){
+        //manual propostion
+        actualCategoryIndex = selector.selectedIndex - 1;
+      }else if (checkbox.checked){
+        //propostion from the server
+        var fromServer = getCategorySuggestionFromServer();
+        if (Number.isInteger(fromServer)) {
+          actualCategoryIndex = fromServer;
+        }else{
+          actualCategoryIndex = randomCategory();
+        }
       }else{
-        randomCategory();
+        //no category
+        actualCategoryIndex = -1;
       }
     }
 
-    
+    //-------------FROM HERE EVERYTHING ABOUT THE LAYOUT----------
+    var selector = document.getElementById("categorySelector");
+    var checkbox = document.getElementById("proposalModeCheckBox");
+    checkbox.checked = true;
+    var imageForCat = document.getElementById("postureToAdoptImg");
+    var title = document.getElementById("postureToAdaptTitle");
+
+    categories.forEach(function(cat) {
+      selector.insertAdjacentHTML("beforeend", '<option>' + cat.title + '</option>')
+    })
+
+    selector.addEventListener("change", function() {
+      checkbox.checked = false
+      actualCategoryIndex =   selector.selectedIndex;
+      proposeNextCategory();
+      displayCategory();
+    })
+
+    checkbox.addEventListener("change", function() {
+      selector.selectedIndex = 0
+      proposeNextCategory();
+      displayCategory();
+    })
+
+    var displayCategory = function(){
+      var initialTitle = "No category actually proposed"
+      var initialImgSrc = "images/questionMark.jpg"
+      if(actualCategoryIndex >=0){
+        initialTitle = categories[actualCategoryIndex].title
+        initialImgSrc = categories[actualCategoryIndex].imageURL
+      }
+      title.innerHTML = initialTitle;
+      imageForCat.src = initialImgSrc;
+    }
+
+    proposeNextCategory();
+    displayCategory();
 
     return {
       categories: categories,
