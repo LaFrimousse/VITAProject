@@ -4,6 +4,7 @@
   var Camera = App.Camera;
   var CameraLayout = App.CameraLayout;
   var RecordsButtons = App.RecordsButtons;
+  var CategoriesStorage = App.CategoriesStorage;
 
   var CameraEvents = (function() {
     var verbose = true
@@ -255,6 +256,7 @@
       CameraLayout.hideElement("mirrorButton");
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("switchCameraWrapper");
+      CategoriesStorage.hideElements();
       updateCounter(RecordsButtons.delay());
       if (verbose) {
         console.log("CameraEvents: just started taking pictures");
@@ -267,6 +269,7 @@
       CameraLayout.showElement("mirrorButton");
       CameraLayout.showElement("closeCameraButton");
       CameraLayout.showElement("switchCameraWrapper");
+      CategoriesStorage.showElements();
       RecordsButtons.setButtonRed();
       isTakingPicture = false;
       if (verbose) {
@@ -283,6 +286,11 @@
         if (!Camera.isCameraOpen) {
           openCamera();
         } else {
+          //check a category is selectedIndex
+          if(CategoriesStorage.getActualCategory() == null){
+            alert("Please chose a category before considering to take a picture for some")
+            return;
+          }
           //the camera is open
           if (delay > 0) {
             startTakingPicture();

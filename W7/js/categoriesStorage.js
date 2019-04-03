@@ -178,6 +178,7 @@
     }
 
     //-------------FROM HERE EVERYTHING ABOUT THE LAYOUT----------
+    var wrapper = document.getElementsByClassName("categoryDisplayWrapper")[0];
     var selector = document.getElementById("categorySelector");
     var checkbox = document.getElementById("proposalModeCheckBox");
     checkbox.checked = true;
@@ -215,6 +216,18 @@
     proposeNextCategory();
     displayCategory();
 
+    var hideElements = function(){
+      if (!wrapper.classList.contains("notDisplayed")) {
+        wrapper.classList.add("notDisplayed");
+      }
+    }
+
+    var showElements = function(){
+      if (wrapper.classList.contains("notDisplayed")) {
+        wrapper.classList.remove("notDisplayed");
+      }
+    }
+
     return {
       categories: categories,
       appendPictureWrapperToACat: appendPictureWrapperToACat,
@@ -222,7 +235,10 @@
       pictureTakenForACat: pictureTakenForACat,
       pointsTakenForACat: pointsTakenForACat,
       getActualCategory:getActualCategory,
-      proposeNextCategory:proposeNextCategory
+      proposeNextCategory:proposeNextCategory,
+      displayCategory:displayCategory,
+      showElements:showElements,
+      hideElements:hideElements
     }
 
   })();
