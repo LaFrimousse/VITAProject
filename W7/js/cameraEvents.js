@@ -219,8 +219,11 @@
       }
 
       var nextUpdateIn = 1000;
+
       if (remainingTime <= 1000) {
         nextUpdateIn = 100;
+      }else if(remainingTime % 1000 != 0){
+        nextUpdateIn = remainingTime % 1000;
       }
 
       intervalBeforeCounterUpdate = window.setTimeout(function() {
