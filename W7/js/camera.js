@@ -216,6 +216,10 @@ This module is never responsible for any Layout*/
       });
     }
 
+    var isUsingBackCamera = function(){
+      return isBackCamera;
+    }
+
     /*Explicitly reveal public pointers to the private functions
     that we want to reveal publicly*/
     return {
@@ -224,7 +228,8 @@ This module is never responsible for any Layout*/
       isCameraOpen: isCameraOpen,
       takePicture: takePicture,
       switchCamera: switchCamera,
-      hasMultipleCameraAvailable:hasMultipleCameraAvailable
+      hasMultipleCameraAvailable:hasMultipleCameraAvailable,
+      isUsingBackCamera:isUsingBackCamera
     }
   })();
 

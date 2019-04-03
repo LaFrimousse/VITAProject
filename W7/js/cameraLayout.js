@@ -91,6 +91,13 @@
         return;
       }
 
+      if(element == mirrorVideoButton && Camera.isUsingBackCamera()){
+        if(verbose){
+          console.log("CameraLayout: not showing the mirror button for a back camera");
+        }
+        return;
+      }
+
       if (element.classList.contains("notDisplayed")) {
         element.classList.remove("notDisplayed");
       }
