@@ -168,8 +168,7 @@
       }
     }
 
-    proposeNextCategory();
-    console.log(getActualCategory())
+    
 
     return {
       categories: categories,

@@ -14,7 +14,7 @@ This module is never responsible for any Layout*/
   var App = window.App || {};
 
   var Camera = (function() {
-    var verbose = false
+    var verbose = true
     var actuallyOpeningOrClosing = false;
 
     //the DOM element in which the video is displayed
@@ -23,6 +23,8 @@ This module is never responsible for any Layout*/
     //a helper variable that keeps track of the camera state
     var isCameraOpen = false
     var isBackCamera = true
+    //will be a boolean
+    var hasMultipleCamera = null
 
     /*some constraints about the video format that can still evolve, we can pick
     the one we want */
@@ -194,6 +196,28 @@ This module is never responsible for any Layout*/
     }
 
     var hasMultipleCameraAvailable = function(callback) {
+
+      if (typeof this.hasMultipleCamera === "boolean"){
+        if(verbose){
+          console.log("Camera: answering the question of multiple camera using a previous stored value. The answer is " + this.hasMultipleCamera);
+        }
+        if(callback){
+          callback(this.hasMultipleCamera);
+        }
+        return this.hasMultipleCamera;
+      }
+
+      var cb = function(response){
+        this.hasMultipleCamera = response
+        if(callback){
+          callback(response);
+        }
+      }.bind(this)
+
+      askSystemIfMultipleCameraAvailable(cb);
+    }
+
+    var askSystemIfMultipleCameraAvailable = function(callback) {
       var videoDevices = []
       navigator.mediaDevices.enumerateDevices().then(function(devices) {
         /*const hasVideo = devices.some(device => device.kind === "videoinput");
@@ -203,11 +227,9 @@ This module is never responsible for any Layout*/
             videoDevices.push(dev);
           }
         })
-
-
         var multipleAvailable = videoDevices.length > 1;
         if (verbose) {
-          var negation = multipleAvailable? "" : " not";
+          var negation = multipleAvailable ? "" : " not";
           console.log("Camera: We noticed that this device has" + negation + " multiple input video devices");
         }
         if (callback) {
@@ -216,7 +238,7 @@ This module is never responsible for any Layout*/
       });
     }
 
-    var isUsingBackCamera = function(){
+    var isUsingBackCamera = function() {
       return isBackCamera;
     }
 
@@ -226,10 +248,11 @@ This module is never responsible for any Layout*/
       open: openCamera,
       close: closeCamera,
       isCameraOpen: isCameraOpen,
+      hasMultipleCamera:hasMultipleCamera,
       takePicture: takePicture,
       switchCamera: switchCamera,
-      hasMultipleCameraAvailable:hasMultipleCameraAvailable,
-      isUsingBackCamera:isUsingBackCamera
+      hasMultipleCameraAvailable: hasMultipleCameraAvailable,
+      isUsingBackCamera: isUsingBackCamera
     }
   })();
 

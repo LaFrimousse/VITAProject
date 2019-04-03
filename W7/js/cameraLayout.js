@@ -91,7 +91,8 @@
         return;
       }
 
-      if(element == mirrorVideoButton && Camera.isUsingBackCamera()){
+      if(element == mirrorVideoButton && Camera.isUsingBackCamera()
+      && Camera.hasMultipleCameraAvailable()){
         if(verbose){
           console.log("CameraLayout: not showing the mirror button for a back camera");
         }
