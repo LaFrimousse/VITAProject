@@ -12,7 +12,7 @@
   var PointsDrawing = App.PointsDrawing;*/
 
   var Manager = function(){
-    var verbose = true;
+    var verbose = false;
 
 
     var userTookPicture = function(data){
@@ -20,8 +20,11 @@
         console.log("Manager: The user took a picture for the category \"" + CategoriesStorage.getActualCategory().label+"\"");
       }
 
+      CategoriesStorage.appendPictureWrapperToACat(null, null, null, data);
       CategoriesStorage.proposeNextCategory();
       CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
+
+
     }
 
     var systemTookPicture = function(data){

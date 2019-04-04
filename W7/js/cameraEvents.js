@@ -168,13 +168,13 @@
     var takeInstantPicture = function(userAction) {
       var systemCallBack = function(data) {
         if (manager) {
-          manager.systemTookPicture();
+          manager.systemTookPicture(data);
         }
       }
 
       var userCallBack = function(data) {
         if (manager) {
-          manager.userTookPicture();
+          manager.userTookPicture(data);
         }
       }
 
@@ -308,6 +308,8 @@
       }
       manager = m;
     }
+
+    openCamera();
 
     return {
       userClickedRedButton: userClickedRedButton,

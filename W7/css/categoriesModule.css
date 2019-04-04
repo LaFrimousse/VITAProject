@@ -1,68 +1,35 @@
-.categoryDisplayWrapper{
-border: 1px solid green;
-min-height: 100px;
+.categoryDisplayWrapper {
+  border: 1px solid green;
+  min-height: 100px;
 }
 
-.categorySelectCheckBoxWrapper{
+.categorySelectCheckBoxWrapper {
   border: 1px solid blue;
   display: flex;
   justify-content: space-between;
 }
 
-.categoryModeCheckBoxWrapper{
+.categoryModeCheckBoxWrapper {
   background: yellow;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
-.categoryModeCheckBoxWrapper label{
+
+.categoryModeCheckBoxWrapper label {
   background: blue;
 }
 
-.pictureDisplayWrapper{
+.pictureDisplayWrapper {
   border: 1px solid red;
-  min-height: 100px;
 }
 
-.notDisplayed{
-  display: none;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-#categorySelected{
+#pictures {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#categoryChoosenImg{
-  height: 200px;
-}
-
-#pictureTakenPerCategory{
-  border: 1px solid ;
-  /*height: 200px;*/
-  display: none;
   flex-wrap: wrap-reverse;
-  /*justify-content: center;*/
-  /*overflow: -moz-scrollbars-vertical;
-  overflow-y: scroll;*/
-  padding: 5px;
 }
 
-#pictureTakenPerCategory * {
+#pictures * {
   display: block;
   margin-right: 5px;
   margin-bottom: 5px;
@@ -70,7 +37,7 @@ min-height: 100px;
   background-color: black;
 }
 
-#pictureTakenPerCategory .selected {
+#pictures .selected {
   display: block;
   margin-right: 5px;
   margin-bottom: 5px;
@@ -78,10 +45,10 @@ min-height: 100px;
   background-color: red;
 }
 
-#categoriesModule img{
-  height: 100px;
+.pictureDisplayWrapper img {
+  max-height: 100px;
 }
 
-#postureWantedByServer {
-  height: 100px;
+.notDisplayed {
+  display: none;
 }
