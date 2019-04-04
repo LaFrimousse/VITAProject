@@ -80,9 +80,10 @@
     }
 
     var getRealIndexFromNbOrString = function(obj) {
-      if(obj == null){
+      if (obj == null) {
         return actualCategoryIndex;
-      } if (Number.isInteger(obj)) {
+      }
+      if (Number.isInteger(obj)) {
         return obj;
       } else {
         return indexForLabel(obj);
@@ -100,9 +101,10 @@
         console.log("CategoriesStorage: just appened a picture wrapper for the category \"" +
           labelForIndex(catIndex) + "\"");
       }
+      if (!checkbox.checked) {
+        CategoriesLayout.showPicturesForACat(picturesTakenForACat());
+      }
     }
-
-
 
 
     var deleteAPictureWrapperFromACat = function(catIndexOrLabelName, elementIndex) {
@@ -121,7 +123,7 @@
     var picturesTakenForACat = function(catIndexOrLabelName) {
 
       var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
-    
+
       var picturesTaken = []
       picturesWrappers[catIndex].forEach(function(pw) {
         if (pw.picture) {
