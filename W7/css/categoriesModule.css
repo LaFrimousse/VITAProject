@@ -24,12 +24,12 @@
   border: 1px solid red;
 }
 
-#pictures {
+.pictures {
   display: flex;
   flex-wrap: wrap-reverse;
 }
 
-#pictures * {
+.pictures * {
   display: block;
   margin-right: 5px;
   margin-bottom: 5px;
@@ -37,7 +37,7 @@
   background-color: black;
 }
 
-#pictures .selected {
+.pictures .selected {
   display: block;
   margin-right: 5px;
   margin-bottom: 5px;

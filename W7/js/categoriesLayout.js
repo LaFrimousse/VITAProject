@@ -85,11 +85,10 @@
         addAPhotoToPicturesTaken(data, index);
       })
 
-      show(pictureDisplayWrapper);
       if (pictures.length > 0) {
-        pictureDisplayWrapper.style.display = "block";
+        show(picturesWrapper);
       } else {
-        pictureDisplayWrapper.style.display = "none";
+        hide(picturesWrapper);
       }
     }
 
@@ -116,7 +115,7 @@
       if(verbose){
         console.log("CategoriesLayout: hidding the pictures displayed");
       }
-      hide(pictureDisplayWrapper);
+      hide(picturesWrapper);
     }
 
     var appendAPictureToTheOneDisplayed = function(picture) {

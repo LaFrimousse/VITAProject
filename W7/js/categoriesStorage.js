@@ -121,9 +121,7 @@
     var picturesTakenForACat = function(catIndexOrLabelName) {
 
       var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
-      console.log(picturesWrappers)
-      console.log(catIndex)
-      console.log(picturesWrappers[catIndex])
+    
       var picturesTaken = []
       picturesWrappers[catIndex].forEach(function(pw) {
         if (pw.picture) {
