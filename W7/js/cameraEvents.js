@@ -4,6 +4,7 @@
   var Camera = App.Camera;
   var CameraLayout = App.CameraLayout;
   var RecordsButtons = App.RecordsButtons;
+  var CategoriesLayout = App.CategoriesLayout;
   var CategoriesStorage = App.CategoriesStorage;
 
   var CameraEvents = (function() {
@@ -256,7 +257,7 @@
       CameraLayout.hideElement("mirrorButton");
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("switchCameraWrapper");
-      CategoriesStorage.hideElements();
+      CategoriesLayout.hideElements();
       updateCounter(RecordsButtons.delay());
       if (verbose) {
         console.log("CameraEvents: just started taking pictures");
@@ -269,7 +270,7 @@
       CameraLayout.showElement("mirrorButton");
       CameraLayout.showElement("closeCameraButton");
       CameraLayout.showElement("switchCameraWrapper");
-      CategoriesStorage.showElements();
+      CategoriesLayout.showElements();
       RecordsButtons.setButtonRed();
       isTakingPicture = false;
       if (verbose) {

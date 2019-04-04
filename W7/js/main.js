@@ -5,6 +5,7 @@
 
   var CameraEvents = App.CameraEvents;
   var CategoriesStorage = App.CategoriesStorage;
+  var CategoriesLayout = App.CategoriesLayout;
 
   /*var CategoriesManager = App.CategoriesManager;
   var Server = App.Server;
@@ -20,7 +21,7 @@
       }
 
       CategoriesStorage.proposeNextCategory();
-      CategoriesStorage.displayCategory();
+      CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
     }
 
     var systemTookPicture = function(data){

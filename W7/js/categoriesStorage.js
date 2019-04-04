@@ -2,6 +2,7 @@
   'use strict';
 
   var App = window.App || {};
+  var CategoriesLayout = App.CategoriesLayout;
 
   var CategoriesStorage = (function() {
     var verbose = true
@@ -146,44 +147,43 @@
       return pointsTaken;
     }
 
-    var getActualCategory = function(){
+    var getActualCategory = function() {
       return actualCategoryIndex < 0 ? null : categories[actualCategoryIndex];
     }
 
-    var randomCategory = function(){
+    var randomCategory = function() {
       var randomIndex = Math.floor(Math.random() * categories.length);
       return randomIndex;
     }
 
-    var getCategorySuggestionFromServer = function(){
+    var getCategorySuggestionFromServer = function() {
       return null;
     }
 
-    var proposeNextCategory = function(){
-      if(selector.selectedIndex != 0){
+    var proposeNextCategory = function() {
+      if (selector.selectedIndex != 0) {
         //manual propostion
         actualCategoryIndex = selector.selectedIndex - 1;
-      }else if (checkbox.checked){
+      } else if (checkbox.checked) {
         //propostion from the server
         var fromServer = getCategorySuggestionFromServer();
         if (Number.isInteger(fromServer)) {
           actualCategoryIndex = fromServer;
-        }else{
+        } else {
           actualCategoryIndex = randomCategory();
         }
-      }else{
+      } else {
         //no category
         actualCategoryIndex = -1;
       }
     }
 
     //-------------FROM HERE EVERYTHING ABOUT THE LAYOUT----------
-    var wrapper = document.getElementsByClassName("categoryDisplayWrapper")[0];
+
     var selector = document.getElementById("categorySelector");
     var checkbox = document.getElementById("proposalModeCheckBox");
     checkbox.checked = true;
-    var imageForCat = document.getElementById("postureToAdoptImg");
-    var title = document.getElementById("postureToAdaptTitle");
+
 
     categories.forEach(function(cat) {
       selector.insertAdjacentHTML("beforeend", '<option>' + cat.title + '</option>')
@@ -191,42 +191,18 @@
 
     selector.addEventListener("change", function() {
       checkbox.checked = false
-      actualCategoryIndex =   selector.selectedIndex;
       proposeNextCategory();
-      displayCategory();
+      CategoriesLayout.displayCategory(getActualCategory());
     })
 
     checkbox.addEventListener("change", function() {
       selector.selectedIndex = 0
       proposeNextCategory();
-      displayCategory();
+      CategoriesLayout.displayCategory(getActualCategory());
     })
 
-    var displayCategory = function(){
-      var initialTitle = "No category actually proposed"
-      var initialImgSrc = "images/questionMark.jpg"
-      if(actualCategoryIndex >=0){
-        initialTitle = categories[actualCategoryIndex].title
-        initialImgSrc = categories[actualCategoryIndex].imageURL
-      }
-      title.innerHTML = initialTitle;
-      imageForCat.src = initialImgSrc;
-    }
-
     proposeNextCategory();
-    displayCategory();
-
-    var hideElements = function(){
-      if (!wrapper.classList.contains("notDisplayed")) {
-        wrapper.classList.add("notDisplayed");
-      }
-    }
-
-    var showElements = function(){
-      if (wrapper.classList.contains("notDisplayed")) {
-        wrapper.classList.remove("notDisplayed");
-      }
-    }
+    CategoriesLayout.displayCategory(getActualCategory());
 
     return {
       categories: categories,
@@ -234,11 +210,8 @@
       deleteAPictureWrapperFromACat: deleteAPictureWrapperFromACat,
       pictureTakenForACat: pictureTakenForACat,
       pointsTakenForACat: pointsTakenForACat,
-      getActualCategory:getActualCategory,
-      proposeNextCategory:proposeNextCategory,
-      displayCategory:displayCategory,
-      showElements:showElements,
-      hideElements:hideElements
+      getActualCategory: getActualCategory,
+      proposeNextCategory: proposeNextCategory
     }
 
   })();
