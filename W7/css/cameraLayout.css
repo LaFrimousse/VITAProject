@@ -156,7 +156,7 @@
   max-height: 40px;
   display: block;
   flex: 1;
-  margin-top: 5px;
+  margin-top: 1px;
   margin-bottom: 15px;
 }
 
@@ -176,7 +176,8 @@
   display: block;
   max-width: 80%;
   min-width: 50%;
-  margin-bottom: 15px;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 
 .notDisplayed {
@@ -186,6 +187,15 @@
 @media all and (min-width: 768px) {
   #videoElement{
     max-height: 80vh;
+  }
+
+  #delaySlider {
+    margin-bottom: 15px;
+    margin-top: 0px;
+  }
+
+  #takePictureButton {
+    margin-top: 5px;
   }
 
 }
