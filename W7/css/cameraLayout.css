@@ -183,24 +183,7 @@
   display: none;
 }
 
-/*@media all and (min-width: 768px) {*/
-/*Does not target the phones*/
-/*
-  body {
-    margin: 10px;
-  }
+@media all and (min-width: 768px) {
+  
 
-  #videoElementContainer {
-    width: 50%;
-  }
-
-  #openCloseCameraButton {
-    width: 30px;
-    height: 30px;
-  }
-
-  #mirrorVideoButton {
-    width: 35px;
-    height: 35px;
-  }
-}*/
+}
