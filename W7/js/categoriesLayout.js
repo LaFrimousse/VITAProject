@@ -139,7 +139,7 @@
       var indexes = [];
       [].slice.call(childrenList).forEach(function(item, index) {
         if (item.classList.contains("selected")) {
-          item.classList.removes("selected");
+          item.classList.remove("selected");
         }
       });
     }
