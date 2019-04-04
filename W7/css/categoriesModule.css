@@ -1,52 +1,51 @@
 .categoryDisplayWrapper {
-  border: 1px solid green;
-  min-height: 100px;
+  margin-top: 5px;
+  border: 1px solid black;
 }
 
 .categorySelectCheckBoxWrapper {
-  border: 1px solid blue;
   display: flex;
   justify-content: space-between;
 }
 
 .categoryModeCheckBoxWrapper {
-  background: yellow;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
-.categoryModeCheckBoxWrapper label {
-  background: blue;
-}
-
-.pictureDisplayWrapper {
-  border: 1px solid red;
+.deletePicture{
+  display: block;
+  margin: auto;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding: 5px;
+  background-color: rgb(244, 69, 66);
+  border-radius: 3px;
+  border : 1px solid rgb(224, 49, 46);
 }
 
 .pictures {
   display: flex;
   flex-wrap: wrap-reverse;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
-.pictures * {
+.pictures img {
   display: block;
-  margin-right: 5px;
-  margin-bottom: 5px;
   padding: 3px;
+  margin-bottom: 3px;
   background-color: black;
+  box-sizing: border-box;
+  max-width:33%;
+  height: auto;
 }
 
 .pictures .selected {
-  display: block;
-  margin-right: 5px;
-  margin-bottom: 5px;
-  padding: 3px;
   background-color: red;
-}
-
-.pictureDisplayWrapper img {
-  max-height: 100px;
 }
 
 .notDisplayed {

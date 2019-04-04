@@ -17,21 +17,22 @@
     var deleteButton = document.getElementById("deletePicture");
 
     var hideElements = function() {
-      if(verbose){
+      if (verbose) {
         console.log("CategoriesLayout: hidding the elements to the user");
       }
+      removeSelection();
       hide(globalWrapper);
     }
 
     var showElements = function() {
-      if(verbose){
+      if (verbose) {
         console.log("CategoriesLayout: showing the elements to the user");
       }
       show(globalWrapper);
     }
 
     var displayCategory = function(cat) {
-      if(verbose){
+      if (verbose) {
         console.log("CategoriesLayout: displaying a category to the user");
       }
       var initialTitle = "No category actually proposed"
@@ -68,8 +69,8 @@
     }
 
     var showPicturesForACat = function(pictures) {
-      if(verbose){
-        console.log("CategoriesLayout: showing " +pictures.length + " pictures to the user for a category");
+      if (verbose) {
+        console.log("CategoriesLayout: showing " + pictures.length + " pictures to the user for a category");
       }
 
       nbOfPictureSelected = 0;
@@ -112,36 +113,61 @@
     }
 
     var hidePicturesTaken = function() {
-      if(verbose){
+      if (verbose) {
         console.log("CategoriesLayout: hidding the pictures displayed");
       }
+      removeSelection();
       hide(picturesWrapper);
-    }
-
-    var appendAPictureToTheOneDisplayed = function(picture) {
-      if(verbose){
-        console.log("CategoriesLayout: appending a picture to the one already displayed");
-      }
-
+      hide(deleteButton);
     }
 
 
     deleteButton.addEventListener("click", function() {
+      deleteImages();
+    });
+
+    document.addEventListener("keydown", function(e) {
+      if (e.keyCode == 8) {
+        deleteImages();
+      }
+    });
+
+    var removeSelection = function() {
+      nbOfPictureSelected = 0;
+      hide(deleteButton);
       var childrenList = picturesWrapper.children;
       var indexes = [];
-      [].slice.call(childrenList).forEach(function(item,index) {
-        if(item.classList.contains("selected")){
+      [].slice.call(childrenList).forEach(function(item, index) {
+        if (item.classList.contains("selected")) {
+          item.classList.removes("selected");
+        }
+      });
+    }
+
+    var deleteImages = function() {
+      if (nbOfPictureSelected == 0) {
+        //to save if the user want's to delete a picture using the keyboard
+        return;
+      }
+      if(verbose){
+        console.log("CategoriesLayout: deleting the selected images");
+      }
+      var childrenList = picturesWrapper.children;
+      var indexes = [];
+      [].slice.call(childrenList).forEach(function(item, index) {
+        if (item.classList.contains("selected")) {
           indexes.push(index)
         }
       });
-      indexes.reverse().forEach(function(nb){
+
+      indexes.reverse().forEach(function(nb) {
         categoryStorage.deleteAPictureWrapperFromACat(null, nb)
       })
-      //reload the UI
-    });
+      // UI reloaded from categriesStorage
+    }
 
-    var setCategoryStorage = function(storage){
-      if(verbose){
+    var setCategoryStorage = function(storage) {
+      if (verbose) {
         console.log("CategoriesLayout: setting his categoryStorage reference")
         categoryStorage = storage;
       }
@@ -151,11 +177,9 @@
       displayCategory: displayCategory,
       showElements: showElements,
       hideElements: hideElements,
-      showPicturesForACat:showPicturesForACat,
-      hidePicturesTaken:hidePicturesTaken,
-      appendAPictureToTheOneDisplayed:appendAPictureToTheOneDisplayed,
-      setCategoryStorage:setCategoryStorage
-
+      showPicturesForACat: showPicturesForACat,
+      hidePicturesTaken: hidePicturesTaken,
+      setCategoryStorage: setCategoryStorage
     }
   })();
   App.CategoriesLayout = CategoriesLayout;

@@ -28,6 +28,10 @@
   visibility: hidden;
 }
 
+.buttonBehavior:active {
+  transform: scale(.9);
+}
+
 
 body{
   margin: 0px;
