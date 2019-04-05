@@ -170,7 +170,11 @@
       var offsetForRightButton = offsetForLeftButton + videoElementWidth;
 
       postureToAdoptImg.style.right = offsetForLeftButton + "px";
-      postureToAdoptImg.style.maxWidth = videoElementWidth / 5 + "px";
+      var dividor = 5; // for phones
+      if(window.innerWidth > 768 ){//for browser
+        dividor = 3;
+      }
+      postureToAdoptImg.style.maxWidth = videoElementWidth / dividor + "px";
 
       counter.style.right = offsetForLeftButton + "px";
     }
@@ -180,6 +184,7 @@
       console.log("resize");
       replaceButtonInVideoElement();
     })
+
 
 
     return {
