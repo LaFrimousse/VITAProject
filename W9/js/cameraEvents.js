@@ -179,13 +179,14 @@
       }
 
       var callback = userAction ? userCallBack : systemCallBack;
-      var data = Camera.takePicture();
+      //var data = Camera.takePicture();
 
       if (userAction) {
         CameraLayout.animePictureTaken();
       }
+      Camera.takePictureAsBlob(callback);
 
-      callback(data);
+      //callback(data);
     }
 
 

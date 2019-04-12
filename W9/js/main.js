@@ -17,6 +17,7 @@
 
 
     var userTookPicture = function(data){
+      console.log(data)
       if(verbose){
         console.log("Manager: The user took a picture for the category \"" + CategoriesStorage.getActualCategory().label+"\"");
       }
@@ -26,7 +27,7 @@
       CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
 
       //fetch(data).then(res => res.blob())
-      fetch(data).then(res =>   Firebase.putFile(res.blob()));
+      Firebase.putFile(data);
 
 
 

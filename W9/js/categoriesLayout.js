@@ -95,7 +95,8 @@
 
     var addAPhotoToPicturesTaken = function(data, index) {
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
-      newImg.src = data
+      var url = URL.createObjectURL(data)
+      newImg.src = url
       //newImg.setAttribute("data-picture_nb", index);
       picturesWrapper.appendChild(newImg)
 
