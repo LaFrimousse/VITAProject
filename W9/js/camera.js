@@ -158,33 +158,6 @@ This module is never responsible for any Layout*/
 
     }
 
-    var takePicture = function() {
-      //cannot take picture if camera is closed
-      if (!this.isCameraOpen) {
-        console.error("Camera: Cannot take a picture if the camera is closed")
-
-        return null
-      }
-
-      var height = videoElement.clientHeight
-      var width = videoElement.clientWidth
-
-      var context = canvas.getContext('2d');
-      canvas.width = width;
-      canvas.height = height;
-      context.drawImage(videoElement, 0, 0, width, height)
-
-      //full quality
-      var data = canvas.toDataURL('image/jpeg', 1.0)
-
-      if (verbose) {
-        console.log("Camera: Took a picture, rendered it in a canvas of size" + width +
-          " (width) X " + height + " (height)")
-      }
-
-      return data
-    }
-
     var takePictureAsBlob = function(callback) {
       //cannot take picture if camera is closed
       if (!this.isCameraOpen) {
@@ -280,7 +253,6 @@ This module is never responsible for any Layout*/
       close: closeCamera,
       isCameraOpen: isCameraOpen,
       hasMultipleCamera:hasMultipleCamera,
-      takePicture: takePicture,
       takePictureAsBlob:takePictureAsBlob,
       switchCamera: switchCamera,
       hasMultipleCameraAvailable: hasMultipleCameraAvailable,

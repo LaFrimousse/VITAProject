@@ -310,7 +310,7 @@
       manager = m;
     }
 
-    //sopenCamera();
+    openCamera();
 
     return {
       userClickedRedButton: userClickedRedButton,

@@ -8,6 +8,7 @@
     var categoryStorage = null;
     var actualCategoryDisplayed = null;
     var nbOfPictureSelected = 0;
+    var urlToClean = [];
 
     var globalWrapper = document.getElementsByClassName("categoryDisplayWrapper")[0];
     var imageForCat = document.getElementById("postureToAdoptImg");
@@ -80,6 +81,11 @@
       while (picturesWrapper.firstChild) {
         picturesWrapper.removeChild(picturesWrapper.firstChild);
       }
+      urlToClean.forEach(function(el){
+        window.URL.revokeObjectURL(el);
+      })
+      urlToClean = []
+
 
       //and fill with the new pictures if availables
       pictures.forEach(function(data, index) {
@@ -97,6 +103,7 @@
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
       var url = URL.createObjectURL(data)
       newImg.src = url
+      urlToClean.push(url);
       //newImg.setAttribute("data-picture_nb", index);
       picturesWrapper.appendChild(newImg)
 
