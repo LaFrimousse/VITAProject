@@ -6,6 +6,7 @@
   var CameraEvents = App.CameraEvents;
   var CategoriesStorage = App.CategoriesStorage;
   var CategoriesLayout = App.CategoriesLayout;
+  var Firebase = App.Firebase;
 
   /*var CategoriesManager = App.CategoriesManager;
   var Server = App.Server;
@@ -23,6 +24,10 @@
       CategoriesStorage.appendPictureWrapperToACat(null, null, null, data);
       CategoriesStorage.proposeNextCategory();
       CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
+
+      //fetch(data).then(res => res.blob())
+      fetch(data).then(res =>   Firebase.putFile(res.blob()));
+
 
 
     }
