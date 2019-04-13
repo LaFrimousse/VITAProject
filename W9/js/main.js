@@ -7,41 +7,65 @@
   var CategoriesStorage = App.CategoriesStorage;
   var CategoriesLayout = App.CategoriesLayout;
   var Firebase = App.Firebase;
+  var Helper = App.Helper;
 
   /*var CategoriesManager = App.CategoriesManager;
   var Server = App.Server;
   var PointsDrawing = App.PointsDrawing;*/
 
-  var Manager = function(){
-    var verbose = false;
+  var Manager = function() {
+    var verbose = true;
+
+    var clientIdCookieName = "clientIdCookieName";
+    var clientId = null;
+
+    (function() { // init code that fetch the client id cookie
+      var previousClientId = Helper.getCookie(clientIdCookieName);
+      if(previousClientId == null){
+        if(verbose){
+          console.log("Main: no previous cookie found for this user identifier");
+        }
+        previousClientId = Helper.UUID();
+      }else{
+        if(verbose){
+          console.log("Main: a previous cookie has been found for this user : "+previousClientId);
+        }
+      }
+      clientId = previousClientId;
+      Helper.setCookie(clientIdCookieName, clientId, 100);
+    })();
 
 
-    var userTookPicture = function(data){
-      console.log(data)
-      if(verbose){
-        console.log("Manager: The user took a picture for the category \"" + CategoriesStorage.getActualCategory().label+"\"");
+
+    var userTookPicture = function(data) {
+      var catName = CategoriesStorage.getActualCategory().label;
+      if (verbose) {
+        console.log("Manager: The user took a picture for the category \"" + catName + "\"");
       }
 
-      CategoriesStorage.appendPictureWrapperToACat(null, null, null, data);
+      var imageId = Helper.UUID();
+
+
+      CategoriesStorage.appendPictureWrapperToACat(catName, imageId, null, data);
       CategoriesStorage.proposeNextCategory();
       CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
 
-      //fetch(data).then(res => res.blob())
-      Firebase.putFile(data);
+      Firebase.putFile(["userImages", catName, imageId], data);
 
 
 
     }
 
-    var systemTookPicture = function(data){
-      if(verbose){
+    var systemTookPicture = function(data) {
+      if (verbose) {
         console.log("Manager: The system took a picture");
       }
+
     }
 
     return {
       userTookPicture: userTookPicture,
-      systemTookPicture:systemTookPicture
+      systemTookPicture: systemTookPicture
     }
 
   }();

@@ -6,7 +6,6 @@
   var Firebase = (function() {
     var verbose = true;
 
-    console.log("Fire loaded");
     var storage = firebase.storage();
     var storageRef = storage.ref();
     var imagesRef = storageRef.child('images');
@@ -14,10 +13,13 @@
 
 
 
-    var putFile = function(file) {
-      spaceRef.put(file).then(function(snapshot) {
-        console.log('Uploaded a blob or file!');
-        console.log(snapshot);
+    var putFile = function(arrayPath, file) {
+      var newRef = storageRef;
+      for (var i in arrayPath){
+        newRef = newRef.child(arrayPath[i]);
+      }
+      newRef.put(file).then(function(snapshot) {
+        console.log('Firebase: Uploaded a blob or file in Firebase!');
       });
     }
 
@@ -25,12 +27,6 @@
 
     }
 
-    document.addEventListener("keypress", function(e) {
-      if (e.charCode == 32) { //SPACE
-        var imageForCat = document.getElementById("postureToAdoptImg");
-        putFile(imageForCat.src)
-      }
-    });
 
     return {
       verbose: verbose,

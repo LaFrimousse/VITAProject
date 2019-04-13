@@ -8,17 +8,6 @@
     var verbose = true
     var actualCategoryIndex = -1;
 
-    function UUID() {
-      //https://codepen.io/Jvsierra/pen/BNbEjW
-      function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1);
-      }
-      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-        s4() + '-' + s4() + s4() + s4();
-    }
-
     /*return an empty 2d array of same lenght than categories, in order to add pictures and point later at the same indexes than the categories allows to*/
     function empty2DArray(categories) {
       var emptyArray = []
