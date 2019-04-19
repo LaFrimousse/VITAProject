@@ -21,14 +21,14 @@
 
     (function() { // init code that fetch the client id cookie
       var previousClientId = Helper.getCookie(clientIdCookieName);
-      if(previousClientId == null){
-        if(verbose){
+      if (previousClientId == null) {
+        if (verbose) {
           console.log("Main: no previous cookie found for this user identifier");
         }
         previousClientId = Helper.UUID();
-      }else{
-        if(verbose){
-          console.log("Main: a previous cookie has been found for this user : "+previousClientId);
+      } else {
+        if (verbose) {
+          console.log("Main: a previous cookie has been found for this user : " + previousClientId);
         }
       }
       clientId = previousClientId;
@@ -50,7 +50,7 @@
       CategoriesStorage.proposeNextCategory();
       CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
 
-      Firebase.saveImage(clientId, imageId, data, catName, new Date(), "browserString");
+      Firebase.saveImage(clientId, imageId, data, catName, new Date(), navigator.userAgent);
     }
 
 
@@ -58,8 +58,8 @@
       if (verbose) {
         console.log("Manager: The system took a picture");
       }
-
     }
+
 
     return {
       userTookPicture: userTookPicture,
