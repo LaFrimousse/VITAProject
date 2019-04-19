@@ -35,6 +35,9 @@
       var promise = new Promise(function(resolve, reject) {
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.put(imageFile).then(function(snapshot) {
+          if (verbose){
+            console.log("Firebase : just saved the image " + imageId+ " online");
+          }
           resolve(snapshot);
         }).catch(function(error) {
           reject(error);
@@ -47,6 +50,9 @@
       var promise = new Promise(function(resolve, reject) {
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.delete().then(function() {
+          if (verbose){
+            console.log("Firebase : just deleted the image " + imageId+ " of firebase");
+          }
           resolve();
         }).catch(function(error) {
           reject(error);
@@ -61,6 +67,9 @@
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.getDownloadURL().then(function(url) {
           if (justURLWanted) {
+            if (verbose){
+              console.log("Firebase : just downloaded the url of an image : " + url);
+            }
             resolve({
               categoryName: categoryName,
               imageId: imageId,
@@ -71,6 +80,9 @@
             xhr.responseType = 'blob';
             xhr.onload = function(event) {
               var blob = xhr.response;
+              if (verbose){
+                console.log("Firebase : just downloaded the blob of the image at url : " + url);
+              }
               resolve({
                 categoryName: categoryName,
                 imageId: imageId,
@@ -116,6 +128,9 @@
           if (doc && doc.exists) {
             var data = doc.data()
             var oldList = data.imageList;
+            if (verbose){
+              console.log("Firebase : just downloaded list images Id for the cat : " + categoryName + " "+ oldList);
+            }
             resolve(oldList);
           } else {
             resolve([])
@@ -133,6 +148,9 @@
         listRef.set({
           imageList: imageList
         }).then(function() {
+          if (verbose){
+            console.log("Firebase : just stored the image list for category "+categoryName+"on firebase : " + imageList );
+          }
           resolve();
         }).catch(function(error) {
           reject(error);
@@ -148,6 +166,9 @@
           date: date,
           browserDescription: browserDescription
         }).then(function() {
+          if (verbose){
+            console.log("Firebase : just stored the metadata of image "+imageId+"on firebase" );
+          }
           resolve();
         }).catch(function(error) {
           reject(error);
@@ -162,6 +183,9 @@
       var promise = new Promise(function(resolve, reject) {
         var refDoc = imgsCollection.doc(imageId);
         refDoc.delete().then(function() {
+          if (verbose){
+            console.log("Firebase : just deleted the image metadata of " + imageId);
+          }
           resolve();
         }).catch(function(error) {
           reject(error);
@@ -175,7 +199,9 @@
         getImgListForUser(userId, categoryName).then(function(list) {
           for (var i = 0; i < list.length; i++) {
             if (list[i] === imageIdToDel) {
-              console.log("removing an imag", list[i]);
+              if (verbose){
+                console.log("Firebase : removing an id of the image list before storing it again. categoryName :  " + categoryName + " idToDelete : " + imageIdToDel +"actualList: " + list);
+              }
               list.splice(i, 1);
               i--;
             }
@@ -194,8 +220,7 @@
 
     var deleteImage = function(imageId, catName, userId) {
 
-      deleteImgFromStorage(catName, userId).then(function() {
-        return;
+      deleteImgFromStorage(catName, imageId).then(function() {
         deleteImgIdToTheListForThisUser(userId, imageId, catName).then(function() {
           deleteImageMetaData(imageId).catch(function(error) {
             console.error(error);

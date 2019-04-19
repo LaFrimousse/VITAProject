@@ -105,20 +105,20 @@
     }
 
 
-    var deleteAPictureWrapperFromACat = function(catIndexOrLabelName, elementIndex) {
+    var deleteAPictureWrapperFromACat = function(catIndexOrLabelName, listOfIndex) {
 
       var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
-      var imgId = picturesWrappers[catIndex][elementIndex].uuid;
       var catLabel = labelForIndex(catIndex);
-      /*console.log("userId ",userId)
-      console.log("imgId ",imgId)
-      console.log("catLabel ",catLabel)*/
-      Firebase.deleteImage(imgId,catLabel, userId);
-      picturesWrappers[catIndex].splice(elementIndex, 1);
+
+      listOfIndex.forEach(function(elementIndex){
+        var imgId = picturesWrappers[catIndex][elementIndex].uuid;
+        Firebase.deleteImage(imgId,catLabel, userId);
+        picturesWrappers[catIndex].splice(elementIndex, 1);
+      });
 
       if (verbose) {
-        console.log("CategoriesStorage: just deleted a picture wrapper for the category \"" +
-          labelForIndex(catIndex) + "\"");
+        console.log("CategoriesStorage: just deleted some picture wrapper for the category " +
+          catLabel + " : " + listOfIndex);
       }
       CategoriesLayout.showPicturesForACat(picturesTakenForACat());
     }

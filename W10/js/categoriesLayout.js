@@ -49,10 +49,14 @@
 
     var hideOrShowDeleteButton = function() {
       if (nbOfPictureSelected == 0) {
-        console.log("CategoriesLayout: hidding the delete button");
+        if(verbose){
+          console.log("CategoriesLayout: hidding the delete button");
+        }
         hide(deleteButton)
       } else {
-        console.log("CategoriesLayout: showing the delete button");
+        if(verbose){
+          console.log("CategoriesLayout: showing the delete button");
+        }
         show(deleteButton)
       }
     }
@@ -168,9 +172,8 @@
         }
       });
 
-      indexes.reverse().forEach(function(nb) {
-        categoryStorage.deleteAPictureWrapperFromACat(null, nb)
-      })
+        categoryStorage.deleteAPictureWrapperFromACat(null, indexes.reverse());
+
       // UI reloaded from categriesStorage
     }
 
