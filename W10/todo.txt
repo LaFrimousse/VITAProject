@@ -1,5 +1,4 @@
-Mieux sauvgarder sur firebase: 
-images plus metadata (User-id, date, type of browser)
+Changer les positions(penser route)
 Créer un script pour les télécharger en local sur l'ordi
 créer un script pour les passer à pipfaf et enregistrer les points
 trouver un algo pour entrainer un modèle

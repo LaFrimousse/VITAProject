@@ -19,7 +19,7 @@
 
       putImgFileInFirebase(categoryName, imageId, imageFile).then(function(snapshot) {
         addImgIdToTheListForThisUser(userId, imageId, categoryName).then(function() {
-          storeImgMetaData(imageId, date, browserId).catch(function(error) {
+          storeImgMetaData(imageId, date, browserId, categoryName).catch(function(error) {
             console.error(error);
           });
         }).catch(function(error) {
@@ -159,10 +159,11 @@
       return promise;
     }
 
-    var storeImgMetaData = function(imageId, date, browserDescription) {
+    var storeImgMetaData = function(imageId, date, browserDescription, catLabel) {
       var promise = new Promise(function(resolve, reject) {
         var imgRef = imgsCollection.doc(imageId);
         imgRef.set({
+          categoryLabel: catLabel,
           date: date,
           browserDescription: browserDescription
         }).then(function() {
@@ -233,12 +234,31 @@
       })
     };
 
+    var getAllImagesMetaData = function(){
+      var promise = new Promise(function(resolve, reject) {
+        var back = [];
+        imgsCollection.get().then(function(snapshot){
+          snapshot.forEach(function(sn){
+            back.push({catLabel: sn.data().categoryLabel,
+            pictId: sn.id})
+          })
+          resolve(back);
+        }).catch(function(error) {
+          console.error(error);
+        });
+
+
+      });
+      return promise;
+    }
+
     return {
       verbose: verbose,
       saveImage: saveImage,
       deleteImage:deleteImage,
       getImgListForUser: getImgListForUser,
-      downloadImageAsBlob: downloadImageAsBlob
+      downloadImageAsBlob: downloadImageAsBlob,
+      getAllImagesMetaData:getAllImagesMetaData
     }
   })();
 
