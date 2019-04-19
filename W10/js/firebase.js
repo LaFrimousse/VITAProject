@@ -17,18 +17,20 @@
 
     var saveImage = function(userId, imageId, imageFile, categoryName, date, browserId) {
 
-      putImgFileInFirebase(categoryName, imageId, imageFile).then(function(snapshot){
-        addImgIdToTheListForThisUser(userId, imageId, categoryName).then(function(){
-          storeImgMetaData(imageId, date, browserId).catch(function(error){
+      putImgFileInFirebase(categoryName, imageId, imageFile).then(function(snapshot) {
+        addImgIdToTheListForThisUser(userId, imageId, categoryName).then(function() {
+          storeImgMetaData(imageId, date, browserId).catch(function(error) {
             console.error(error);
           });
-        }).catch(function(error){
+        }).catch(function(error) {
           console.error(error);
         });
-      }).catch(function(error){
+      }).catch(function(error) {
         console.error(error);
       });
     }
+
+
 
     var putImgFileInFirebase = function(categoryName, imageId, imageFile) {
       var promise = new Promise(function(resolve, reject) {
@@ -42,11 +44,39 @@
       return promise;
     }
 
-    var addImgIdToTheListForThisUser = function(userId, imageId, categoryName){
+    var downloadImageAsBlob = function(categoryName, imageId) {
+      var justURLWanted = false;
       var promise = new Promise(function(resolve, reject) {
-        getImgListForUser(userId, categoryName).then(function(list){
+        var imgRef = storageRef.child("images").child(categoryName).child(imageId);
+        imgRef.getDownloadURL().then(function(url) {
+          if (justURLWanted) {
+            resolve(url);
+          } else {
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = function(event) {
+              var blob = xhr.response;
+              resolve(blob);
+            };
+            xhr.onerror = function(error) {
+              reject(error);
+            };
+            xhr.open('GET', url);
+            xhr.send();
+          }
+
+        }).catch(function(error) {
+          resolve(error);
+        });
+      });
+      return promise;
+    }
+
+    var addImgIdToTheListForThisUser = function(userId, imageId, categoryName) {
+      var promise = new Promise(function(resolve, reject) {
+        getImgListForUser(userId, categoryName).then(function(list) {
           list.push(imageId);
-          storeImgListForUser(userId, categoryName, list).then(function(){
+          storeImgListForUser(userId, categoryName, list).then(function() {
             resolve();
           }).catch(function(error) {
             reject(error);
@@ -60,7 +90,7 @@
 
 
     var getImgListForUser = function(userId, categoryName) {
-      
+
       var promise = new Promise(function(resolve, reject) {
         var listRef = usersCollection.doc(userId).collection("categories").doc(categoryName);
         listRef.get().then(function(doc) {
@@ -78,12 +108,12 @@
       return promise;
     }
 
-    var storeImgListForUser = function(userId, categoryName, imageList){
+    var storeImgListForUser = function(userId, categoryName, imageList) {
       var promise = new Promise(function(resolve, reject) {
         var listRef = usersCollection.doc(userId).collection("categories").doc(categoryName);
-        listRef.set(
-          {imageList: imageList}
-        ).then(function() {
+        listRef.set({
+          imageList: imageList
+        }).then(function() {
           resolve();
         }).catch(function(error) {
           reject(error);
@@ -92,7 +122,7 @@
       return promise;
     }
 
-    var storeImgMetaData = function(imageId, date, browserDescription){
+    var storeImgMetaData = function(imageId, date, browserDescription) {
       var promise = new Promise(function(resolve, reject) {
         var imgRef = imgsCollection.doc(imageId);
         imgRef.set({
@@ -107,7 +137,31 @@
       return promise;
     }
 
+    var downloadImages = function(listImageId) {
+      var promise = new Promise(function(resolve, reject) {
+        resolve("öJ");
+      });
+      return promise;
+    }
 
+
+
+    /*db.collection("users").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        console.log(`${doc.id} => ${doc.data()}`);
+    });
+});*/
+
+
+    getImgListForUser("52629ad2-575a-2566-95f7-9bdaf25452d4", "arms_down").then(function(res) {
+      res.forEach(function(imgId) {
+        downloadImageAsBlob("arms_down", imgId).then(function(res) {
+          console.log(res);
+        }).catch(function(error) {
+          console.error(error);
+        })
+      })
+    })
 
 
     return {
