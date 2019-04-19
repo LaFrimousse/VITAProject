@@ -1,0 +1,46 @@
+.mirrored{
+  transform: rotateY(180deg);
+   -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+   -moz-transform:rotateY(180deg); /* Firefox */
+}
+
+.alpha08{
+   opacity: 0.8;
+}
+
+.alpha06{
+   opacity: 0.6;
+}
+
+.alpha04{
+   opacity: 0.4;
+}
+
+.alpha02{
+   opacity: 0.2;
+}
+
+.notDisplayed{
+  display: none;
+}
+
+.hidden{
+  visibility: hidden;
+}
+
+.buttonBehavior:active {
+  transform: scale(.9);
+}
+
+
+body{
+  margin: 0px;
+  background-color:  rgb(230,230,230);
+}
+
+@media all and (min-width: 768px) {
+  body{
+    margin: 10px;
+    margin-top: 5px;
+  }
+}
