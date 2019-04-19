@@ -3,10 +3,19 @@
 
   var App = window.App || {};
   var CategoriesLayout = App.CategoriesLayout;
+  var Firebase = App.Firebase;
 
   var CategoriesStorage = (function() {
-    var verbose = false
+    var verbose = false;
     var actualCategoryIndex = -1;
+    var userId = null;
+
+    var setUserId = function(toSet){
+      userId = toSet;
+      if(verbose){
+        console.log("CategoryStorage: setted his userId ", userId);
+      }
+    }
 
     /*return an empty 2d array of same lenght than categories, in order to add pictures and point later at the same indexes than the categories allows to*/
     function empty2DArray(categories) {
@@ -99,8 +108,14 @@
     var deleteAPictureWrapperFromACat = function(catIndexOrLabelName, elementIndex) {
 
       var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
-
+      var imgId = picturesWrappers[catIndex][elementIndex].uuid;
+      var catLabel = labelForIndex(catIndex);
+      /*console.log("userId ",userId)
+      console.log("imgId ",imgId)
+      console.log("catLabel ",catLabel)*/
+      Firebase.deleteImage(imgId,catLabel, userId);
       picturesWrappers[catIndex].splice(elementIndex, 1);
+
       if (verbose) {
         console.log("CategoriesStorage: just deleted a picture wrapper for the category \"" +
           labelForIndex(catIndex) + "\"");
@@ -212,7 +227,8 @@
       picturesTakenForACat: picturesTakenForACat,
       pointsTakenForACat: pointsTakenForACat,
       getActualCategory: getActualCategory,
-      proposeNextCategory: proposeNextCategory
+      proposeNextCategory: proposeNextCategory,
+      setUserId: setUserId
     }
 
   })();

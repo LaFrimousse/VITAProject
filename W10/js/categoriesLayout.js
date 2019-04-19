@@ -177,8 +177,8 @@
     var setCategoryStorage = function(storage) {
       if (verbose) {
         console.log("CategoriesLayout: setting his categoryStorage reference")
-        categoryStorage = storage;
       }
+      categoryStorage = storage;
     }
 
     return {

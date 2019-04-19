@@ -32,10 +32,13 @@
         }
       }
       clientId = previousClientId;
+      CategoriesStorage.setUserId(clientId);
+      console.log("----------set", clientId)
       Helper.setCookie(clientIdCookieName, clientId, 100);
 
       //load from firebase the picture the user took in previous session
       var allCat = CategoriesStorage.categories
+      // allCat = [];
       allCat.forEach(function(cat){
         var catName = cat.label;
         Firebase.getImgListForUser(clientId, catName).then(function(listIds){

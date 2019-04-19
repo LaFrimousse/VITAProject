@@ -31,12 +31,23 @@
     }
 
 
-
     var putImgFileInFirebase = function(categoryName, imageId, imageFile) {
       var promise = new Promise(function(resolve, reject) {
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.put(imageFile).then(function(snapshot) {
           resolve(snapshot);
+        }).catch(function(error) {
+          reject(error);
+        });
+      });
+      return promise;
+    }
+
+    var deleteImgFromStorage = function(categoryName, imageId) {
+      var promise = new Promise(function(resolve, reject) {
+        var imgRef = storageRef.child("images").child(categoryName).child(imageId);
+        imgRef.delete().then(function() {
+          resolve();
         }).catch(function(error) {
           reject(error);
         });
@@ -51,9 +62,9 @@
         imgRef.getDownloadURL().then(function(url) {
           if (justURLWanted) {
             resolve({
-              categoryName:categoryName,
-              imageId:imageId,
-              url:url
+              categoryName: categoryName,
+              imageId: imageId,
+              url: url
             });
           } else {
             var xhr = new XMLHttpRequest();
@@ -61,9 +72,9 @@
             xhr.onload = function(event) {
               var blob = xhr.response;
               resolve({
-                categoryName:categoryName,
-                imageId:imageId,
-                blob:blob
+                categoryName: categoryName,
+                imageId: imageId,
+                blob: blob
               });
             };
             xhr.onerror = function(error) {
@@ -145,38 +156,64 @@
       return promise;
     }
 
-    var downloadImages = function(listImageId) {
+
+
+    var deleteImageMetaData = function(imageId) {
       var promise = new Promise(function(resolve, reject) {
-        resolve("öJ");
+        var refDoc = imgsCollection.doc(imageId);
+        refDoc.delete().then(function() {
+          resolve();
+        }).catch(function(error) {
+          reject(error);
+        });
       });
       return promise;
     }
 
+    var deleteImgIdToTheListForThisUser = function(userId, imageIdToDel, categoryName) {
+      var promise = new Promise(function(resolve, reject) {
+        getImgListForUser(userId, categoryName).then(function(list) {
+          for (var i = 0; i < list.length; i++) {
+            if (list[i] === imageIdToDel) {
+              console.log("removing an imag", list[i]);
+              list.splice(i, 1);
+              i--;
+            }
+          }
+          storeImgListForUser(userId, categoryName, list).then(function() {
+            resolve();
+          }).catch(function(error) {
+            reject(error);
+          });
+        }).catch(function(error) {
+          reject(error);
+        });
+      });
+      return promise;
+    }
 
+    var deleteImage = function(imageId, catName, userId) {
 
-    /*db.collection("users").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
-    });
-});*/
-
-
-    /*getImgListForUser("52629ad2-575a-2566-95f7-9bdaf25452d4", "arms_down").then(function(res) {
-      res.forEach(function(imgId) {
-        downloadImageAsBlob("arms_down", imgId).then(function(res) {
-          console.log(res);
+      deleteImgFromStorage(catName, userId).then(function() {
+        return;
+        deleteImgIdToTheListForThisUser(userId, imageId, catName).then(function() {
+          deleteImageMetaData(imageId).catch(function(error) {
+            console.error(error);
+          }).catch(function(error) {
+            console.error(error);
+          });
         }).catch(function(error) {
           console.error(error);
-        })
+        });
       })
-    })*/
-
+    };
 
     return {
       verbose: verbose,
       saveImage: saveImage,
+      deleteImage:deleteImage,
       getImgListForUser: getImgListForUser,
-      downloadImageAsBlob:downloadImageAsBlob
+      downloadImageAsBlob: downloadImageAsBlob
     }
   })();
 
