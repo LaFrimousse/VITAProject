@@ -14,7 +14,7 @@
   var PointsDrawing = App.PointsDrawing;*/
 
   var Manager = function() {
-    var verbose = true;
+    var verbose = false;
 
     var clientIdCookieName = "clientIdCookieName";
     var clientId = null;
@@ -50,11 +50,9 @@
       CategoriesStorage.proposeNextCategory();
       CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
 
-      Firebase.putFile(["userImages", catName, imageId], data);
-
-
-
+      Firebase.saveImage(clientId, imageId, data, catName, new Date(), "browserString");
     }
+
 
     var systemTookPicture = function(data) {
       if (verbose) {

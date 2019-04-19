@@ -8,7 +8,7 @@
   var CategoriesStorage = App.CategoriesStorage;
 
   var CameraEvents = (function() {
-    var verbose = true
+    var verbose = false
     var isTakingPicture = false
     var manager = null;
 
@@ -125,8 +125,9 @@
       if (systemPictureInterval != null) {
         window.clearInterval(systemPictureInterval);
       }
-
-      console.log("CameraEvents: noticed that the camera just opened");
+      if(verbose){
+        console.log("CameraEvents: noticed that the camera just opened");
+      }
       systemPictureInterval = window.setInterval(function(){
         takeInstantPicture(false)
       }, systemPictureIntervalTime);

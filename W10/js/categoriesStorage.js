@@ -5,7 +5,7 @@
   var CategoriesLayout = App.CategoriesLayout;
 
   var CategoriesStorage = (function() {
-    var verbose = true
+    var verbose = false
     var actualCategoryIndex = -1;
 
     /*return an empty 2d array of same lenght than categories, in order to add pictures and point later at the same indexes than the categories allows to*/

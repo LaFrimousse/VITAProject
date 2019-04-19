@@ -4,7 +4,7 @@
   var Camera = App.Camera;
 
   var CameraLayout = (function() {
-    var verbose = true;
+    var verbose = false;
 
     var shouldDisplayCameraSwitch = false;
     Camera.hasMultipleCameraAvailable(function(multAvailable){

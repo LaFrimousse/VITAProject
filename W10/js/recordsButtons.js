@@ -5,7 +5,7 @@
   var Camera = App.Camera;
 
   var RecordsButtons = (function() {
-    var verbose = true
+    var verbose = false
     var delay = null; //number
     var isLooping = null; //boolean
     var cameraEventModule = null;

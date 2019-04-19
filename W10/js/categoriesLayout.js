@@ -4,7 +4,7 @@
   var App = window.App || {};
 
   var CategoriesLayout = (function() {
-    var verbose = true;
+    var verbose = false;
     var categoryStorage = null;
     var actualCategoryDisplayed = null;
     var nbOfPictureSelected = 0;
