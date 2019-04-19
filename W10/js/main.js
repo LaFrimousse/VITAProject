@@ -33,8 +33,25 @@
       }
       clientId = previousClientId;
       Helper.setCookie(clientIdCookieName, clientId, 100);
-    })();
 
+      //load from firebase the picture the user took in previous session
+      var allCat = CategoriesStorage.categories
+      allCat.forEach(function(cat){
+        var catName = cat.label;
+        Firebase.getImgListForUser(clientId, catName).then(function(listIds){
+            listIds.forEach(function(pictId){
+              Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper){
+                CategoriesStorage.appendPictureWrapperToACat(wrapper.categoryName, wrapper.imageId, null, wrapper.blob);
+              }).catch(function(error){
+                console.error("Cannot download an image for the cat " + catName," ",pictId, " ", error);
+              });
+            })
+        }).catch(function(error){
+          console.error("Cannot get a list of image for the cat " + catName," ", error);
+        });
+      });
+
+    })();
 
 
     var userTookPicture = function(data) {

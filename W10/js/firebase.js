@@ -50,13 +50,21 @@
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.getDownloadURL().then(function(url) {
           if (justURLWanted) {
-            resolve(url);
+            resolve({
+              categoryName:categoryName,
+              imageId:imageId,
+              url:url
+            });
           } else {
             var xhr = new XMLHttpRequest();
             xhr.responseType = 'blob';
             xhr.onload = function(event) {
               var blob = xhr.response;
-              resolve(blob);
+              resolve({
+                categoryName:categoryName,
+                imageId:imageId,
+                blob:blob
+              });
             };
             xhr.onerror = function(error) {
               reject(error);
@@ -153,7 +161,7 @@
 });*/
 
 
-    getImgListForUser("52629ad2-575a-2566-95f7-9bdaf25452d4", "arms_down").then(function(res) {
+    /*getImgListForUser("52629ad2-575a-2566-95f7-9bdaf25452d4", "arms_down").then(function(res) {
       res.forEach(function(imgId) {
         downloadImageAsBlob("arms_down", imgId).then(function(res) {
           console.log(res);
@@ -161,12 +169,14 @@
           console.error(error);
         })
       })
-    })
+    })*/
 
 
     return {
       verbose: verbose,
-      saveImage: saveImage
+      saveImage: saveImage,
+      getImgListForUser: getImgListForUser,
+      downloadImageAsBlob:downloadImageAsBlob
     }
   })();
 
