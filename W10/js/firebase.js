@@ -4,7 +4,7 @@
   var App = window.App || {};
 
   var Firebase = (function() {
-    var verbose = true;
+    var verbose = false;
 
     /*Reference to the database*/
     var firestore = firebase.firestore();
@@ -61,8 +61,7 @@
       return promise;
     }
 
-    var downloadImageAsBlob = function(categoryName, imageId) {
-      var justURLWanted = false;
+    var downloadImageAsBlob = function(categoryName, imageId, justURLWanted ) {
       var promise = new Promise(function(resolve, reject) {
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.getDownloadURL().then(function(url) {
@@ -121,7 +120,6 @@
 
 
     var getImgListForUser = function(userId, categoryName) {
-
       var promise = new Promise(function(resolve, reject) {
         var listRef = usersCollection.doc(userId).collection("categories").doc(categoryName);
         listRef.get().then(function(doc) {
@@ -133,6 +131,9 @@
             }
             resolve(oldList);
           } else {
+            if(verbose){
+              console.log("No old list found for category", categoryName)
+            }
             resolve([])
           }
         }).catch(function(error) {
