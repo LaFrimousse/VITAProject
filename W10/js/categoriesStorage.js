@@ -33,23 +33,23 @@
       },
       {
         "title": "Put one arm up, the other down",
-        "label": "arm_up_arm_down",
-        "imageURL": "images/arm_up_arm_down.png"
+        "label": "everyone_stop",
+        "imageURL": "images/everyone_stop.png"
       },
       {
-        "title": "Put your arms down",
-        "label": "arms_down",
-        "imageURL": "images/arms_down.png"
+        "title": "Put your arms at 90 degrees",
+        "label": "90_degrees",
+        "imageURL": "images/90_degrees.png"
       },
       {
-        "title": "Make a roof",
-        "label": "arms_roof",
-        "imageURL": "images/arms_roof.png"
+        "title": "Please slow down",
+        "label": "slow_down",
+        "imageURL": "images/slow_down.png"
       },
       {
-        "title": "Put your hands up (in the air)",
-        "label": "arms_up",
-        "imageURL": "images/arms_up.png"
+        "title": "Please stop and park",
+        "label": "stop_and_park",
+        "imageURL": "images/stop_and_park.png"
       }
     ]
 
