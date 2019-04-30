@@ -8,6 +8,7 @@
   var CategoriesLayout = App.CategoriesLayout;
   var Firebase = App.Firebase;
   var Helper = App.Helper;
+  var Server = App.Server;
 
   /*var CategoriesManager = App.CategoriesManager;
   var Server = App.Server;
@@ -37,18 +38,22 @@
 
       //load from firebase the picture the user took in previous session
       var allCat = CategoriesStorage.categories
-      allCat.forEach(function(cat){
+      allCat.forEach(function(cat) {
         var catName = cat.label;
-        Firebase.getImgListForUser(clientId, catName).then(function(listIds){
-            listIds.forEach(function(pictId){
-              Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper){
-                CategoriesStorage.appendPictureWrapperToACat(wrapper.categoryName, wrapper.imageId, null, wrapper.blob);
-              }).catch(function(error){
-                console.error("Cannot download an image for the cat " + catName," ",pictId, " ", error);
+        Firebase.getImgListForUser(clientId, catName).then(function(listIds) {
+          listIds.forEach(function(pictId) {
+            Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper) {
+              Firebase.getPointsForAPicture(pictId).then(function(points){
+                CategoriesStorage.appendPictureWrapperToACat(wrapper.categoryName, wrapper.imageId, points, wrapper.blob);
+              }).catch(function(error) {
+                console.error("Cannot download the points for the image " + catName, " ", pictId, " ", error);
               });
-            })
-        }).catch(function(error){
-          console.error("Cannot get a list of image for the cat " + catName," ", error);
+            }).catch(function(error) {
+              console.error("Cannot download an image for the cat " + catName, " ", pictId, " ", error);
+            });
+          })
+        }).catch(function(error) {
+          console.error("Cannot get a list of image for the cat " + catName, " ", error);
         });
       });
 
@@ -60,15 +65,39 @@
       if (verbose) {
         console.log("Manager: The user took a picture for the category \"" + catName + "\"");
       }
+      proceedImage(catName,data);
 
-      var imageId = Helper.UUID();
-
-
-      CategoriesStorage.appendPictureWrapperToACat(catName, imageId, null, data);
       CategoriesStorage.proposeNextCategory();
       CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
+    }
 
-      Firebase.saveImage(clientId, imageId, data, catName, new Date(), navigator.userAgent);
+    var proceedImage = function(catName,data) {
+      //create a unique identifier for this picture
+      var imageId = Helper.UUID();
+
+      //turn the blob to a base64 string to send it to the pif_paf server
+      var reader = new FileReader();
+      reader.onload = function() {
+        var json = {};
+        json.image = reader.result;
+
+        Server.requestPifPafForPoints(json).then(function(pointsText) {
+          if (verbose) {
+            console.log("Main: received some points from the pif paf server, time to save them in memory and send them to firebase")
+          }
+          var points = JSON.parse(pointsText);
+          CategoriesStorage.appendPictureWrapperToACat(catName, imageId, points, data);
+          Firebase.saveImage(clientId, imageId, data, catName, new Date(), navigator.userAgent, points);
+
+        }).catch(function(error) {
+          console.log("WILL SAVE IMG FOR CAT " + catName)
+          console.error("Didn't receive points from the pif paf algo, but still save the picture in firebase and into memory " + error);
+          CategoriesStorage.appendPictureWrapperToACat(catName, imageId, null, data);
+          Firebase.saveImage(clientId, imageId, data, catName, new Date(), navigator.userAgent, null);
+        })
+
+      }
+      reader.readAsDataURL(data);
     }
 
 
