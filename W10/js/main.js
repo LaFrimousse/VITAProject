@@ -90,7 +90,6 @@
           Firebase.saveImage(clientId, imageId, data, catName, new Date(), navigator.userAgent, points);
 
         }).catch(function(error) {
-          console.log("WILL SAVE IMG FOR CAT " + catName)
           console.error("Didn't receive points from the pif paf algo, but still save the picture in firebase and into memory " + error);
           CategoriesStorage.appendPictureWrapperToACat(catName, imageId, null, data);
           Firebase.saveImage(clientId, imageId, data, catName, new Date(), navigator.userAgent, null);

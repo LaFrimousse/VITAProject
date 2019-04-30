@@ -259,10 +259,14 @@
     }
 
     var getPointsForAPicture = function(pictId){
-      /*var promise = new Promise(function(resolve, reject) {
-
+      var promise = new Promise(function(resolve, reject) {
+        imgsCollection.doc(pictId).get().then(function(snapshot){
+            resolve(JSON.parse(snapshot.data().points));
+        }).catch(function(error) {
+          reject(error);
+        });
       });
-      return promise;*/
+      return promise;
     }
 
     return {
