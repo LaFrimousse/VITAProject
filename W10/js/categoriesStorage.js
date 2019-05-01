@@ -207,7 +207,6 @@
       proposeNextCategory();
       CategoriesLayout.displayCategory(getActualCategory());
       CategoriesLayout.showPicturesForACat(picturesTakenForACat());
-
     })
 
     checkbox.addEventListener("change", function() {
@@ -219,6 +218,9 @@
 
     proposeNextCategory();
     CategoriesLayout.displayCategory(getActualCategory());
+
+    
+
 
     return {
       categories: categories,
