@@ -131,11 +131,11 @@
       var picturesTaken = []
       picturesWrappers[catIndex].forEach(function(pw) {
         if (pw.picture) {
-          picturesTaken.push(pw.picture)
+          picturesTaken.push(pw);
         }
       })
       if (verbose) {
-        console.log("CategoriesStorage: returning the pictures taken for category of index " + catIndex + "(" +
+        console.log("CategoriesStorage: returning the pictures wrappers taken for category of index " + catIndex + "(" +
           picturesTaken.length + " pictures)");
       }
       return picturesTaken;
@@ -219,7 +219,7 @@
     proposeNextCategory();
     CategoriesLayout.displayCategory(getActualCategory());
 
-    
+
 
 
     return {

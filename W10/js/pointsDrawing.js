@@ -33,7 +33,6 @@
 
 
     var drawPointsInCanvas = function(points, canvas, imgWidth, imgHeight) {
-      attention si on a plusieurs pers sur l image on a plusieurs pts
       var x_factor = 1;
       var y_factor = 1;
       if (imgWidth) {
@@ -51,8 +50,6 @@
 
           var pointX = point[0] * x_factor;
           var pointY = point[1] * y_factor;
-          console.log("will draw a point (", pointX, ",", pointY, ") certainty: " + certainty)
-
 
           context.beginPath(); // La tête
           context.arc(pointX, pointY, POINTS_RADIUS, 0, Math.PI * 2);
@@ -60,7 +57,6 @@
           context.stroke();
         }
       })
-
 
     }
 
@@ -93,7 +89,10 @@
         canvasUsedToAddPointsInPictures.width = imgWidth;
         canvasUsedToAddPointsInPictures.height = imgHeight;
         context.drawImage(img, 0, 0)
-        drawPointsInCanvas(points[0].coordinates, canvasUsedToAddPointsInPictures, imgWidth, imgHeight)
+        points.forEach(function(pts){
+          drawPointsInCanvas(pts.coordinates, canvasUsedToAddPointsInPictures, imgWidth, imgHeight);
+        });
+
         if (typeof(callback) != "undefined") {
           callback(canvasUsedToAddPointsInPictures.toDataURL('image/jpeg', 1.0))
         }

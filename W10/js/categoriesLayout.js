@@ -1,7 +1,8 @@
 (function(window) {
   'use strict';
 
-  var App = window.App || {};
+  var App = window.App;
+  var PointsDrawing = App.PointsDrawing;
 
   var CategoriesLayout = (function() {
     var verbose = false;
@@ -73,10 +74,11 @@
       }
     }
 
-    var showPicturesForACat = function(pictures) {
+    var showPicturesForACat = function(pictsWraps, displayPoints) {
       if (verbose) {
-        console.log("CategoriesLayout: showing " + pictures.length + " pictures to the user for a category");
+        console.log("CategoriesLayout: showing " + pictsWraps.length + " pictures to the user for a category");
       }
+      displayPoints = true;
 
       nbOfPictureSelected = 0;
       hideOrShowDeleteButton();
@@ -92,22 +94,30 @@
 
 
       //and fill with the new pictures if availables
-      pictures.forEach(function(data, index) {
-        addAPhotoToPicturesTaken(data, index);
+      pictsWraps.forEach(function(wrapper, index) {
+        addAPhotoToPicturesTaken(wrapper, index, displayPoints);
       })
-
-      if (pictures.length > 0) {
+      if (pictsWraps.length > 0) {
         show(picturesWrapper);
       } else {
         hide(picturesWrapper);
       }
     }
 
-    var addAPhotoToPicturesTaken = function(data, index) {
+    var addAPhotoToPicturesTaken = function(wrapper, index, displayPoints) {
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
-      var url = URL.createObjectURL(data)
-      newImg.src = url
+      var url = URL.createObjectURL(wrapper.picture);
+
+      if(!displayPoints){
+        newImg.src = url
+      }else{
+        var callback = function(url2){
+          newImg.src = url2;
+        }
+        PointsDrawing.addPointsInImage(url, wrapper.points, callback);
+      }
       urlToClean.push(url);
+
       //newImg.setAttribute("data-picture_nb", index);
       picturesWrapper.appendChild(newImg)
 

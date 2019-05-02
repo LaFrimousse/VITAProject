@@ -9,7 +9,6 @@
   var Firebase = App.Firebase;
   var Helper = App.Helper;
   var Server = App.Server;
-  var PointsDrawing = App.PointsDrawing;
 
   /*var CategoriesManager = App.CategoriesManager;
   var Server = App.Server;
@@ -45,20 +44,6 @@
           listIds.forEach(function(pictId) {
             Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper) {
               Firebase.getPointsForAPicture(pictId).then(function(points){
-
-
-
-                var url = URL.createObjectURL(wrapper.blob)
-                document.getElementById("testImg").src = url
-
-                var callback = function(url2){
-                  console.log("Now the points should be here")
-                  document.getElementById("testImg").src = url2;
-                }
-
-                PointsDrawing.addPointsInImage(url, points,callback);
-
-
                 CategoriesStorage.appendPictureWrapperToACat(wrapper.categoryName, wrapper.imageId, points, wrapper.blob);
               }).catch(function(error) {
                 console.error("Cannot download the points for the image " + catName, " ", pictId, " ", error);
