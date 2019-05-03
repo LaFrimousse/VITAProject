@@ -110,11 +110,20 @@
       var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
       var catLabel = labelForIndex(catIndex);
 
+      var imagesToDelete = [];
+
       listOfIndex.forEach(function(elementIndex){
         var imgId = picturesWrappers[catIndex][elementIndex].uuid;
-        Firebase.deleteImage(imgId,catLabel, userId);
+
+        var imgToDel = {};
+        imgToDel.catLabel = catLabel;
+        imgToDel.userId = userId;
+        imgToDel.imageId = imgId;
+        imagesToDelete.push(imgToDel);
         picturesWrappers[catIndex].splice(elementIndex, 1);
       });
+
+      Firebase.deleteImages(imagesToDelete);
 
       if (verbose) {
         console.log("CategoriesStorage: just deleted some picture wrapper for the category " +

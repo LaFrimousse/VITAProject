@@ -15,7 +15,7 @@
   var PointsDrawing = App.PointsDrawing;*/
 
   var Manager = function() {
-    var verbose = true;
+    var verbose = false;
 
     var clientIdCookieName = "clientIdCookieName";
     var clientId = null;
