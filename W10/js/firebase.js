@@ -175,7 +175,7 @@
         var imgRef = imgsCollection.doc(imageId);
         imgRef.set({
           categoryLabel: catLabel,
-          date: date,
+          date: Date.parse(date),
           browserDescription: browserDescription,
           points: JSON.stringify(points)
         }).then(function() {
@@ -288,6 +288,8 @@
             back.push({
               catLabel: sn.data().categoryLabel,
               pictId: sn.id,
+              date: sn.data().date,
+              browserDescription: sn.data().browserDescription,
               points: JSON.parse(sn.data().points)
             });
           });
@@ -317,7 +319,8 @@
       getImgListForUser: getImgListForUser,
       downloadImageAsBlob: downloadImageAsBlob,
       getPointsForAPicture: getPointsForAPicture,
-      getAllImagesMetaData: getAllImagesMetaData
+      getAllImagesMetaData: getAllImagesMetaData,
+      storeImgMetaData:storeImgMetaData,/*public because needed from download.js*/
     }
   })();
 

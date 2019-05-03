@@ -8,52 +8,60 @@
   var Download = (function() {
     var verbose = true;
 
-    (function() {//init stuff?
-      Firebase.getAllImagesMetaData().then(function(listMetaData){
-        console.log(listMetaData);
-      }).catch(function(error){
+    (function() { //init stuff?
+      Firebase.getAllImagesMetaData().then(function(listMetaData) {
+        //listMetaData represent all metadata for all the images
+        addPointsToAllMetaDataWithoutPoints(listMetaData);
+      }).catch(function(error) {
         console.error(error);
       });
     })();
 
-  
-    /*(function() {//init stuff?
-      Firebase.getAllImagesMetaData().then(function(listMetaData) {
-        listMetaData.forEach(function(metaData){
-          console.log(metaData);
-        });*/
-        /*var metaData = listMetaData[0];
-        Firebase.downloadImageAsBlob(metaData.catLabel, metaData.pictId, true).then(function(imageBlob){
-          console.log(imageBlob);
-        }).catch(function(error) {
-          console.error(error);
-        });*/
 
+    /*Exectute this function to add points to all metadata that have no points. For example, if some users took picture without a connection to a pif paf algorithm, their pictures are saved online but for sure without the points. After downloading all metadata of all images of firebase, pass them to this function. For each metadata that has no points stores, it goes on firebase, fetch the corresponding image, pass them to pif paf running locally, get the points and save them back on firebase in order to have all image metadata on firebase with corresponding points.*/
+    var addPointsToAllMetaDataWithoutPoints = function(listMetaData) {
+      listMetaData.forEach(function(metaDataForImg) {
 
-      //})
-  //  })();
-
-
-    /*navigator.webkitPersistentStorage.requestQuota(1024 * 1024 * 1024, function() {
-      window.webkitRequestFileSystem(window.PERSISTENT, 1024 * 1024, SaveDatFileBro);
-    })*/
-
-
-
-
-/*console.log(image);
-document.getElementById("image").src = image.image;
-
-
-  var callback = function(response){
-      console.log(response);
+        if (metaDataForImg.points == null) {
+          proceedMetaData(metaDataForImg);
+        }
+      });
     }
-    var myurl = "http://localhost:5000/process";
-    Server.post(myurl, image, callback, true);
 
-*/
 
-    return {image:image}
+    var proceedMetaData = function(metaData) {
+      Firebase.downloadImageAsBlob(metaData.catLabel, metaData.pictId, false).then(function(data) {
+
+        var reader = new FileReader();
+        reader.onload = function() {
+          var json = {};
+          json.image = reader.result;
+
+          Server.requestPifPafForPoints(json).then(function(pointsText) {
+            if (verbose) {
+              console.log("Main: received some points from the pif paf server, time send them on the server");
+            }
+            var points = JSON.parse(pointsText);
+            metaData.points = points;
+//         TODO
+            Firebase.storeImgMetaData(metaData.pictId, metaData.date, metaData.browserDescription, metaData.catLabel, metaData.points).catch(function(error){
+              console.error("Cannot save the new metadata on firebase ", error);
+            })
+            //Firebase.saveImage(clientId, imageId, data, catName, new Date(), navigator.userAgent, points);
+
+          }).catch(function(error) {
+            console.error("Cannot work with the pif paf algo for metadata ", metaData, " ", error);
+          });
+
+        }
+        reader.readAsDataURL(data.blob);
+      }).catch(function(error) {
+        console.error(error);
+      });
+    }
+
+
+    return {}
   })();
 
   App.Download = Download;
