@@ -108,7 +108,7 @@
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
       var url = URL.createObjectURL(wrapper.picture);
 
-      if(!displayPoints){
+      if(!displayPoints || wrapper.points == null){
         newImg.src = url
       }else{
         var callback = function(url2){
