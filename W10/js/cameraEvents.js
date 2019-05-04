@@ -13,7 +13,7 @@
     var manager = null;
 
     var systemPictureInterval = null;
-    var systemPictureIntervalTime = 250;
+    var systemPictureIntervalTime = 300;
 
 
     /*Get access of the DOMs elements*/
@@ -138,6 +138,8 @@
       cancelTakingPictureWithDelay();
       window.clearInterval(systemPictureInterval);
       systemPictureInterval = null;
+
+      App.PifPafBuffer.stopSendingAndShowingPoints();
 
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("mirrorButton");

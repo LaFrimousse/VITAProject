@@ -119,14 +119,6 @@
       }
     }
 
-    //----------------dealing with
-
-
-
-
-
-
-
 
     return {
       userTookPicture: userTookPicture,
