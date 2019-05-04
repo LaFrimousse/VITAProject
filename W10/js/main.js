@@ -17,7 +17,7 @@
   var PointsDrawing = App.PointsDrawing;*/
 
   var Manager = function() {
-    var verbose = false;
+    var verbose = true;
     var drawLivePoints = true;
 
     var clientIdCookieName = "clientIdCookieName";

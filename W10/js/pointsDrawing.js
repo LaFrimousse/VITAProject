@@ -27,8 +27,8 @@
       canvas.height = height
       var context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
-      pointsToDraw.forEach(function(points){
-        drawPointsInCanvas(points.coordinates,canvas, width, height)
+      pointsToDraw.forEach(function(points) {
+        drawPointsInCanvas(points.coordinates, canvas, width, height)
       })
     }
 
@@ -57,8 +57,62 @@
           context.fill();
           context.stroke();
         }
-      })
+      });
 
+      //1-2 eyes
+      //3-4 ears
+      //5-6 shoulders
+      //7-8 elbows
+      //9-10 wrists
+      //11-12 bassin
+      var array = [[5,6],[6,8],[5,7],[8,10],[7,9],[11,12],[5,11], [6,12],
+      [11,13],[12,14],[13,15],[14,16]]
+      //var array = [[11,12]]
+      //[[1,2],[2,3],[3,4]]
+      drawLines(array, points, x_factor, y_factor, context);
+    }
+
+    var drawLines = function(linesWanted, points, x_factor, y_factor, context){
+      linesWanted.forEach(function(line){
+        var startPoint = line[0];
+        var endPoint = line[1];
+        if(points[startPoint][2] >= THRESHOLD_TO_DRAW_A_POINT && points[endPoint][2] >= THRESHOLD_TO_DRAW_A_POINT){
+          var start = [points[startPoint][0] * x_factor, points[startPoint][1] * y_factor]
+          var end = [points[endPoint][0] * x_factor, points[endPoint][1] * y_factor]
+          drawALine(context, start, end )
+        }
+      })
+    }
+
+    var drawALine = function(context, start, end, thickness, color) {
+      if (thickness == undefined || thickness == null) {
+        thickness = 3;
+      }
+      var actualThickness = context.lineWidth;
+      context.lineWidth = thickness;
+
+      if (color == undefined || color == null) {
+        color = randomColor();
+      }
+      var actualFillStyle = context.strokeStyle;
+      context.strokeStyle = color;
+
+
+      context.beginPath();
+      context.moveTo(start[0],start[1]);
+      context.lineTo(end[0],end[1]);
+      context.stroke();
+      context.lineWidth = actualThickness;
+      context.strokeStyle = actualFillStyle;
+    }
+
+    var randomColor = function() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
     }
 
 
@@ -90,7 +144,7 @@
         canvasUsedToAddPointsInPictures.width = imgWidth;
         canvasUsedToAddPointsInPictures.height = imgHeight;
         context.drawImage(img, 0, 0)
-        points.forEach(function(pts){
+        points.forEach(function(pts) {
           drawPointsInCanvas(pts.coordinates, canvasUsedToAddPointsInPictures, imgWidth, imgHeight);
         });
 
