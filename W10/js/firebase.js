@@ -4,7 +4,7 @@
   var App = window.App || {};
 
   var Firebase = (function() {
-    var verbose = true;
+    var verbose = false;
 
     /*Reference to the database*/
     var firestore = firebase.firestore();

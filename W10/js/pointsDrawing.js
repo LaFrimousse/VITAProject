@@ -7,7 +7,7 @@
 
     var videoElement = document.getElementById("videoElement")
     //the DOM element in which the video is displayed
-    var canvas = document.getElementById("videoPointsCanvas")
+    var canvas = document.getElementById("canvasForLivePoints")
 
     var canvasUsedToAddPointsInPictures = document.getElementById("usedToDrawPointsInPictures")
 
@@ -21,14 +21,16 @@
 
     var addPointsOverVideo = function(pointsToDraw) {
       lastDrawnPointsInVideo = pointsToDraw
-
       var height = videoElement.clientHeight
       var width = videoElement.clientWidth
       canvas.width = width
       canvas.height = height
       var context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
-      drawPointsInCanvas(pointsToDraw, canvas)
+      pointsToDraw.forEach(function(points){
+        console.log(points.coordinates);
+        drawPointsInCanvas(points.coordinates, canvas)
+      })
     }
 
 

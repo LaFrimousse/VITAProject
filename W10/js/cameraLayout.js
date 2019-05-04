@@ -7,7 +7,7 @@
     var verbose = false;
 
     var shouldDisplayCameraSwitch = false;
-    Camera.hasMultipleCameraAvailable(function(multAvailable){
+    Camera.hasMultipleCameraAvailable(function(multAvailable) {
       shouldDisplayCameraSwitch = multAvailable
     });
 
@@ -28,7 +28,7 @@
 
 
 
-    var switchOpacityFunction = function(){
+    var switchOpacityFunction = function() {
       if (postureToAdoptImg.classList.contains("alpha04")) {
         postureToAdoptImg.classList.remove("alpha04");
       } else {
@@ -36,11 +36,11 @@
       }
     }
 
-    var addImageOpacityListener = function(){
+    var addImageOpacityListener = function() {
       postureToAdoptImg.addEventListener("click", switchOpacityFunction);
     }
 
-    var removeImageOpacityListener = function(){
+    var removeImageOpacityListener = function() {
       postureToAdoptImg.removeEventListener("click", switchOpacityFunction);
       if (postureToAdoptImg.classList.contains("alpha04")) {
         postureToAdoptImg.classList.remove("alpha04");
@@ -84,16 +84,16 @@
     }
 
     var show = function(element) {
-      if(element == switchCameraWrapper && !shouldDisplayCameraSwitch){
-        if(verbose){
+      if (element == switchCameraWrapper && !shouldDisplayCameraSwitch) {
+        if (verbose) {
           console.log("CameraLayout: not showing the switchCamera switch");
         }
         return;
       }
 
-      if(element == mirrorVideoButton && Camera.isUsingBackCamera()
-      && Camera.hasMultipleCameraAvailable()){
-        if(verbose){
+      if (element == mirrorVideoButton && Camera.isUsingBackCamera() &&
+        Camera.hasMultipleCameraAvailable()) {
+        if (verbose) {
           console.log("CameraLayout: not showing the mirror button for a back camera");
         }
         return;
@@ -164,6 +164,9 @@
       var videoElementWidth = parseInt(getComputedStyle(videoElement).width);
       var offsetForLeftButton = (videoElementContainerWidth - videoElementWidth) / 2
 
+      canvasForLivePoints.style.width = videoElementWidth + "px";
+      canvasForLivePoints.style.left = offsetForLeftButton + "px";
+
       closeCameraButton.style.left = offsetForLeftButton + "px";
       mirrorVideoButton.style.left = offsetForLeftButton + "px";
 
@@ -171,21 +174,28 @@
 
       postureToAdoptImg.style.right = offsetForLeftButton + "px";
       var dividor = 5; // for phones
-      if(window.innerWidth > 768 ){//for browser
+      if (window.innerWidth > 768) { //for browser
         dividor = 3;
       }
       postureToAdoptImg.style.maxWidth = videoElementWidth / dividor + "px";
 
       counter.style.right = offsetForLeftButton + "px";
     }
-    replaceButtonInVideoElement();
+
 
     window.addEventListener("resize", function() {
-      console.log("resize");
+      console.log("Window is beeing resized");
       replaceButtonInVideoElement();
     })
 
+    var replaceElementInVideoMoreThanOnce = function() {
+      var initialResizeTime = [50, 100, 150, 200, 250, 500, 1000, 2000];
+      initialResizeTime.forEach(function(updateIn) {
+        window.setTimeout(replaceButtonInVideoElement, updateIn);
+      });
+    }
 
+    replaceElementInVideoMoreThanOnce();
 
     return {
       hideElement: hideElement,
@@ -193,9 +203,9 @@
       mirrorElements: mirrorElements,
       updateCounter: updateCounter,
       animePictureTaken: animePictureTaken,
-      replaceButtonInVideoElement: replaceButtonInVideoElement,
-      addImageOpacityListener:addImageOpacityListener,
-      removeImageOpacityListener:removeImageOpacityListener
+      replaceButtonInVideoElement: replaceElementInVideoMoreThanOnce,
+      addImageOpacityListener: addImageOpacityListener,
+      removeImageOpacityListener: removeImageOpacityListener
     }
   })();
 

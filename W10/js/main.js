@@ -9,6 +9,7 @@
   var Firebase = App.Firebase;
   var Helper = App.Helper;
   var Server = App.Server;
+  var PointsDrawing = App.PointsDrawing;
 
   /*var CategoriesManager = App.CategoriesManager;
   var Server = App.Server;
@@ -16,6 +17,7 @@
 
   var Manager = function() {
     var verbose = false;
+    var drawLivePoints = false;
 
     var clientIdCookieName = "clientIdCookieName";
     var clientId = null;
@@ -43,7 +45,7 @@
         Firebase.getImgListForUser(clientId, catName).then(function(listIds) {
           listIds.forEach(function(pictId) {
             Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper) {
-              Firebase.getPointsForAPicture(pictId).then(function(points){
+              Firebase.getPointsForAPicture(pictId).then(function(points) {
                 CategoriesStorage.appendPictureWrapperToACat(wrapper.categoryName, wrapper.imageId, points, wrapper.blob);
               }).catch(function(error) {
                 console.error("Cannot download the points for the image " + catName, " ", pictId, " ", error);
@@ -65,13 +67,13 @@
       if (verbose) {
         console.log("Manager: The user took a picture for the category \"" + catName + "\"");
       }
-      proceedImage(catName,data);
+      proceedImage(catName, data);
 
       CategoriesStorage.proposeNextCategory();
       CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
     }
 
-    var proceedImage = function(catName,data) {
+    var proceedImage = function(catName, data) {
       //create a unique identifier for this picture
       var imageId = Helper.UUID();
 
@@ -103,6 +105,22 @@
     var systemTookPicture = function(data) {
       if (verbose) {
         console.log("Manager: The system took a picture");
+      }
+
+      if (drawLivePoints) {
+        var reader = new FileReader();
+        reader.onload = function() {
+          var json = {};
+          json.image = reader.result;
+          console.log(json);
+          Server.requestPifPafForPoints(json).then(function(pointsText) {
+            var points = JSON.parse(pointsText);
+            PointsDrawing.addPointsOverVideo(points);
+          })/*.catch(function(error) {
+            console.error("Didn't receive points from the pif paf algo, so no live points to draw " + error);
+          })*/
+        }
+        reader.readAsDataURL(data);
       }
     }
 

@@ -13,7 +13,7 @@
     var manager = null;
 
     var systemPictureInterval = null;
-    var systemPictureIntervalTime = 500;
+    var systemPictureIntervalTime = 4000;
 
 
     /*Get access of the DOMs elements*/
@@ -120,7 +120,7 @@
       CameraLayout.showElement("switchCameraWrapper");
       CameraLayout.addImageOpacityListener();
 
-      window.setTimeout(CameraLayout.replaceButtonInVideoElement, 150);
+      CameraLayout.replaceButtonInVideoElement();
 
       if (systemPictureInterval != null) {
         window.clearInterval(systemPictureInterval);
@@ -148,7 +148,7 @@
         isMirrored = false;
       }
 
-      window.setTimeout(CameraLayout.replaceButtonInVideoElement, 0);
+      CameraLayout.replaceButtonInVideoElement();
       console.log("CameraEvents: noticed that the camera just closed")
     }
 
