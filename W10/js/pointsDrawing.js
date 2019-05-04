@@ -28,8 +28,7 @@
       var context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
       pointsToDraw.forEach(function(points){
-        console.log(points.coordinates);
-        drawPointsInCanvas(points.coordinates, canvas)
+        drawPointsInCanvas(points.coordinates,canvas, width, height)
       })
     }
 

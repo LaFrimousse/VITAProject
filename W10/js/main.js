@@ -10,6 +10,7 @@
   var Helper = App.Helper;
   var Server = App.Server;
   var PointsDrawing = App.PointsDrawing;
+  var PifPafBuffer = App.PifPafBuffer;
 
   /*var CategoriesManager = App.CategoriesManager;
   var Server = App.Server;
@@ -17,7 +18,7 @@
 
   var Manager = function() {
     var verbose = false;
-    var drawLivePoints = false;
+    var drawLivePoints = true;
 
     var clientIdCookieName = "clientIdCookieName";
     var clientId = null;
@@ -112,17 +113,19 @@
         reader.onload = function() {
           var json = {};
           json.image = reader.result;
-          console.log(json);
-          Server.requestPifPafForPoints(json).then(function(pointsText) {
-            var points = JSON.parse(pointsText);
-            PointsDrawing.addPointsOverVideo(points);
-          })/*.catch(function(error) {
-            console.error("Didn't receive points from the pif paf algo, so no live points to draw " + error);
-          })*/
+          PifPafBuffer.sendPictureToPifPaf(json);
         }
         reader.readAsDataURL(data);
       }
     }
+
+    //----------------dealing with
+
+
+
+
+
+
 
 
     return {

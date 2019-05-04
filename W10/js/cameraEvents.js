@@ -13,7 +13,7 @@
     var manager = null;
 
     var systemPictureInterval = null;
-    var systemPictureIntervalTime = 4000;
+    var systemPictureIntervalTime = 250;
 
 
     /*Get access of the DOMs elements*/
@@ -311,7 +311,7 @@
       manager = m;
     }
 
-    //openCamera();
+    openCamera();
 
     return {
       userClickedRedButton: userClickedRedButton,
