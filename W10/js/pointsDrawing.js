@@ -16,6 +16,49 @@
     var POINTS_RADIUS = 10
     var FILL_STYLE = "rgba(255, 255, 255, 0.5)"
 
+    var randomColor = function() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    var arraySkeletonInitializeColor = function() {
+      //1-2 eyes
+      //3-4 ears
+      //5-6 shoulders
+      //7-8 elbows
+      //9-10 wrists
+      //11-12 bassin
+      var array = [
+        [1, 3],
+        [2, 4],
+        [5, 6],
+        [6, 8],
+        [5, 7],
+        [8, 10],
+        [7, 9],
+        [11, 12],
+        [5, 11],
+        [6, 12],
+        [11, 13],
+        [12, 14],
+        [13, 15],
+        [14, 16],
+        [0, 1],
+        [0, 2]
+      ];
+
+      var arrayBack = [];
+      array.forEach(function(el) {
+        el.push(randomColor())
+        arrayBack.push(el)
+      })
+      return arrayBack;
+    }
+    var array = arraySkeletonInitializeColor();
 
     var lastDrawnPointsInVideo = undefined
 
@@ -59,27 +102,30 @@
         }
       });
 
-      //1-2 eyes
-      //3-4 ears
-      //5-6 shoulders
-      //7-8 elbows
-      //9-10 wrists
-      //11-12 bassin
-      var array = [[5,6],[6,8],[5,7],[8,10],[7,9],[11,12],[5,11], [6,12],
-      [11,13],[12,14],[13,15],[14,16]]
-      //var array = [[11,12]]
-      //[[1,2],[2,3],[3,4]]
       drawLines(array, points, x_factor, y_factor, context);
+      //draw the neck
+      if (points[0][2] >= THRESHOLD_TO_DRAW_A_POINT &&
+        points[5][2] >= THRESHOLD_TO_DRAW_A_POINT &&
+        points[6][2] >= THRESHOLD_TO_DRAW_A_POINT) {
+        var middleX = (points[5][0] + points[6][0]) / 2;
+        var middleY = (points[5][1] + points[6][1]) / 2;
+        var start = [middleX * x_factor, middleY * y_factor];
+        var end = [points[0][0] * x_factor, points[0][1] * y_factor];
+        var color = array[2][2];
+        drawALine(context, start, end, null, color);
+      }
+
     }
 
-    var drawLines = function(linesWanted, points, x_factor, y_factor, context){
-      linesWanted.forEach(function(line){
+    var drawLines = function(linesWanted, points, x_factor, y_factor, context) {
+      linesWanted.forEach(function(line) {
         var startPoint = line[0];
         var endPoint = line[1];
-        if(points[startPoint][2] >= THRESHOLD_TO_DRAW_A_POINT && points[endPoint][2] >= THRESHOLD_TO_DRAW_A_POINT){
+        var color = line[2];
+        if (points[startPoint][2] >= THRESHOLD_TO_DRAW_A_POINT && points[endPoint][2] >= THRESHOLD_TO_DRAW_A_POINT) {
           var start = [points[startPoint][0] * x_factor, points[startPoint][1] * y_factor]
           var end = [points[endPoint][0] * x_factor, points[endPoint][1] * y_factor]
-          drawALine(context, start, end )
+          drawALine(context, start, end, null, color)
         }
       })
     }
@@ -99,21 +145,14 @@
 
 
       context.beginPath();
-      context.moveTo(start[0],start[1]);
-      context.lineTo(end[0],end[1]);
+      context.moveTo(start[0], start[1]);
+      context.lineTo(end[0], end[1]);
       context.stroke();
       context.lineWidth = actualThickness;
       context.strokeStyle = actualFillStyle;
     }
 
-    var randomColor = function() {
-      var letters = '0123456789ABCDEF';
-      var color = '#';
-      for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
+
 
 
     var removePointsFromVideo = function() {
