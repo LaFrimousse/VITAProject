@@ -49,7 +49,7 @@
     var dealWithPointsReceived = function(pointsText) {
       var points = JSON.parse(pointsText);
       if (verbose) {
-        console.log("PifPafBuffer: received some points from the pif paf server", points);
+        console.log("PifPafBuffer: received some points from the pif paf server that will be drawn ", points);
       }
       PointsDrawing.addPointsOverVideo(points);
     }
@@ -59,7 +59,11 @@
 
 
     var stopSendingAndShowingPoints = function() {
+      if(verbose){
+        console.log("PifPafBuffer: noticed we should stop displaying points");
+      }
       stop = true;
+      PointsDrawing.addPointsOverVideo(null);
     }
 
 
