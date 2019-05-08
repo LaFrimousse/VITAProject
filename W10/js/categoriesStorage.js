@@ -100,7 +100,7 @@
           labelForIndex(catIndex) + "\"");
       }
       if (!checkbox.checked) {
-        CategoriesLayout.showPicturesForACat(picturesTakenForACat());
+        CategoriesLayout.showNewPicture(points, picture, true);
       }
     }
 

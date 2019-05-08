@@ -94,8 +94,8 @@
 
 
       //and fill with the new pictures if availables
-      pictsWraps.forEach(function(wrapper, index) {
-        addAPhotoToPicturesTaken(wrapper, index, displayPoints);
+      pictsWraps.forEach(function(wrapper) {
+        addAPhotoToPicturesTaken(wrapper, displayPoints);
       })
       if (pictsWraps.length > 0) {
         show(picturesWrapper);
@@ -104,7 +104,15 @@
       }
     }
 
-    var addAPhotoToPicturesTaken = function(wrapper, index, displayPoints) {
+    var showNewPicture = function(points, picture, displayPoints){
+      var wrapper = {}
+      wrapper.picture = picture;
+      wrapper.points = points;
+      addAPhotoToPicturesTaken(wrapper, displayPoints);
+        show(picturesWrapper);
+    }
+
+    var addAPhotoToPicturesTaken = function(wrapper, displayPoints) {
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
       var url = URL.createObjectURL(wrapper.picture);
 
@@ -118,7 +126,6 @@
       }
       urlToClean.push(url);
 
-      //newImg.setAttribute("data-picture_nb", index);
       picturesWrapper.appendChild(newImg)
 
       newImg.addEventListener("click", function(el) {
@@ -194,11 +201,14 @@
       categoryStorage = storage;
     }
 
+
+
     return {
       displayCategory: displayCategory,
       showElements: showElements,
       hideElements: hideElements,
       showPicturesForACat: showPicturesForACat,
+      showNewPicture:showNewPicture,
       hidePicturesTaken: hidePicturesTaken,
       setCategoryStorage: setCategoryStorage
     }
