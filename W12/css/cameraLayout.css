@@ -1,0 +1,205 @@
+#titleCameraButtonWrapper {
+  border: 1px solid black;
+  padding: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+#postureToAdaptTitle {
+  font-size: large;
+  text-align: center;
+  margin: 0px;
+  font-family: Arial, Comic Sans MS, serif;
+  border-bottom: 1px solid black;
+  background-color: rgb(253, 255, 193);
+}
+
+#videoElementContainer {
+  /*No padding or margin in this element since the 2 children are abolutely align.
+  But can create a parent div if a external border is really wanted*/
+  position: relative;
+  max-width: 100%;
+  padding: 0px;
+  /*https://stackoverflow.com/questions/20590239/maintain-aspect-ratio-of-div-but-fill-screen-width-and-height-in-css*/
+}
+
+/*The canvas in the one the picture taken are rendered before being turned in an image*/
+#videoBackedUpCanvas {
+  display: none;
+}
+
+/*the element in the one the user sees himself*/
+#videoElement {
+  margin: auto;
+  display: block;
+  max-width: 100%;
+  max-height: 65vh;
+}
+
+/*The element used to draw some points on top of the live video*/
+#canvasForLivePoints {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  
+  /*background-color: blue;
+  opacity: 0.4*/
+}
+#cameraRecordButtons {
+  max-height: 30vh;
+  background-color: rgb(105, 109, 106);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid black;
+  overflow: hidden;
+}
+#closeCameraButton {
+  padding: 2px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 25px;
+  height: 25px;
+}
+
+
+
+#mirrorVideoButton {
+  opacity: 0.8;
+  padding: 2px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 30px;
+  height: 30px;
+}
+
+
+
+.switchBoxWrapper {
+  pointer-events: none;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+}
+
+#switchBoxWrapper p {
+  font-size: small;
+  padding: 0px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#switchBoxWrapper div {
+  margin: 0px;
+  padding: 0px;
+}
+
+#postureToAdoptImg {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  max-width: 50px;
+}
+
+#counter {
+  position: absolute;
+  margin: 0px;
+  margin-right: 5px;
+  bottom: 0px;
+  right: 0px;
+  font-size: xx-large;
+}
+
+.redCounter {
+  color: red;
+}
+
+/*--------------------------------------------------------------------------------*/
+#cameraRecordButtons {
+  max-height: 25vh;
+  background-color: rgb(105, 109, 106);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid black;
+  overflow: hidden;
+}
+
+#cameraRecordButtons * {
+  margin: 0px;
+  padding:0px;
+}
+
+#delayButtonLooping {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#takePictureButton {
+  max-width: 40px;
+  max-height: 40px;
+  display: block;
+  flex: 1;
+  margin-top: 1px;
+  margin-bottom: 15px;
+}
+
+
+
+.delayp {
+  text-align: center;
+  flex: 1;
+}
+
+#loopingWrapper {
+  text-align: center;
+  flex: 1;
+}
+
+#delaySlider {
+  display: block;
+  max-width: 80%;
+  min-width: 50%;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.notDisplayed {
+  display: none;
+}
+
+@media all and (min-width: 768px) {
+  #videoElement{
+    max-height: 80vh;
+  }
+
+  #delaySlider {
+    margin-bottom: 15px;
+    margin-top: 0px;
+  }
+
+  #takePictureButton {
+    margin-top: 5px;
+  }
+  #postureToAdaptTitle{
+    font-size: xx-large;
+  }
+
+}

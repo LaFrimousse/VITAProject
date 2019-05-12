@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/slider.css" />
+  <link rel="stylesheet" href="css/range.css" />
+  <link rel="stylesheet" href="css/gestureProposal.css" />
+  <link rel="stylesheet" href="css/cameraLayout.css" />
+  <link rel="stylesheet" href="css/categoriesModule.css" />
+  <title>Camera Try</title>
+  <!--A <meta> viewport element gives the browser instructions on how to control the page's dimensions and scaling.
+    -->
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+</head>
+
+<body>
+  <!--
+<canvas id="usedToDrawPointsInPictures" ></canvas>
+-->
+<canvas id="usedToDrawPointsInPictures" style="display: none;"></canvas>
+  <div id="titleCameraButtonWrapper">
+    <p id="postureToAdaptTitle"></p>
+
+    <div id="videoElementContainer">
+      <!--For the camera module: the videoBackedUpCanvas is the DOM element in which a particular frame of the video stream is rendered before getting turned into a data each time the camera module is asked to take a picture.
+      This element is not visible on the html page because its display style is none.-->
+      <canvas id="videoBackedUpCanvas"></canvas>
+
+      <!--For the camera module: the videoElement is the DOM element in which the video stream captured by
+      the camera is rendered-->
+      <video id="videoElement" autoplay playsinline poster="images/videoElementPoster.jpg"></video>
+
+      <!--For the pointsOverVideo module: this canvas is the DOM element in which points and lines are going to be drawn over the video frame.-->
+      <canvas id="canvasForLivePoints"></canvas>
+
+      <img id="closeCameraButton" class="notDisplayed buttonBehavior" src="images/closeCameraButton.png" />
+
+      <div class="switchBoxWrapper notDisplayed" id="switchBoxWrapper">
+        <p>Front camera</p>
+        <div>
+          <label class="switch">
+            <input type="checkbox" id="switchCameraCheckBox">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <p>Back camera</p>
+      </div>
+
+      <img id="mirrorVideoButton" src="images/mirror.png" class="notDisplayed buttonBehavior" />
+
+      <img id="postureToAdoptImg" src="images/questionMark.jpg" />
+      <p id="counter" class="notDisplayed">-1</p>
+
+    </div>
+
+    <div id="cameraRecordButtons">
+
+      <div id="delayButtonLooping">
+        <p class="delayp">Delay: <span id="delayIndicator"></span> sec</p>
+
+        <img id="takePictureButton" class="buttonBehavior" src="images/takePictureButton.png" />
+
+        <div id="loopingWrapper">
+          <input type="checkbox" name="loopingBox" id="loopingBox" />
+          <label for="loopingBox">Looping</label>
+        </div>
+      </div>
+
+
+      <input type="range" id="delaySlider" name="delaySlider" min="0" max="10" step="0.5">
+
+    </div>
+
+  </div>
+
+  <div class="categoryDisplayWrapper">
+
+    <div class="categorySelectCheckBoxWrapper">
+      <select name="categoryChoosen" id="categorySelector">
+        <option disabled selected value> -- No category manually selected-- </option>
+      </select>
+      <div class="categoryModeCheckBoxWrapper">
+        <input type="checkbox" name="proposalModeCheckBox" id="proposalModeCheckBox" />
+        <label for="proposalModeCheckBox">Automatic Proposition</label>
+      </div>
+    </div>
+
+    <div class="pictureDisplayWrapper">
+      <button id="deletePicture" class="buttonBehavior deletePicture notDisplayed">Delete Pictures</button>
+      <div class="pictures notDisplayed" id="pictures"></div>
+    </div>
+
+  </div>
+
+
+<p></p>
+
+
+
+  <!-- Firebase App is always required and must be first -->
+  <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-firestore.js"></script>
+
+  <script>
+    var config = {
+      apiKey: "AIzaSyDXJjzFxhMFeypgptKs-WE3jzikbtOWcWE",
+      authDomain: "vita-project-f8d92.firebaseapp.com",
+      databaseURL: "https://<DATABASE_NAME>.firebaseio.com",
+      projectId: "vita-project-f8d92",
+      storageBucket: "gs://vita-project-f8d92.appspot.com/",
+      messagingSenderId: "<SENDER_ID>",
+    };
+    firebase.initializeApp(config);
+  </script>
+
+
+  <script src="js/pointsDrawing.js"></script>
+  <script src="js/helper.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/cameraLayout.js"></script>
+  <script src="js/recordsButtons.js"></script>
+  <script src="js/categoriesLayout.js"></script>
+  <script src="js/categoriesStorage.js"></script>
+  <script src="js/cameraEvents.js"></script>
+  <script src="js/server.js"></script>
+  <script src="js/pifPafBuffer.js"></script>
+  <script src="js/main.js"></script>
+
+  <!--
+  <script src="js/pointsDrawing.js"></script>
+  <script src="js/server.js"></script>
+  <script src="js/main.js"></script>
+-->
+</body>
+
+</html>
