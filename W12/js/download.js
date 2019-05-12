@@ -11,6 +11,7 @@
     (function() { //init stuff?
       Firebase.getAllImagesMetaData().then(function(listMetaData) {
         //listMetaData represent all metadata for all the images
+        //console.log(listMetaData)
         addPointsToAllMetaDataWithoutPoints(listMetaData);
       }).catch(function(error) {
         console.error(error);

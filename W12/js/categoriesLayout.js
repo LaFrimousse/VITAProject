@@ -3,10 +3,11 @@
 
   var App = window.App;
   var PointsDrawing = App.PointsDrawing;
+  var CategoriesStorage = App.CategoriesStorage;
 
   var CategoriesLayout = (function() {
     var verbose = false;
-    var categoryStorage = null;
+      var actualCategoryIndex = -1;
     var actualCategoryDisplayed = null;
     var nbOfPictureSelected = 0;
     var urlToClean = [];
@@ -17,6 +18,35 @@
     var pictureDisplayWrapper = document.getElementsByClassName("pictureDisplayWrapper")[0];
     var picturesWrapper = document.getElementById("pictures");
     var deleteButton = document.getElementById("deletePicture");
+
+    //theses 3 next line of code were originally in categoriesStorage.js
+    var selector = document.getElementById("categorySelector");
+    var checkbox = document.getElementById("proposalModeCheckBox");
+    checkbox.checked = true;
+
+
+        CategoriesStorage.categories.forEach(function(cat) {
+          selector.insertAdjacentHTML("beforeend", '<option>' + cat.title + '</option>')
+        })
+
+        selector.addEventListener("change", function() {
+          checkbox.checked = false
+          CategoriesStorage.proposeNextCategory(selector.selectedIndex);
+          displayCategory(getActualCategory());
+          showPicturesForACat(picturesTakenForACat());
+        })
+
+        checkbox.addEventListener("change", function() {
+          selector.selectedIndex = 0
+          CategoriesStorage.proposeNextCategory(selector.selectedIndex);
+          displayCategory(getActualCategory());
+          hidePicturesTaken();
+        })
+
+        CategoriesStorage.proposeNextCategory(0);
+        displayCategory(getActualCategory());
+
+
 
     var hideElements = function() {
       if (verbose) {
@@ -189,17 +219,12 @@
         }
       });
 
-        categoryStorage.deleteAPictureWrapperFromACat(null, indexes.reverse());
+        CategoriesStorage.deleteAPictureWrapperFromACat(null, indexes.reverse());
 
       // UI reloaded from categriesStorage
     }
 
-    var setCategoryStorage = function(storage) {
-      if (verbose) {
-        console.log("CategoriesLayout: setting his categoryStorage reference")
-      }
-      categoryStorage = storage;
-    }
+
 
 
 
@@ -210,7 +235,6 @@
       showPicturesForACat: showPicturesForACat,
       showNewPicture:showNewPicture,
       hidePicturesTaken: hidePicturesTaken,
-      setCategoryStorage: setCategoryStorage
     }
   })();
   App.CategoriesLayout = CategoriesLayout;
