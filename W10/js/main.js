@@ -18,7 +18,7 @@
 
   var Manager = function() {
     var verbose = true;
-    var drawLivePoints = false;
+    var drawLivePoints = true;
 
     var clientIdCookieName = "clientIdCookieName";
     var clientId = null;
