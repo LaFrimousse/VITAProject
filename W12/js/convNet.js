@@ -4,7 +4,9 @@
   var Firebase = App.Firebase;
   var CategoriesStorage = App.CategoriesStorage;
   var ConvNet = (function() {
-    var NB_CATEGORIES = 5;
+
+    const classNames = CategoriesStorage.catLabels()
+    const NB_CATEGORIES = classNames.length;
 
     async function run() {
       var data = await getData();
@@ -28,6 +30,7 @@
       console.log('Done Training');
 
       await showAccuracy(model, test_inputs, test_labels);
+      await showConfusion(model, test_inputs, test_labels);
 
     }
 
@@ -194,7 +197,17 @@
       const [pred, labels] = doPrediction(model, testInput, testLabels);
       const classAccuracy = await tfvis.metrics.perClassAccuracy(labels, pred);
       const container = {name: 'Accuracy', tab: 'Evaluation'};
-      tfvis.show.perClassAccuracy(container, classAccuracy, CategoriesStorage.catLabels());
+      tfvis.show.perClassAccuracy(container, classAccuracy, classNames);
+
+      labels.dispose();
+    }
+
+    async function showConfusion(model, testInput, testLabels) {
+      const [preds, labels] = doPrediction(model, testInput, testLabels);
+      const confusionMatrix = await tfvis.metrics.confusionMatrix(labels, preds);
+      const container = {name: 'Confusion Matrix', tab: 'Evaluation'};
+      tfvis.render.confusionMatrix(
+          container, {values: confusionMatrix}, classNames);
 
       labels.dispose();
     }
