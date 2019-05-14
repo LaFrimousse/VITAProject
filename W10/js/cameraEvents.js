@@ -150,6 +150,7 @@
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("mirrorButton");
       CameraLayout.hideElement("switchCameraWrapper");
+      CameraLayout.hideElement("skeletons");
       CameraLayout.removeImageOpacityListener();
       if (isMirrored) {
         CameraLayout.mirrorElements();
