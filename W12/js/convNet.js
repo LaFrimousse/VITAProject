@@ -27,6 +27,8 @@
       await trainModel(model, training_inputs, training_labels, validation_inputs, validation_labels);
       console.log('Done Training');
 
+      await showAccuracy(model, test_inputs, test_labels);
+
     }
 
 
@@ -162,7 +164,7 @@
       const BATCH_SIZE = 32;
       /*epochs refers to the number of times the model is going to look at the entire dataset that you provide it. Here we will take 50 iterations through the dataset.*/
       /*One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.*/
-      const epochs = 10;
+      const epochs = 1;
 
       /*model.fit is the function we call to start the training loop. It is an asynchronous function so we return the promise it gives us so that the caller can determine when training is complete.*/
       /*return await model.fit(inputs, labels, {
@@ -186,8 +188,26 @@
         shuffle: true,
         callbacks: fitCallbacks
       });
+    }
 
+    async function showAccuracy(model, testInput, testLabels) {
+      const [pred, labels] = doPrediction(model, testInput, testLabels);
+      const classAccuracy = await tfvis.metrics.perClassAccuracy(labels, pred);
+      const container = {name: 'Accuracy', tab: 'Evaluation'};
+      tfvis.show.perClassAccuracy(container, classAccuracy, CategoriesStorage.catLabels());
 
+      labels.dispose();
+    }
+
+    function doPrediction(model, testInput,testLabels) {
+
+      //const testxs = testData.xs.reshape([testDataSize, IMAGE_WIDTH, IMAGE_HEIGHT, 1]);
+      const labels = testLabels.argMax([-1]);
+      /*Take the maximum value of the vector output by the model, the class with the highest probability*/
+      const preds = model.predict(testInput).argMax([-1]);
+
+      //preds.dispose();
+      return [preds, labels];
     }
 
 

@@ -139,8 +139,7 @@ async function train(model, data) {
       d.labels
     ];
   });
-  trainXs.print()
-  trainYs.print()
+  
   /*console.log(trainXs)
   console.log(trainYs)*/
 

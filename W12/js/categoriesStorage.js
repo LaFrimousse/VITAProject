@@ -45,9 +45,15 @@
       return categories[index].label
     }
 
+    var getCatLabels = function(){
+      return categories.map(el=>el.label)
+    }
+
+
     return {
       indexForLabel: indexForLabel,
       labelForIndex:labelForIndex,
+      catLabels : getCatLabels
     }
 
   })();
