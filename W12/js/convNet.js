@@ -207,7 +207,7 @@
       const confusionMatrix = await tfvis.metrics.confusionMatrix(labels, preds);
       const container = {name: 'Confusion Matrix', tab: 'Evaluation'};
       tfvis.render.confusionMatrix(
-          container, {values: confusionMatrix}, classNames);
+          container, {values: confusionMatrix, tickLabels:classNames });
 
       labels.dispose();
     }
