@@ -28,6 +28,9 @@
       } = tensors;
       await trainModel(model, training_inputs, training_labels, validation_inputs, validation_labels);
       console.log('Done Training');
+      /*const saveResult = await model.save('localstorage://my-model-1');
+      console.log("model saved")
+      console.log(saveResult)*/
 
       await showAccuracy(model, test_inputs, test_labels);
       await showConfusion(model, test_inputs, test_labels);
@@ -60,14 +63,14 @@
       model.add(tf.layers.dense({
         inputShape: [17 * 3],
         // Integer or Long, dimensionality of the output space.
-        units: 50,
+        units: 500,
         useBias: true
       }));
 
-      /*model.add(tf.layers.dense({
-        units: 50,
+      model.add(tf.layers.dense({
+        units: 500,
         activation: 'sigmoid'
-      }));*/
+      }));
 
       //  model.add(tf.layers.flatten());
 
@@ -148,9 +151,6 @@
 
     async function trainModel(model, trainingInputs, trainingLabels, validationInputs, validationLabels) {
 
-      console.log(trainingInputs);
-      console.log(trainingLabels);
-
       /*Here we decide which metrics we are going to monitor. We will monitor loss and accuracy on the training set as well as loss and accuracy on the validation set */
       const metrics = ['loss', 'val_loss', 'acc', 'val_acc'];
       const container = {
@@ -167,7 +167,7 @@
       const BATCH_SIZE = 32;
       /*epochs refers to the number of times the model is going to look at the entire dataset that you provide it. Here we will take 50 iterations through the dataset.*/
       /*One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.*/
-      const epochs = 1;
+      const epochs = 20;
 
       /*model.fit is the function we call to start the training loop. It is an asynchronous function so we return the promise it gives us so that the caller can determine when training is complete.*/
       /*return await model.fit(inputs, labels, {
