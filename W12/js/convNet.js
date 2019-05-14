@@ -111,7 +111,7 @@
         const labels = data.map(d => d.label);
 
         const inputTensor = tf.tensor2d(inputs, [inputs.length, 3 * 17]);
-        const labelTensor = tf.tensor2d(labels, [labels.length, 1]);
+        const labelTensor = tf.tensor2d(labels, [labels.length, NB_CATEGORIES]);
 
         //Step 3. Normalize the data to the range 0 - 1 using min-max scaling
         const inputMax = inputTensor.max();
