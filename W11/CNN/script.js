@@ -139,6 +139,10 @@ async function train(model, data) {
       d.labels
     ];
   });
+  trainXs.print()
+  trainYs.print()
+  /*console.log(trainXs)
+  console.log(trainYs)*/
 
   const [testXs, testYs] = tf.tidy(() => {
     const d = data.nextTestBatch(TEST_DATA_SIZE);
