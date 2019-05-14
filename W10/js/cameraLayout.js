@@ -22,6 +22,7 @@
     var closeCameraButton = document.getElementById("closeCameraButton");
     var mirrorVideoButton = document.getElementById("mirrorVideoButton");
     var switchCameraWrapper = document.getElementById("switchBoxWrapper");
+    var showLivePointsButton = document.getElementById("showLivePointsButton")
     var counter = document.getElementById("counter");
     //usefull only to resize
     var postureToAdoptImg = document.getElementById("postureToAdoptImg");
@@ -71,6 +72,8 @@
           return switchCameraWrapper;
         case "counter":
           return counter;
+        case "skeletons":
+          return showLivePointsButton;
         default:
           console.error("CameraLayoutModule: No element to select that corresponds to " + nameOfElement);
           return;

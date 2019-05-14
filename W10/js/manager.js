@@ -18,7 +18,6 @@
 
   var Manager = function() {
     var verbose = true;
-    var drawLivePoints = true;
 
     var clientIdCookieName = "clientIdCookieName";
     var clientId = null;
@@ -40,6 +39,7 @@
       Helper.setCookie(clientIdCookieName, clientId, 100);
 
       //load from firebase the picture the user took in previous session
+      return;
       var allCat = CategoriesStorage.categories
       allCat.forEach(function(cat) {
         var catName = cat.label;
@@ -64,6 +64,7 @@
 
 
     var userTookPicture = function(data) {
+      return;
       var catName = CategoriesStorage.getActualCategory().label;
       if (verbose) {
         console.log("Manager: The user took a picture for the category \"" + catName + "\"");
@@ -103,7 +104,7 @@
     }
 
 
-    var systemTookPicture = function(data) {
+    var systemTookPicture = function(data, drawLivePoints) {
       if (verbose) {
         console.log("Manager: The system took a picture");
       }
