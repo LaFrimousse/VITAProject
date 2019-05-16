@@ -301,6 +301,31 @@
       return promise;
     }
 
+    var getAllImagesMetaDataForAUser = function(userId) {
+      console.log(userId);
+      return;
+
+      var promise = new Promise(function(resolve, reject) {
+        var back = [];
+        imgsCollection.get().then(function(snapshot) {
+
+          snapshot.forEach(function(sn) {
+            back.push({
+              catLabel: sn.data().categoryLabel,
+              pictId: sn.id,
+              date: sn.data().date,
+              browserDescription: sn.data().browserDescription,
+              points: JSON.parse(sn.data().points)
+            });
+          });
+          resolve(back);
+        }).catch(function(error) {
+          reject(error);
+        });
+      });
+      return promise;
+    }
+
     var getPointsForAPicture = function(pictId) {
       var promise = new Promise(function(resolve, reject) {
         imgsCollection.doc(pictId).get().then(function(snapshot) {
@@ -320,6 +345,7 @@
       downloadImageAsBlob: downloadImageAsBlob,
       getPointsForAPicture: getPointsForAPicture,
       getAllImagesMetaData: getAllImagesMetaData,
+      getAllImagesMetaDataForAUser:getAllImagesMetaDataForAUser,
       storeImgMetaData:storeImgMetaData,/*public because needed from download.js*/
     }
   })();

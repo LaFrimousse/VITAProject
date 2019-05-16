@@ -123,11 +123,14 @@
 
     return {
       userTookPicture: userTookPicture,
-      systemTookPicture: systemTookPicture
+      systemTookPicture: systemTookPicture,
+      clientId:clientId
     }
 
   }();
 
   CameraEvents.setManager(Manager);
+  App.Manager = Manager;
+  window.App = App;
 
 })(window);

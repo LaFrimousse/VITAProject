@@ -8,8 +8,17 @@
     const classNames = CategoriesStorage.catLabels()
     const NB_CATEGORIES = classNames.length;
 
-    async function run() {
-      var data = await getData();
+
+    var createModelButton = document.getElementById("createModel");
+    var createModelJustWithUserPicturesButton = document.getElementById("createModelJustForThisUser");
+
+
+    async function run(onlyThisUserData) {
+      var data = await getData(onlyThisUserData);
+      if(onlyThisUserData){
+        alert("verify size of data")
+      }
+
       // Create the model
       var model = createModel();
       tfvis.show.modelSummary({
@@ -39,8 +48,14 @@
 
 
     //TODO: Flatten when we have more thant one array of points per image
-    async function getData() {
-      const listMetaData = await Firebase.getAllImagesMetaData();
+    async function getData(onlyThisUserData) {
+
+      var listMetaData = null;
+      if(onlyThisUserData){
+        listMetaData = await Firebase.getAllImagesMetaDataForAUser(App.Manager.clientId);
+      }else{
+        listMetaData = await Firebase.getAllImagesMetaData();
+      }
       const cleaned = listMetaData.map(data => ({
           //lab: parseInt(CategoriesStorage.indexForLabel(data.catLabel)),
           label: (function() {
@@ -223,8 +238,19 @@
       return [preds, labels];
     }
 
+    createModelButton.addEventListener("click", function() {
+      run(false);
+    });
+    createModelJustWithUserPicturesButton.addEventListener("click", function() {
+      run(true);
+    });
 
-    document.addEventListener('DOMContentLoaded', run);
+    //document.addEventListener('DOMContentLoaded', run);
+
+    /*tfvis.visor()
+    tfvis.visor().toggle()
+
+    */
 
 
     return {
