@@ -38,6 +38,7 @@
       CategoriesStorage.setUserId(clientId);
       Helper.setCookie(clientIdCookieName, clientId, 100);
 
+
       //load from firebase the picture the user took in previous session
       var allCat = CategoriesStorage.categories
       allCat.forEach(function(cat) {
