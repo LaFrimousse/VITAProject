@@ -39,7 +39,6 @@
       Helper.setCookie(clientIdCookieName, clientId, 100);
 
       //load from firebase the picture the user took in previous session
-      return;
       var allCat = CategoriesStorage.categories
       allCat.forEach(function(cat) {
         var catName = cat.label;
@@ -64,7 +63,6 @@
 
 
     var userTookPicture = function(data) {
-      return;
       var catName = CategoriesStorage.getActualCategory().label;
       if (verbose) {
         console.log("Manager: The user took a picture for the category \"" + catName + "\"");
