@@ -2,6 +2,7 @@
   'use strict';
   var App = window.App || {};
   var Firebase = App.Firebase;
+
   var CategoriesStorage = App.CategoriesStorage;
   var ConvNet = (function() {
 
@@ -56,6 +57,7 @@
       }else{
         listMetaData = await Firebase.getAllImagesMetaData();
       }
+      console.log(listMetaData);
       const cleaned = listMetaData.map(data => ({
           //lab: parseInt(CategoriesStorage.indexForLabel(data.catLabel)),
           label: (function() {

@@ -301,30 +301,20 @@
       return promise;
     }
 
-    var getAllImagesMetaDataForAUser = function(userId) {
-      console.log(userId);
-      return;
-
-      var promise = new Promise(function(resolve, reject) {
-        var back = [];
-        imgsCollection.get().then(function(snapshot) {
-
-          snapshot.forEach(function(sn) {
-            back.push({
-              catLabel: sn.data().categoryLabel,
-              pictId: sn.id,
-              date: sn.data().date,
-              browserDescription: sn.data().browserDescription,
-              points: JSON.parse(sn.data().points)
-            });
-          });
-          resolve(back);
-        }).catch(function(error) {
-          reject(error);
-        });
-      });
-      return promise;
+    async function getAllImagesMetaDataForAUser(userId) {
+      var allCatNames = App.CategoriesStorage.catLabels()
+      var allImagesIdsForUser = []
+      var i;
+      for (i = 0; i < allCatNames.length; i++) {
+        var toAdd = await getImgListForUser(userId, allCatNames[i]);
+        allImagesIdsForUser.push(toAdd)
+      }
+      allImagesIdsForUser = allImagesIdsForUser.flat()
+      var setId = new Set(allImagesIdsForUser);
+      var allMetaData = await getAllImagesMetaData();
+      return allMetaData.filter(md => setId.has(md.pictId));
     }
+
 
     var getPointsForAPicture = function(pictId) {
       var promise = new Promise(function(resolve, reject) {
