@@ -8,22 +8,37 @@
 
     const classNames = CategoriesStorage.catLabels()
     const NB_CATEGORIES = classNames.length;
+    var trainedOnceAlready = false;
 
 
     var createModelButton = document.getElementById("createModel");
     var createModelJustWithUserPicturesButton = document.getElementById("createModelJustForThisUser");
+    var showOrHideModelButton = document.getElementById("showOrHideModelButton");
+
+    var hideCreateModelButtons = function() {
+      createModelButton.classList.add("notDisplayed");
+      createModelJustWithUserPicturesButton.classList.add("notDisplayed");
+    }
+
+    var showCreateModelButtons = function() {
+      createModelButton.classList.remove("notDisplayed");
+      createModelJustWithUserPicturesButton.classList.remove("notDisplayed");
+    }
 
 
     async function run(onlyThisUserData) {
       var data = await getData(onlyThisUserData);
-      if(onlyThisUserData){
+      // TODO: VERIFY SIZE OF INPUT
+      /*if(onlyThisUserData){
+        console.log(data)
         alert("verify size of data")
-      }
+      }*/
 
       // Create the model
       var model = createModel();
       tfvis.show.modelSummary({
-        name: 'Model Summary'
+        name: 'Model Summary',
+        tab: "Model Summary"
       }, model);
 
       var tensors = convertToTensors(data);
@@ -44,7 +59,9 @@
 
       await showAccuracy(model, test_inputs, test_labels);
       await showConfusion(model, test_inputs, test_labels);
-
+      trainedOnceAlready = true;
+      showCreateModelButtons();
+      showOrHideModelButton.classList.remove("notDisplayed");
     }
 
 
@@ -52,12 +69,11 @@
     async function getData(onlyThisUserData) {
 
       var listMetaData = null;
-      if(onlyThisUserData){
+      if (onlyThisUserData) {
         listMetaData = await Firebase.getAllImagesMetaDataForAUser(App.Manager.clientId);
-      }else{
+      } else {
         listMetaData = await Firebase.getAllImagesMetaData();
       }
-      console.log(listMetaData);
       const cleaned = listMetaData.map(data => ({
           //lab: parseInt(CategoriesStorage.indexForLabel(data.catLabel)),
           label: (function() {
@@ -172,6 +188,7 @@
       const metrics = ['loss', 'val_loss', 'acc', 'val_acc'];
       const container = {
         name: 'Model Training',
+        tab: "Training",
         styles: {
           height: '1000px'
         }
@@ -213,7 +230,10 @@
     async function showAccuracy(model, testInput, testLabels) {
       const [pred, labels] = doPrediction(model, testInput, testLabels);
       const classAccuracy = await tfvis.metrics.perClassAccuracy(labels, pred);
-      const container = {name: 'Accuracy', tab: 'Evaluation'};
+      const container = {
+        name: 'Accuracy',
+        tab: 'Evaluation'
+      };
       tfvis.show.perClassAccuracy(container, classAccuracy, classNames);
 
       labels.dispose();
@@ -222,14 +242,20 @@
     async function showConfusion(model, testInput, testLabels) {
       const [preds, labels] = doPrediction(model, testInput, testLabels);
       const confusionMatrix = await tfvis.metrics.confusionMatrix(labels, preds);
-      const container = {name: 'Confusion Matrix', tab: 'Evaluation'};
+      const container = {
+        name: 'Confusion Matrix',
+        tab: 'Evaluation'
+      };
       tfvis.render.confusionMatrix(
-          container, {values: confusionMatrix, tickLabels:classNames });
+        container, {
+          values: confusionMatrix,
+          tickLabels: classNames
+        });
 
       labels.dispose();
     }
 
-    function doPrediction(model, testInput,testLabels) {
+    function doPrediction(model, testInput, testLabels) {
 
       //const testxs = testData.xs.reshape([testDataSize, IMAGE_WIDTH, IMAGE_HEIGHT, 1]);
       const labels = testLabels.argMax([-1]);
@@ -241,16 +267,37 @@
     }
 
     createModelButton.addEventListener("click", function() {
+      hideCreateModelButtons();
+      if (trainedOnceAlready) {
+        tfvis.visor().setActiveTab("Training")
+        if (!tfvis.visor().isOpen()) {
+          tfvis.visor().toggle()
+        }
+      }
       run(false);
     });
     createModelJustWithUserPicturesButton.addEventListener("click", function() {
+      hideCreateModelButtons();
+
+      if (trainedOnceAlready) {
+        tfvis.visor().setActiveTab("Training")
+        if (!tfvis.visor().isOpen()) {
+          tfvis.visor().toggle()
+        }
+      }
+
       run(true);
+    });
+
+    showOrHideModelButton.addEventListener("click", function() {
+      tfvis.visor().toggle()
+
     });
 
     //document.addEventListener('DOMContentLoaded', run);
 
     /*tfvis.visor()
-    tfvis.visor().toggle()
+
 
     */
 
