@@ -104,7 +104,7 @@
     }
 
 
-    var systemTookPicture = function(data) {
+    var systemTookPicture = function(data, drawLivePoints) {
       if (verbose) {
         console.log("Manager: The system took a picture");
       }

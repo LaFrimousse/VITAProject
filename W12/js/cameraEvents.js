@@ -11,6 +11,7 @@
     var verbose = false
     var isTakingPicture = false
     var manager = null;
+    var ALLOW_LIVE_POINTS = true;
 
     var systemPictureInterval = null;
     var systemPictureIntervalTime = 300;
@@ -19,7 +20,11 @@
     /*Get access of the DOMs elements*/
     var closeCameraButton = document.getElementById("closeCameraButton")
     var mirrorVideoButton = document.getElementById("mirrorVideoButton")
+    var showLivePointsButton = document.getElementById("showLivePointsButton")
     var isMirrored = false;
+    var livePointsWanted = false;
+
+
 
     /*open the camera and ask to update the UI accordingly*/
     var openCamera = function(callback) {
@@ -118,6 +123,7 @@
       CameraLayout.showElement("closeCameraButton");
       CameraLayout.showElement("mirrorButton");
       CameraLayout.showElement("switchCameraWrapper");
+      CameraLayout.showElement("skeletons");
       CameraLayout.addImageOpacityListener();
 
       CameraLayout.replaceButtonInVideoElement();
@@ -125,10 +131,10 @@
       if (systemPictureInterval != null) {
         window.clearInterval(systemPictureInterval);
       }
-      if(verbose){
+      if (verbose) {
         console.log("CameraEvents: noticed that the camera just opened");
       }
-      systemPictureInterval = window.setInterval(function(){
+      systemPictureInterval = window.setInterval(function() {
         takeInstantPicture(false)
       }, systemPictureIntervalTime);
 
@@ -139,13 +145,14 @@
       window.clearInterval(systemPictureInterval);
       systemPictureInterval = null;
 
-      App.PifPafBuffer.stopSendingAndShowingPoints();
+      stopLivePoints();
 
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("mirrorButton");
       CameraLayout.hideElement("switchCameraWrapper");
+      CameraLayout.hideElement("skeletons");
       CameraLayout.removeImageOpacityListener();
-      if(isMirrored){
+      if (isMirrored) {
         CameraLayout.mirrorElements();
         isMirrored = false;
       }
@@ -168,10 +175,36 @@
       }
     })
 
+    showLivePointsButton.addEventListener("click", function() {
+      if (livePointsWanted) {
+        stopLivePoints()
+      } else {
+        startLivePoints()
+      }
+    })
+
+    var startLivePoints = function() {
+      if (verbose) {
+        console.log("CameraEvents: was asked to start the live points")
+      }
+      livePointsWanted = true;
+      showLivePointsButton.classList.remove("alpha04");
+    }
+    var stopLivePoints = function() {
+      livePointsWanted = false;
+      App.PifPafBuffer.stopSendingAndShowingPoints();
+      if (verbose) {
+        console.log("CameraEvents: was asked to stop the live points")
+      }
+      showLivePointsButton.classList.add("alpha04");
+    }
+
+
+
     var takeInstantPicture = function(userAction) {
       var systemCallBack = function(data) {
         if (manager) {
-          manager.systemTookPicture(data);
+          manager.systemTookPicture(data, livePointsWanted);
         }
       }
 
@@ -228,7 +261,7 @@
 
       if (remainingTime <= 1000) {
         nextUpdateIn = 100;
-      }else if(remainingTime % 1000 != 0){
+      } else if (remainingTime % 1000 != 0) {
         nextUpdateIn = remainingTime % 1000;
       }
 
@@ -261,6 +294,7 @@
       CameraLayout.hideElement("mirrorButton");
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("switchCameraWrapper");
+      CameraLayout.hideElement("skeletons");
       CategoriesLayout.hideElements();
       updateCounter(RecordsButtons.delay());
       if (verbose) {
@@ -274,6 +308,9 @@
       CameraLayout.showElement("mirrorButton");
       CameraLayout.showElement("closeCameraButton");
       CameraLayout.showElement("switchCameraWrapper");
+      if (ALLOW_LIVE_POINTS) {
+        CameraLayout.showElement("skeletons");
+      }
       CategoriesLayout.showElements();
       RecordsButtons.setButtonRed();
       isTakingPicture = false;
@@ -283,6 +320,8 @@
     }
 
     var userClickedRedButton = function() {
+      stopLivePoints()
+
       if (isTakingPicture) {
         stopTakingPicture();
       } else {
@@ -292,7 +331,7 @@
           openCamera();
         } else {
           //check a category is selectedIndex
-          if(CategoriesStorage.getActualCategory() == null){
+          if (CategoriesStorage.getActualCategory() == null) {
             alert("Please chose a category before considering to take a picture for some")
             return;
           }
