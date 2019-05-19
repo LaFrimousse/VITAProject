@@ -74,6 +74,9 @@
           return counter;
         case "skeletons":
           return showLivePointsButton;
+        case "postureImage":
+            return postureToAdoptImg;
+
         default:
           console.error("CameraLayoutModule: No element to select that corresponds to " + nameOfElement);
           return;

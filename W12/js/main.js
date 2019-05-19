@@ -40,7 +40,7 @@
         Helper.setCookie(clientIdCookieName, clientId, 100);
 
         //load from firebase the picture the user took in previous session
-        //return;
+        return;
         var allCat = CategoriesStorage.categories
         allCat.forEach(function(cat) {
           var catName = cat.label;
@@ -66,8 +66,13 @@
 
       var userTookPicture = function(data) {
 
-        if (false) {
+        if (true) {
+          getPointsFromPifPaf(data).then(function(points) {
 
+            var prediction = App.ConvNet.testAPicForRecognition(points);
+            console.log("The prediction is", prediction)
+            console.log("Async gives", prediction.dataSync())
+          });
 
           return;
         }

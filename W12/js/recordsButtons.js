@@ -81,13 +81,21 @@
         delay = 0;
         isLooping = false;
       } else {
-        isLooping = true;
-        delay = 3;
+        isLooping = false;
+        delay = 0;
       }
       delayIndicator.innerHTML = delay.toFixed(1);
       slider.value = delay;
       loopingCase.checked = isLooping;
     };
+
+    var hideElements = function(){
+      document.getElementById("cameraRecordButtons").classList.add("notDisplayed")
+    }
+
+    var showElements = function(){
+      document.getElementById("cameraRecordButtons").classList.remove("notDisplayed")
+    }
 
     setInitialValues(false);
     Camera.hasMultipleCameraAvailable(function(mult){
@@ -102,7 +110,9 @@
       isLooping: getLooping,
       delay: getDelay,
       setButtonRed: setButtonRed,
-      setButtonGray: setButtonGray
+      setButtonGray: setButtonGray,
+      showElements: showElements,
+      hideElements: hideElements,
     }
   })();
 

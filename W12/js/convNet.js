@@ -11,12 +11,13 @@
     const BATCH_SIZE = 32;
     /*epochs refers to the number of times the model is going to look at the entire dataset that you provide it. Here we will take 50 iterations through the dataset.*/
     /*One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.*/
-    const EPOCHS = 20;
+    const EPOCHS = 2;
 
     const classNames = CategoriesStorage.catLabels()
     const NB_CATEGORIES = classNames.length;
     var trainedOnceAlready = false;
     var isRecognitionModeActivated = false;
+    var model = null;
 
 
     var createModelButton = document.getElementById("createModel");
@@ -45,7 +46,7 @@
       }*/
 
       // Create the model
-      var model = createModel();
+       model = createModel();
       tfvis.show.modelSummary({
         name: 'Model Summary',
         tab: "Model Summary"
@@ -61,6 +62,7 @@
         test_inputs,
         test_labels
       } = tensors;
+      console.log(test_inputs)
       await trainModel(model, training_inputs, training_labels, validation_inputs, validation_labels);
       console.log('Done Training');
       /*const saveResult = await model.save('localstorage://my-model-1');
@@ -198,7 +200,7 @@
       return tf.tidy(() => {
 
         // Step 2. Convert data to Tensor
-        const inputs = data.map(d => d.coordinates.flat())
+        const inputs = points.map(d => d.coordinates.flat())
 
         const inputTensor = tf.tensor2d(inputs, [inputs.length, 3 * 17]);
 
@@ -209,7 +211,7 @@
         const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
 
         return {
-          inputs: inputs,
+          inputs: normalizedInputs,
         }
       });
 
@@ -292,20 +294,15 @@
       const labels = testLabels.argMax([-1]);
       /*Take the maximum value of the vector output by the model, the class with the highest probability*/
       const preds = model.predict(testInput).argMax([-1]);
-
       //preds.dispose();
+      console.log("Model prediction is ", preds, "and label was ", labels)
       return [preds, labels];
     }
 
     var testAPicForRecognition = function(points){
       var tensor = getTensorForRecoMode(points);
-      console.log(tensor);
-
-
-
-
-
-      const preds = model.predict(testInput).argMax([-1]);
+      const preds = model.predict(tensor.inputs)//.argMax([-1]);
+      return preds;
     }
 
     createModelButton.addEventListener("click", function() {
@@ -339,10 +336,19 @@
       isRecognitionModeActivated = !isRecognitionModeActivated
       var text = !isRecognitionModeActivated ? "Go to recognition mode" : "Leave recognition mode"
       goToRecoModeButton.innerHTML = text;
+      if(isRecognitionModeActivated){
+        App.CategoriesLayout.hideElements()
+        App.RecordsButtons.hideElements()
+        App.CameraLayout.hideElement("postureImage")
+      }else{
+        App.CategoriesLayout.showElements()
+        App.RecordsButtons.showElements()
+        App.CameraLayout.showElement("postureImage")
+      }
     });
 
 
-
+    //run();
     return {
       isRecognitionModeActivated:isRecognitionModeActivated,
       testAPicForRecognition: testAPicForRecognition
