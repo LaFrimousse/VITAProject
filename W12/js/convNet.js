@@ -5,15 +5,24 @@
 
   var CategoriesStorage = App.CategoriesStorage;
   var ConvNet = (function() {
+    /*batchSize refers to the size of the data subsets that the model will see on each iteration of training. Common batch sizes tend to be in the range 32-512. There isn't really an ideal batch size for all problems and it is beyond the scope of this tutorial to describe the mathematical motivations for various batch sizes.*/
+    /*Total number of training examples present in a single batch.
+    As I said, you can’t pass the entire dataset into the neural net at once. So, you divide dataset into Number of Batches or sets or parts.*/
+    const BATCH_SIZE = 32;
+    /*epochs refers to the number of times the model is going to look at the entire dataset that you provide it. Here we will take 50 iterations through the dataset.*/
+    /*One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.*/
+    const EPOCHS = 20;
 
     const classNames = CategoriesStorage.catLabels()
     const NB_CATEGORIES = classNames.length;
     var trainedOnceAlready = false;
+    var isRecognitionModeActivated = false;
 
 
     var createModelButton = document.getElementById("createModel");
     var createModelJustWithUserPicturesButton = document.getElementById("createModelJustForThisUser");
     var showOrHideModelButton = document.getElementById("showOrHideModelButton");
+    var goToRecoModeButton = document.getElementById("startRecognition");
 
     var hideCreateModelButtons = function() {
       createModelButton.classList.add("notDisplayed");
@@ -24,6 +33,7 @@
       createModelButton.classList.remove("notDisplayed");
       createModelJustWithUserPicturesButton.classList.remove("notDisplayed");
     }
+
 
 
     async function run(onlyThisUserData) {
@@ -59,6 +69,7 @@
 
       await showAccuracy(model, test_inputs, test_labels);
       await showConfusion(model, test_inputs, test_labels);
+
       trainedOnceAlready = true;
       showCreateModelButtons();
       showOrHideModelButton.classList.remove("notDisplayed");
@@ -182,6 +193,28 @@
       });
     }
 
+
+    var getTensorForRecoMode = function(points){
+      return tf.tidy(() => {
+
+        // Step 2. Convert data to Tensor
+        const inputs = data.map(d => d.coordinates.flat())
+
+        const inputTensor = tf.tensor2d(inputs, [inputs.length, 3 * 17]);
+
+        //Step 3. Normalize the data to the range 0 - 1 using min-max scaling
+        const inputMax = inputTensor.max();
+        const inputMin = inputTensor.min();
+
+        const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
+
+        return {
+          inputs: inputs,
+        }
+      });
+
+    }
+
     async function trainModel(model, trainingInputs, trainingLabels, validationInputs, validationLabels) {
 
       /*Here we decide which metrics we are going to monitor. We will monitor loss and accuracy on the training set as well as loss and accuracy on the validation set */
@@ -195,13 +228,7 @@
       };
       const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
 
-      /*batchSize refers to the size of the data subsets that the model will see on each iteration of training. Common batch sizes tend to be in the range 32-512. There isn't really an ideal batch size for all problems and it is beyond the scope of this tutorial to describe the mathematical motivations for various batch sizes.*/
-      /*Total number of training examples present in a single batch.
-      As I said, you can’t pass the entire dataset into the neural net at once. So, you divide dataset into Number of Batches or sets or parts.*/
-      const BATCH_SIZE = 32;
-      /*epochs refers to the number of times the model is going to look at the entire dataset that you provide it. Here we will take 50 iterations through the dataset.*/
-      /*One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.*/
-      const epochs = 20;
+
 
       /*model.fit is the function we call to start the training loop. It is an asynchronous function so we return the promise it gives us so that the caller can determine when training is complete.*/
       /*return await model.fit(inputs, labels, {
@@ -221,7 +248,7 @@
       return model.fit(trainingInputs, trainingLabels, {
         batchSize: BATCH_SIZE,
         validationData: [validationInputs, validationLabels],
-        epochs: epochs,
+        epochs: EPOCHS,
         shuffle: true,
         callbacks: fitCallbacks
       });
@@ -240,6 +267,8 @@
     }
 
     async function showConfusion(model, testInput, testLabels) {
+
+
       const [preds, labels] = doPrediction(model, testInput, testLabels);
       const confusionMatrix = await tfvis.metrics.confusionMatrix(labels, preds);
       const container = {
@@ -251,6 +280,8 @@
           values: confusionMatrix,
           tickLabels: classNames
         });
+
+
 
       labels.dispose();
     }
@@ -264,6 +295,17 @@
 
       //preds.dispose();
       return [preds, labels];
+    }
+
+    var testAPicForRecognition = function(points){
+      var tensor = getTensorForRecoMode(points);
+      console.log(tensor);
+
+
+
+
+
+      const preds = model.predict(testInput).argMax([-1]);
     }
 
     createModelButton.addEventListener("click", function() {
@@ -291,19 +333,19 @@
 
     showOrHideModelButton.addEventListener("click", function() {
       tfvis.visor().toggle()
-
     });
 
-    //document.addEventListener('DOMContentLoaded', run);
+    goToRecoModeButton.addEventListener("click", function() {
+      isRecognitionModeActivated = !isRecognitionModeActivated
+      var text = !isRecognitionModeActivated ? "Go to recognition mode" : "Leave recognition mode"
+      goToRecoModeButton.innerHTML = text;
+    });
 
-    /*tfvis.visor()
-
-
-    */
 
 
     return {
-
+      isRecognitionModeActivated:isRecognitionModeActivated,
+      testAPicForRecognition: testAPicForRecognition
     }
   })();
   App.ConvNet = ConvNet;
