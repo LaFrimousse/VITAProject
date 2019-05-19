@@ -16,28 +16,12 @@
     var Server = App.Server;
     var PointsDrawing = App.PointsDrawing;*/
 
-    var Manager = function() {
-      var verbose = true;
+    var Manager = (function() {
+      var verbose = false;
       var drawLivePoints = false;
 
-      var clientIdCookieName = "clientIdCookieName";
-      var clientId = null;
+      (function() {
 
-      (function() { // init code that fetch the client id cookie
-        var previousClientId = Helper.getCookie(clientIdCookieName);
-        if (previousClientId == null) {
-          if (verbose) {
-            console.log("Main: no previous cookie found for this user identifier");
-          }
-          previousClientId = Helper.UUID();
-        } else {
-          if (verbose) {
-            console.log("Main: a previous cookie has been found for this user : " + previousClientId);
-          }
-        }
-        clientId = previousClientId;
-        CategoriesStorage.setUserId(clientId);
-        Helper.setCookie(clientIdCookieName, clientId, 100);
 
         //load from firebase the picture the user took in previous session
         return;
@@ -149,10 +133,9 @@
         return {
           userTookPicture: userTookPicture,
           systemTookPicture: systemTookPicture,
-          clientId: clientId
         }
 
-      }();
+      })();
 
       CameraEvents.setManager(Manager);
       App.Manager = Manager;

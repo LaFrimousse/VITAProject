@@ -1,30 +1,18 @@
-//tuto : https://www.html5rocks.com/en/tutorials/getusermedia/intro/
-/*This module provides 4 usefull functions:
--open (to open the camera)
--close (to close the camera)
--takePicture (to call only when the camera is open)
--isCameraOpen (return a boolean)
-To do this it just retains 2 DOM elements:
-the videoElement in the one to send the stream captured by the camera
-a hidden canvas (never displayed to the user) used to render the videoElement into a image when the takepicure function is called
-This module is never responsible for any Layout*/
 (function(window) {
   'use strict';
-
-  var App = window.App || {};
-
+  var App = window.App;
   var Camera = (function() {
     var verbose = false
-    var actuallyOpeningOrClosing = false;
 
     //the DOM element in which the video is displayed
     var videoElement = document.getElementById("videoElement")
-    var canvas = document.getElementById("videoBackedUpCanvas")
+    var canvas = document.getElementById("canvasUsedToTakePicture")
+
     //a helper variable that keeps track of the camera state
     var isCameraOpen = false
     var isBackCamera = true
-    //will be a boolean
-    var hasMultipleCamera = null
+    var actuallyOpeningOrClosing = false;
+
 
     /*some constraints about the video format that can still evolve, we can pick
     the one we want */
@@ -40,8 +28,7 @@ This module is never responsible for any Layout*/
     };
     var actualContraint = backConstraint;
 
-
-    const vgaConstraints = {
+    /*const vgaConstraints = {
       video: {
         width: {
           exact: 640
@@ -62,7 +49,7 @@ This module is never responsible for any Layout*/
         },
         facingMode: "environment"
       }
-    };
+    };*/
 
     var hasUserMedia = function() {
       var hasMedia = !!(navigator.mediaDevices &&
@@ -160,9 +147,8 @@ This module is never responsible for any Layout*/
 
     var takePictureAsBlob = function(callback) {
       //cannot take picture if camera is closed
-      if (!this.isCameraOpen) {
-        console.error("Camera: Cannot take a picture if the camera is closed")
-
+      if (!this.isCameraOpen || actuallyOpeningOrClosing) {
+        console.error("Camera: Cannot take a picture if the camera is closed or beeing open or closed")
         return null
       }
 
@@ -183,7 +169,7 @@ This module is never responsible for any Layout*/
       }
 
       canvas.toBlob(function(blob) {
-        if(callback){
+        if (callback) {
           callback(blob);
         }
       });
@@ -195,51 +181,7 @@ This module is never responsible for any Layout*/
         var camString = isBackCamera ? "back camera" : "front camera"
         console.log("Camera: Switching the camera to the " + camString);
       }
-
       actualContraint = isBackCamera ? backConstraint : frontConstraint;
-    }
-
-    var hasMultipleCameraAvailable = function(callback) {
-
-      if (typeof this.hasMultipleCamera === "boolean"){
-        if(verbose){
-          console.log("Camera: answering the question of multiple camera using a previous stored value. The answer is " + this.hasMultipleCamera);
-        }
-        if(callback){
-          callback(this.hasMultipleCamera);
-        }
-        return this.hasMultipleCamera;
-      }
-
-      var cb = function(response){
-        this.hasMultipleCamera = response
-        if(callback){
-          callback(response);
-        }
-      }.bind(this)
-
-      askSystemIfMultipleCameraAvailable(cb);
-    }
-
-    var askSystemIfMultipleCameraAvailable = function(callback) {
-      var videoDevices = []
-      navigator.mediaDevices.enumerateDevices().then(function(devices) {
-        /*const hasVideo = devices.some(device => device.kind === "videoinput");
-        console.log("has video", hasVideo);*/
-        devices.forEach(function(dev) {
-          if (dev.kind === "videoinput") {
-            videoDevices.push(dev);
-          }
-        })
-        var multipleAvailable = videoDevices.length > 1;
-        if (verbose) {
-          var negation = multipleAvailable ? "" : " not";
-          console.log("Camera: We noticed that this device has" + negation + " multiple input video devices");
-        }
-        if (callback) {
-          callback(multipleAvailable);
-        }
-      });
     }
 
     var isUsingBackCamera = function() {
@@ -252,10 +194,8 @@ This module is never responsible for any Layout*/
       open: openCamera,
       close: closeCamera,
       isCameraOpen: isCameraOpen,
-      hasMultipleCamera:hasMultipleCamera,
-      takePictureAsBlob:takePictureAsBlob,
+      takePictureAsBlob: takePictureAsBlob,
       switchCamera: switchCamera,
-      hasMultipleCameraAvailable: hasMultipleCameraAvailable,
       isUsingBackCamera: isUsingBackCamera
     }
   })();

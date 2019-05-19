@@ -1,17 +1,30 @@
 (function(window) {
   'use strict';
   var App = window.App;
+  var Device = App.Device;
   var Camera = App.Camera;
 
   var CameraLayout = (function() {
     var verbose = false;
 
     var shouldDisplayCameraSwitch = false;
-    Camera.hasMultipleCameraAvailable(function(multAvailable) {
-      shouldDisplayCameraSwitch = multAvailable
-    });
+
+    (function() { // init code
+      if (Device.hasMultipleCamera()) {
+        shouldDisplayCameraSwitch = true;
+      }
+
+    })();
+
+
 
     //The DOMS elements
+    var globalPanel = document.getElementsByClassName("globalPanel")[0];
+    var leftPanel = document.getElementsByClassName("leftPanel")[0];
+    var centerPanel = document.getElementsByClassName("centerPanel")[0];
+    var rightPanel = document.getElementsByClassName("rightPanel")[0];
+
+
     //usefull to layout the buttons
     var videoElementContainer = document.getElementById("videoElementContainer");
     //the video element (needed in case we mirror it)
@@ -75,7 +88,7 @@
         case "skeletons":
           return showLivePointsButton;
         case "postureImage":
-            return postureToAdoptImg;
+          return postureToAdoptImg;
 
         default:
           console.error("CameraLayoutModule: No element to select that corresponds to " + nameOfElement);
@@ -98,7 +111,7 @@
       }
 
       if (element == mirrorVideoButton && Camera.isUsingBackCamera() &&
-        Camera.hasMultipleCameraAvailable()) {
+        Device.hasMultipleCamera()) {
         if (verbose) {
           console.log("CameraLayout: not showing the mirror button for a back camera");
         }
@@ -166,26 +179,45 @@
 
 
     var replaceButtonInVideoElement = function() {
-      var videoElementContainerWidth = parseInt(getComputedStyle(videoElementContainer).width);
+      var globalPanelWidth = parseInt(getComputedStyle(globalPanel).width);
+      var globalPanelHeight = parseInt(getComputedStyle(globalPanel).height);
+      var centerPanelWidth = parseInt(getComputedStyle(centerPanel).width);
       var videoElementWidth = parseInt(getComputedStyle(videoElement).width);
-      var offsetForLeftButton = (videoElementContainerWidth - videoElementWidth) / 2
+      var videoElementHeight = parseInt(getComputedStyle(videoElement).height);
+      var leftFlex = parseFloat(getComputedStyle(leftPanel).flex);
+      var centerFlex = parseFloat(getComputedStyle(centerPanel).flex);
+      var rightFlex = parseFloat(getComputedStyle(rightPanel).flex);
+      var sum = leftFlex + centerFlex + rightFlex;
+
+      if(videoElementWidth < centerPanelWidth){
+        //console.log("videoElementWidth", videoElementWidth)
+        //console.log("centerPanelWidth", centerPanelWidth)
+        //TODO: Play with the flex here !
+      }
+
+      var offsetForLeftButton = (centerPanelWidth - videoElementWidth) / 2
 
       canvasForLivePoints.style.width = videoElementWidth + "px";
+      canvasForLivePoints.style.height = videoElementHeight + "px";
       canvasForLivePoints.style.left = offsetForLeftButton + "px";
 
       closeCameraButton.style.left = offsetForLeftButton + "px";
       mirrorVideoButton.style.left = offsetForLeftButton + "px";
 
       var offsetForRightButton = offsetForLeftButton + videoElementWidth;
+      mirrorVideoButton.style.bottom = (globalPanelHeight - videoElementHeight) + "px";
 
-      postureToAdoptImg.style.right = offsetForLeftButton + "px";
+      counter.style.right = offsetForLeftButton + "px";
+      counter.style.bottom = (globalPanelHeight - videoElementHeight) + "px";
+
+      /*postureToAdoptImg.style.right = offsetForLeftButton + "px";
       var dividor = 5; // for phones
       if (window.innerWidth > 768) { //for browser
         dividor = 3;
       }
       postureToAdoptImg.style.maxWidth = videoElementWidth / dividor + "px";
+*/
 
-      counter.style.right = offsetForLeftButton + "px";
     }
 
 

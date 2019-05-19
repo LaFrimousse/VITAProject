@@ -2,13 +2,12 @@
   'use strict';
 
   var App = window.App;
-  var Camera = App.Camera;
+  var Device = App.Device;
 
   var RecordsButtons = (function() {
     var verbose = false
     var delay = null; //number
     var isLooping = null; //boolean
-    var cameraEventModule = null;
 
     var takePictureButton = document.getElementById("takePictureButton");
     var delayIndicator = document.getElementById("delayIndicator");
@@ -17,6 +16,12 @@
     var loopingWrapper = document.getElementById("loopingWrapper");
 
 
+    (function () {//init code
+      Device.hasMultipleCamera().then(function(res){
+        setInitialValues(res);});
+    }());
+
+//----- Setting the initial event listeners-----
     slider.addEventListener("input", function() {
       delay = parseFloat(slider.value);
       delayIndicator.innerHTML = delay.toFixed(1);
@@ -35,29 +40,18 @@
       }
     })
 
+    takePictureButton.addEventListener("click", function() {
+      App.CameraEvents.userClickedRedButton()
+    })
+
+    //-----------------------------------------
+
     var hideCheckBox = function() {
-      if (!loopingWrapper.classList.contains("hidden")) {
-        loopingWrapper.classList.add("hidden");
-      }
+      loopingWrapper.classList.add("hidden");
     }
 
     var showCheckBox = function() {
-      if (loopingWrapper.classList.contains("hidden")) {
-        loopingWrapper.classList.remove("hidden");
-      }
-    }
-
-    takePictureButton.addEventListener("click", function() {
-      if (cameraEventModule) {
-        cameraEventModule.userClickedRedButton();
-      }
-    })
-
-    var setCameraEventModule = function(cevm) {
-      if (verbose) {
-        console.log("RecordsButtons: setting his cameraEventModule " + cevm);
-      }
-      cameraEventModule = cevm;
+      loopingWrapper.classList.remove("hidden");
     }
 
     var getLooping = function() {
@@ -76,17 +70,21 @@
       takePictureButton.src = "images/takePictureButtonGray.png";
     }
 
-    var setInitialValues = function(multCamera) {
-      if (multCamera) {
+    var setInitialValues = function(deviceHasMultipleCamera) {
+      if (deviceHasMultipleCamera) {
         delay = 0;
         isLooping = false;
       } else {
         isLooping = false;
         delay = 0;
       }
+
       delayIndicator.innerHTML = delay.toFixed(1);
       slider.value = delay;
       loopingCase.checked = isLooping;
+      if (delay < 0.5) {
+        hideCheckBox();
+      }
     };
 
     var hideElements = function(){
@@ -97,16 +95,7 @@
       document.getElementById("cameraRecordButtons").classList.remove("notDisplayed")
     }
 
-    setInitialValues(false);
-    Camera.hasMultipleCameraAvailable(function(mult){
-      setInitialValues(mult);
-    })
-
-
-    /*Explicitly reveal public pointers to the private functions
-    that we want to reveal publicly*/
     return {
-      setCameraEventModule: setCameraEventModule,
       isLooping: getLooping,
       delay: getDelay,
       setButtonRed: setButtonRed,
@@ -118,5 +107,4 @@
 
   App.RecordsButtons = RecordsButtons;
   window.App = App;
-
 })(window);

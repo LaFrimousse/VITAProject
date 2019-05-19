@@ -361,7 +361,7 @@
 
   })();
 
-  RecordsButtons.setCameraEventModule(CameraEvents);
+  
   App.CameraEvents = CameraEvents;
   window.App = App;
 
