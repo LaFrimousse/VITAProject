@@ -36,52 +36,13 @@
 
 
 
-.showLivePointsButton {
-  position: absolute;
-  bottom: 3px;
-  left: 0;
-  right: 0;
-  width: 70px;
-  height: 50px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0px;
-}
 
 
 
 
 
-.switchBoxWrapper {
-  pointer-events: none;
-  position: absolute;
-  top: 0px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0px;
-}
 
-#switchBoxWrapper p {
-  font-size: small;
-  padding: 0px;
-  margin-top: 3px;
-  margin-bottom: 3px;
-  margin-left: 5px;
-  margin-right: 5px;
-}
 
-#switchBoxWrapper div {
-  margin: 0px;
-  padding: 0px;
-}
 
 #postureToAdoptImg {
   position: absolute;

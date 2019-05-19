@@ -186,7 +186,7 @@
       if (selector.selectedIndex != 0) {
         //manual propostion
         actualCategoryIndex = selector.selectedIndex - 1;
-      } else if (checkbox.checked) {
+      } else {
         //propostion from the server
         var fromServer = getCategorySuggestionFromServer();
         if (Number.isInteger(fromServer)) {
@@ -194,9 +194,6 @@
         } else {
           actualCategoryIndex = randomCategory();
         }
-      } else {
-        //no category
-        actualCategoryIndex = -1;
       }
     }
 
@@ -207,27 +204,17 @@
     //-------------FROM HERE EVERYTHING ABOUT THE LAYOUT----------
 
     var selector = document.getElementById("categorySelector");
-    var checkbox = document.getElementById("proposalModeCheckBox");
-    checkbox.checked = true;
-
 
     categories.forEach(function(cat) {
       selector.insertAdjacentHTML("beforeend", '<option>' + cat.title + '</option>')
     })
 
     selector.addEventListener("change", function() {
-      checkbox.checked = false
       proposeNextCategory();
       CategoriesLayout.displayCategory(getActualCategory());
       CategoriesLayout.showPicturesForACat(picturesTakenForACat());
     })
 
-    checkbox.addEventListener("change", function() {
-      selector.selectedIndex = 0
-      proposeNextCategory();
-      CategoriesLayout.displayCategory(getActualCategory());
-      CategoriesLayout.hidePicturesTaken();
-    })
 
     proposeNextCategory();
     CategoriesLayout.displayCategory(getActualCategory());

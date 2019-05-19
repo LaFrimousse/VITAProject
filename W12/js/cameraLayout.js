@@ -206,6 +206,8 @@
 
       var offsetForRightButton = offsetForLeftButton + videoElementWidth;
       mirrorVideoButton.style.bottom = (globalPanelHeight - videoElementHeight) + "px";
+      
+      showLivePointsButton.style.bottom = (globalPanelHeight - videoElementHeight) + "px";
 
       counter.style.right = offsetForLeftButton + "px";
       counter.style.bottom = (globalPanelHeight - videoElementHeight) + "px";

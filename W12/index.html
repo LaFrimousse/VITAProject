@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/range.css" />
   <link rel="stylesheet" href="css/panel.css" />
   <link rel="stylesheet" href="css/centerPanel.css" />
+  <link rel="stylesheet" href="css/rightPanel.css" />
   <!--<link rel="stylesheet" href="css/gestureProposal.css" />
   <link rel="stylesheet" href="css/cameraLayout.css" />
   <link rel="stylesheet" href="css/categoriesModule.css" />-->
@@ -21,7 +22,7 @@
 <body>
   <div class="globalPanel">
     <div class="leftPanel">
-      left
+
     </div>
     <div class="centerPanel">
 
@@ -36,7 +37,18 @@
       <canvas id="canvasForLivePoints"></canvas>
 
       <img id="closeCameraButton" class="notDisplayed buttonBehavior" src="images/closeCameraButton.png" />
+      <div class="switchBoxWrapper notDisplayed" id="switchBoxWrapper">
+        <p>Front camera</p>
+        <div>
+          <label class="switch">
+            <input type="checkbox" id="switchCameraCheckBox">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <p>Back camera</p>
+      </div>
       <img id="mirrorVideoButton" src="images/mirror.png" class="notDisplayed buttonBehavior" />
+      <img id="showLivePointsButton" class="showLivePointsButton notDisplayed alpha04" src="images/skeletons.png" />
       <p id="counter" class="notDisplayed">-1</p>
 
       <!----------------------->
@@ -68,50 +80,32 @@
       <p id="postureToAdaptTitle"></p>
       <img id="postureToAdoptImg" src="images/questionMark.jpg" />
 
-    </div>
+      <select name="categoryChoosen" id="categorySelector">
+        <option> -- Automatic Selection-- </option>
+      </select>
 
+      <!--End of rightPanel-->
+    </div>
   </div>
 
 
-        <div class="switchBoxWrapper notDisplayed" id="switchBoxWrapper">
-          <p>Front camera</p>
-          <div>
-            <label class="switch">
-              <input type="checkbox" id="switchCameraCheckBox">
-              <span class="slider round"></span>
-            </label>
-          </div>
-          <p>Back camera</p>
-        </div>
 
 
-        <img id="showLivePointsButton" class="showLivePointsButton notDisplayed alpha04" src="images/skeletons.png" />
+
+  <div id="categorySelectorWrapper">
+
+
+  </div>
 
 
 
 
 
   <canvas id="usedToDrawPointsInPictures" style="display: none;"></canvas>
-  <div id="titleCameraButtonWrapper">
 
-
-
-
-
-
-  </div>
 
   <div class="categoryDisplayWrapper">
 
-    <div class="categorySelectCheckBoxWrapper">
-      <select name="categoryChoosen" id="categorySelector">
-        <option disabled selected value> -- No category manually selected-- </option>
-      </select>
-      <div class="categoryModeCheckBoxWrapper">
-        <input type="checkbox" name="proposalModeCheckBox" id="proposalModeCheckBox" />
-        <label for="proposalModeCheckBox">Automatic Proposition</label>
-      </div>
-    </div>
 
     <div class="pictureDisplayWrapper">
       <button id="deletePicture" class="buttonBehavior deletePicture notDisplayed">Delete Pictures</button>

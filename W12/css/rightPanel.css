@@ -1,0 +1,31 @@
+.rightPanel {
+  /*No padding or margin in this element since the 2 children are abolutely align.
+  But can create a parent div if a external border is really wanted*/
+  position: relative;
+  max-width: 100%;
+  padding: 1px;
+  background-color: #84f742;
+  flex: 1;
+  overflow: hidden;
+}
+
+#postureToAdaptTitle {
+  margin: 0px;
+  background-color: yellow;
+  text-align: center;
+  font-size: x-large;
+  text-decoration: underline;
+}
+
+#postureToAdoptImg {
+  display: block;
+  max-width: 100%;
+}
+
+#categorySelector{
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  height: 25px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
