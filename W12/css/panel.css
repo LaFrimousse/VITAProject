@@ -1,0 +1,19 @@
+.globalPanel {
+  border: 1px solid brown;
+  display: flex;
+  max-height: 80vh;
+  margin: 20px;
+}
+
+.leftPanel{
+  background-color: #4286f4;
+  min-width: 100px;
+  flex: 1;
+}
+
+
+
+.rightPanel{
+  background-color: #84f742;
+  flex: 1;
+}
