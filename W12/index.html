@@ -13,13 +13,24 @@
   <!--<link rel="stylesheet" href="css/gestureProposal.css" />
   <link rel="stylesheet" href="css/cameraLayout.css" />
   <link rel="stylesheet" href="css/categoriesModule.css" />-->
-  <title>Camera Try</title>
+  <title>VITA Bachelor's Project</title>
   <!--A <meta> viewport element gives the browser instructions on how to control the page's dimensions and scaling.
     -->
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
 </head>
 
 <body>
+
+  <div class="topBar">
+    <button type="button" id="createModel">Create Global Model</button>
+    <button type="button" id="createModelJustForThisUser">Create My Model</button>
+    <button type="button" id="showOrHideModelButton" class="notDisplayed">Show/Hide Model</button>
+    <button type="button" id="startRecognition" class="notDsisplayed">Go to recognition mode</button>
+  </div>
+
+
+
+
   <div class="globalPanel">
     <div class="leftPanel">
 
@@ -90,39 +101,19 @@
 
 
 
-
-
-  <div id="categorySelectorWrapper">
-
-
-  </div>
-
-
-
-
-
   <canvas id="usedToDrawPointsInPictures" style="display: none;"></canvas>
 
 
-  <div class="categoryDisplayWrapper">
 
 
-    <div class="pictureDisplayWrapper">
-      <button id="deletePicture" class="buttonBehavior deletePicture notDisplayed">Delete Pictures</button>
-      <div class="pictures notDisplayed" id="pictures"></div>
-    </div>
-
+  <div class="pictureAndButtonsWrapper">
+    <button id="deletePicture" class="buttonBehavior deletePicture notDisplayed">Delete Pictures</button>
+    <div class="picturesWrapper notDisplayed" id="picturesWrapper"></div>
   </div>
 
-  <button type="button" id="createModel">Create Global Model</button>
-  <button type="button" id="createModelJustForThisUser">Create My Model</button>
-  <button type="button" id="showOrHideModelButton" class="notDisplayed">Show/Hide Model</button>
-  <button type="button" id="startRecognition" class="notDsisplayed">Go to recognition mode</button>
 
 
 
-
-  <p></p>
 
 
 
@@ -145,16 +136,19 @@
 
   <script src="js/helper.js"></script>
   <script src="js/device.js"></script>
-
-
+  <script src="js/categoriesStorage.js"></script>
   <script src="js/pointsDrawing.js"></script>
+  <script src="js/categoriesLayout.js"></script>
+
+
+
 
   <script src="js/firebase.js"></script>
   <script src="js/camera.js"></script>
   <script src="js/cameraLayout.js"></script>
   <script src="js/recordsButtons.js"></script>
-  <script src="js/categoriesLayout.js"></script>
-  <script src="js/categoriesStorage.js"></script>
+
+
   <script src="js/cameraEvents.js"></script>
   <script src="js/server.js"></script>
   <script src="js/pifPafBuffer.js"></script>

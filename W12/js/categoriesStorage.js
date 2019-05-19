@@ -6,7 +6,7 @@
   var Firebase = App.Firebase;
 
   var CategoriesStorage = (function() {
-    var verbose = false;
+    var verbose = true;
     var actualCategoryIndex = -1;
     var userId = null;
 
@@ -99,9 +99,9 @@
         console.log("CategoriesStorage: just appened a picture wrapper for the category \"" +
           labelForIndex(catIndex) + "\"");
       }
-      if (!checkbox.checked) {
+      /*if (!checkbox.checked) {
         CategoriesLayout.showNewPicture(points, picture, true);
-      }
+      }*/
     }
 
 
@@ -209,6 +209,8 @@
       selector.insertAdjacentHTML("beforeend", '<option>' + cat.title + '</option>')
     })
 
+    selector.selectedIndex = 1
+
     selector.addEventListener("change", function() {
       proposeNextCategory();
       CategoriesLayout.displayCategory(getActualCategory());
@@ -216,8 +218,8 @@
     })
 
 
-    proposeNextCategory();
-    CategoriesLayout.displayCategory(getActualCategory());
+    //proposeNextCategory();
+    //CategoriesLayout.displayCategory(getActualCategory());
 
 
 
@@ -238,7 +240,6 @@
 
   })();
 
-  CategoriesLayout.setCategoryStorage(CategoriesStorage);
   App.CategoriesStorage = CategoriesStorage;
   window.App = App;
 

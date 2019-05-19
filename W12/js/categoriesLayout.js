@@ -3,41 +3,29 @@
 
   var App = window.App;
   var PointsDrawing = App.PointsDrawing;
+  var Storage = App.Storage;
 
   var CategoriesLayout = (function() {
     var verbose = false;
-    var categoryStorage = null;
-    var actualCategoryDisplayed = null;
+
     var nbOfPictureSelected = 0;
     var urlToClean = [];
 
-    var globalWrapper = document.getElementsByClassName("categoryDisplayWrapper")[0];
-    var imageForCat = document.getElementById("postureToAdoptImg");
+    //DOM ELEMENTS
     var title = document.getElementById("postureToAdaptTitle");
-    var pictureDisplayWrapper = document.getElementsByClassName("pictureDisplayWrapper")[0];
-    var picturesWrapper = document.getElementById("pictures");
+    var imageForCat = document.getElementById("postureToAdoptImg");
+
+    var globalWrapper = document.getElementsByClassName("pictureAndButtonsWrapper")[0];
+    var picturesWrapper = document.getElementById("picturesWrapper");
     var deleteButton = document.getElementById("deletePicture");
 
-    var hideElements = function() {
-      if (verbose) {
-        console.log("CategoriesLayout: hidding the elements to the user");
-      }
-      removeSelection();
-      hide(globalWrapper);
-    }
 
-    var showElements = function() {
-      if (verbose) {
-        console.log("CategoriesLayout: showing the elements to the user");
-      }
-      show(globalWrapper);
-    }
 
     var displayCategory = function(cat) {
       if (verbose) {
-        console.log("CategoriesLayout: displaying a category to the user");
+        console.log("CategoriesLayout: displaying the category ",cat,"  to the user");
       }
-      var initialTitle = "No category actually proposed"
+      var initialTitle = ""
       var initialImgSrc = "images/questionMark.jpg"
       actualCategoryDisplayed = cat;
       if (cat != null) {
@@ -47,6 +35,23 @@
       title.innerHTML = initialTitle;
       imageForCat.src = initialImgSrc;
     }
+
+    var hideGlobalWrapper = function() {
+      if (verbose) {
+        console.log("CategoriesLayout: hidding the globalWrapper to the user");
+      }
+      removeSelection();
+      hide(globalWrapper);
+    }
+
+    var showGlobalWrapper = function() {
+      if (verbose) {
+        console.log("CategoriesLayout: hidding the globalWrapper to the user");
+      }
+      removeSelection();
+      show(globalWrapper);
+    }
+
 
     var hideOrShowDeleteButton = function() {
       if (nbOfPictureSelected == 0) {
@@ -63,18 +68,14 @@
     }
 
     var hide = function(element) {
-      if (!element.classList.contains("notDisplayed")) {
         element.classList.add("notDisplayed");
-      }
     }
 
     var show = function(element) {
-      if (element.classList.contains("notDisplayed")) {
         element.classList.remove("notDisplayed");
-      }
     }
 
-    var showPicturesForACat = function(pictsWraps, displayPoints) {
+    /*var showPicturesForACat = function(pictsWraps, displayPoints) {
       if (verbose) {
         console.log("CategoriesLayout: showing " + pictsWraps.length + " pictures to the user for a category");
       }
@@ -194,23 +195,22 @@
       // UI reloaded from categriesStorage
     }
 
-    var setCategoryStorage = function(storage) {
-      if (verbose) {
-        console.log("CategoriesLayout: setting his categoryStorage reference")
-      }
-      categoryStorage = storage;
-    }
 
 
+*/
 
     return {
+      displayCategory:displayCategory,
+      hideGlobalWrapper: hideGlobalWrapper,
+      showGlobalWrapper:showGlobalWrapper,
+
+      /*
       displayCategory: displayCategory,
       showElements: showElements,
       hideElements: hideElements,
       showPicturesForACat: showPicturesForACat,
       showNewPicture:showNewPicture,
-      hidePicturesTaken: hidePicturesTaken,
-      setCategoryStorage: setCategoryStorage
+      hidePicturesTaken: hidePicturesTaken,*/
     }
   })();
   App.CategoriesLayout = CategoriesLayout;

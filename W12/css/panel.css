@@ -1,8 +1,6 @@
 .globalPanel {
   border: 1px solid brown;
   display: flex;
-  max-height: 80vh;
-  margin: 20px;
 }
 
 .leftPanel{

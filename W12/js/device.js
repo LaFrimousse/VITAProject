@@ -5,13 +5,14 @@
   var Device = (function() {
 
     var verbose = false;
+    var CLIENT_ID_COOKIE_NAME = "clientIdCookieName";
     var clientId = null;
     var hasMultipleCamera = null;
 
     (function() { // init code
 
       /*Fetching the client ID  Cookie*/
-      var previousClientId = Helper.getCookie("clientIdCookieName");
+      var previousClientId = Helper.getCookie(CLIENT_ID_COOKIE_NAME);
       if (previousClientId == null) {
         if (verbose) {
           console.log("Device: no previous cookie found acting as user identifier");
@@ -22,7 +23,8 @@
           console.log("Device: a previous cookie has been found for this user : " + previousClientId);
         }
       }
-      Helper.setCookie(clientId, clientId, 100);
+      Helper.setCookie(CLIENT_ID_COOKIE_NAME, previousClientId, 100);
+      clientId = previousClientId;
 
       /*And already looking if the device has multiple camera or not*/
       deviceHasMultipleCamera();
@@ -57,7 +59,6 @@
       }
       return multipleAvailable;
     }
-
 
     /*Explicitly reveal public pointers to the private functions
     that we want to reveal publicly*/
