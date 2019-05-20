@@ -4,7 +4,7 @@
   var App = window.App;
 
   var CategoriesStorage = (function() {
-    var verbose = true;
+    var verbose = false;
 
     var categories = [{
         "title": "Strech out your arms",

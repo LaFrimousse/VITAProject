@@ -8,14 +8,12 @@
   var Firebase = App.Firebase;
 
   var CategoriesLayout = (function() {
-    var verbose = true;
+    var verbose = false;
 
     var nbOfPictureSelected = 0;
     var allPicturesToDisplay = [];
     var urlToClean = [];
 
-    var userWantsToSeeThePoints = true;
-    var userWantsToSeeTheImages = true;
 
     //DOM ELEMENTS
     var title = document.getElementById("postureToAdaptTitle");
@@ -24,6 +22,8 @@
     var globalWrapper = document.getElementsByClassName("pictureAndButtonsWrapper")[0];
     var picturesWrapper = document.getElementById("picturesWrapper");
     var deleteButton = document.getElementById("deletePicture");
+    var seePointsCheckBox = document.getElementById("seeThePointsCheckBox");
+    var seePicturesCheckBox = document.getElementById("seeThePicturesCheckBox");
 
     var displayCategoryTitleAndPicture = function(cat) {
       if (verbose) {
@@ -133,14 +133,14 @@
       var url = URL.createObjectURL(wrapper.picture);
       urlToClean.push(url);
 
-      if (!userWantsToSeeThePoints || wrapper.points == null) {
+      if (!seePointsCheckBox.checked || wrapper.points == null) {
         newImg.src = url
       } else {
         var callback = function(url2) {
          newImg.src = url2;
          urlToClean.push(url2);
         }
-        PointsDrawing.addPointsInImage(url, wrapper.points, callback, userWantsToSeeTheImages);
+        PointsDrawing.addPointsInImage(url, wrapper.points, callback, seePicturesCheckBox.checked);
       }
 
       picturesWrapper.appendChild(newImg)
@@ -206,12 +206,6 @@
     }
 
 
-
-
-
-
-    displayCategoryTitleAndPicture(CategoriesStorage.getActualCategory());
-
     deleteButton.addEventListener("click", function() {
       deleteImages();
     });
@@ -221,6 +215,16 @@
         deleteImages();
       }
     });
+
+    seePointsCheckBox.addEventListener("change", function() {
+      displayAllPictures();
+    });
+
+    seePicturesCheckBox.addEventListener("change", function() {
+      displayAllPictures();
+    });
+
+    displayCategoryTitleAndPicture(CategoriesStorage.getActualCategory());
 
     return {
       displayCategoryTitleAndPicture: displayCategoryTitleAndPicture,

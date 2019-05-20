@@ -18,7 +18,7 @@
   var PointsDrawing = App.PointsDrawing;*/
 
   var Manager = (function() {
-    var verbose = true;
+    var verbose = false;
     var drawLivePoints = false;
 
     (function() {
