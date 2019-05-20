@@ -45,7 +45,10 @@
     var switchOpacityFunction = function() {
       if (postureToAdoptImg.classList.contains("alpha04")) {
         postureToAdoptImg.classList.remove("alpha04");
-      } else {
+        postureToAdoptImg.classList.add("alpha02");
+      } else if (postureToAdoptImg.classList.contains("alpha02")) {
+        postureToAdoptImg.classList.remove("alpha02");
+      }else{
         postureToAdoptImg.classList.add("alpha04");
       }
     }
@@ -58,6 +61,8 @@
       postureToAdoptImg.removeEventListener("click", switchOpacityFunction);
       if (postureToAdoptImg.classList.contains("alpha04")) {
         postureToAdoptImg.classList.remove("alpha04");
+      } else if (postureToAdoptImg.classList.contains("alpha02")) {
+        postureToAdoptImg.classList.remove("alpha02");
       }
     }
 
@@ -189,7 +194,7 @@
       var rightFlex = parseFloat(getComputedStyle(rightPanel).flex);
       var sum = leftFlex + centerFlex + rightFlex;
 
-      if(videoElementWidth < centerPanelWidth){
+      if (videoElementWidth < centerPanelWidth) {
         //console.log("videoElementWidth", videoElementWidth)
         //console.log("centerPanelWidth", centerPanelWidth)
         //TODO: Play with the flex here !
@@ -206,8 +211,8 @@
 
       var offsetForRightButton = offsetForLeftButton + videoElementWidth;
       mirrorVideoButton.style.bottom = (globalPanelHeight - videoElementHeight) + "px";
-      
-      showLivePointsButton.style.bottom = (globalPanelHeight - videoElementHeight) + "px";
+
+      showLivePointsButton.style.bottom = (globalPanelHeight - videoElementHeight + 3) + "px";
 
       counter.style.right = offsetForLeftButton + "px";
       counter.style.bottom = (globalPanelHeight - videoElementHeight) + "px";

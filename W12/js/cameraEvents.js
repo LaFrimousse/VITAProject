@@ -352,7 +352,7 @@
       manager = m;
     }
 
-    openCamera();
+    //openCamera();
 
     return {
       userClickedRedButton: userClickedRedButton,
@@ -361,7 +361,7 @@
 
   })();
 
-  
+
   App.CameraEvents = CameraEvents;
   window.App = App;
 
