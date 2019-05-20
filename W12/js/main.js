@@ -22,8 +22,7 @@
     var drawLivePoints = false;
 
     (function() {
-
-
+      return;
       //load from firebase the picture the user took in previous session
       var allCat = CategoriesStorage.categories
       allCat.forEach(function(cat) {
@@ -32,7 +31,8 @@
           listIds.forEach(function(pictId) {
             Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper) {
               Firebase.getPointsForAPicture(pictId).then(function(points) {
-                CategoriesStorage.appendPictureWrapperToACat(wrapper.categoryName, wrapper.imageId, points, wrapper.blob);
+                CategoriesStorage.appendPictureWrapperToACat(wrapper.catIndex, wrapper.imageId, points, wrapper.blob);
+                //(catIndex, imageId, points, picture, date, browserDescription)
               }).catch(function(error) {
                 console.error("Cannot download the points for the image " + catName, " ", pictId, " ", error);
               });
@@ -48,7 +48,7 @@
     })();
 
 
-    var userTookPicture = function(data) {
+    var userTookPicture = function(picture) {
 
       /*if (false) {
         getPointsFromPifPaf(data).then(function(points) {
@@ -60,34 +60,41 @@
         return;
       }*/
 
-      var catName = CategoriesStorage.getActualCategory().label;
-      if (verbose) {
-        console.log("Manager: The user took a picture for the category \"" + catName + "\"");
+      var catLabel = CategoriesStorage.getActualCategory().label
+
+      var newWrapper = {
+        catIndex: CategoriesStorage.indexForLabel(catLabel),
+        imageId: Helper.UUID(),
+        points: null,
+        picture: picture,
+        date: new Date(),
+        browserDescription: navigator.userAgent
       }
-      proceedImage(catName, data);
+
+      if (verbose) {
+        console.log("Manager: The user took a picture for the category ", catLabel);
+      }
 
       CategoriesStorage.proposeNextCategory();
-      CategoriesLayout.displayCategory(CategoriesStorage.getActualCategory());
-    }
+      CategoriesLayout.displayCategoryTitleAndPicture(CategoriesStorage.getActualCategory());
 
-    var proceedImage = function(catName, data) {
-      //create a unique identifier for this picture
-      var imageId = Helper.UUID();
-
-      getPointsFromPifPaf(data).then(function(points) {
+      getPointsFromPifPaf(picture).then(function(points) {
         if (verbose) {
-          console.log("Main: received some points from the pif paf server, time to save them in memory and send them to firebase under the category ", catName)
+          console.log("Main: received some points from the pif paf server for a new picture, time to save a wrapper in memory and send them to firebase")
         }
 
-        CategoriesStorage.appendPictureWrapperToACat(catName, imageId, points, data);
-        Firebase.saveImage(Device.clientId, imageId, data, catName, new Date(), navigator.userAgent, points);
+        newWrapper.points = points;
+        CategoriesStorage.appendPictureWrapperToACat(newWrapper);
+        Firebase.saveImage(Device.clientId, newWrapper);
 
       }).catch(function(error) {
         console.error("Didn't receive points from the pif paf algo, but still save the picture in firebase and into memory " + error);
-        CategoriesStorage.appendPictureWrapperToACat(catName, imageId, null, data);
-        Firebase.saveImage(Device.clientId, imageId, data, catName, new Date(), navigator.userAgent, null);
+        CategoriesStorage.appendPictureWrapperToACat(newWrapper);
+        Firebase.saveImage(Device.clientId, newWrapper);
       })
+
     }
+
 
     var getPointsFromPifPaf = function(image) {
       var promise = new Promise(function(resolve, reject) {
@@ -126,7 +133,6 @@
         reader.readAsDataURL(data);
       }
     }
-
 
     return {
       userTookPicture: userTookPicture,

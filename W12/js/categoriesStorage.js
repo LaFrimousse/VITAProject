@@ -1,30 +1,10 @@
 (function(window) {
   'use strict';
 
-  var App = window.App || {};
-  var CategoriesLayout = App.CategoriesLayout;
-  var Firebase = App.Firebase;
+  var App = window.App;
 
   var CategoriesStorage = (function() {
     var verbose = true;
-    var actualCategoryIndex = -1;
-    var userId = null;
-
-    var setUserId = function(toSet){
-      userId = toSet;
-      if(verbose){
-        console.log("CategoryStorage: setted his userId ", userId);
-      }
-    }
-
-    /*return an empty 2d array of same lenght than categories, in order to add pictures and point later at the same indexes than the categories allows to*/
-    function empty2DArray(categories) {
-      var emptyArray = []
-      categories.forEach(function(element) {
-        emptyArray.push([])
-      })
-      return emptyArray
-    }
 
     var categories = [{
         "title": "Strech out your arms",
@@ -54,14 +34,18 @@
     ]
 
     /*empty initialized*/
-    var picturesWrappers = empty2DArray(categories);
+    var picturesWrappers = [];
+    var actualCategoryIndex = -1;
 
+    var getCatLabels = function() {
+      return categories.map(el => el.label)
+    }
 
     /*Given a label name, outputs the integer in which to store these picturesWrappers*/
     var indexForLabel = function(label) {
       for (var i in categories) {
         if (categories[i].label == label) {
-          return i;
+          return Number.parseInt(i);
         }
       }
       return -1;
@@ -71,111 +55,39 @@
       return categories[index].label
     }
 
-    function PictureWrapper(uuid, points, picture) {
-      this.uuid = uuid;
-      this.points = points;
-      this.picture = picture;
-    }
-
-    var getRealIndexFromNbOrString = function(obj) {
-      if (obj == null) {
-        return actualCategoryIndex;
-      }
-      if (Number.isInteger(obj)) {
-        return obj;
-      } else {
-        return indexForLabel(obj);
-      }
-    }
 
     /* When the camera module took a picture, we can decide to save it in this class under a particular category*/
-    var appendPictureWrapperToACat = function(catIndexOrLabelName, uuid, points, picture) {
-      var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
+    var appendPictureWrapperToACat = function(newWrapper) {
 
-      var wrapper = new PictureWrapper(uuid, points, picture);
-      picturesWrappers[catIndex].push(wrapper);
+      picturesWrappers.push(newWrapper);
 
       if (verbose) {
-        console.log("CategoriesStorage: just appened a picture wrapper for the category \"" +
-          labelForIndex(catIndex) + "\"");
+        console.log("CategoriesStorage: just appened a picture wrapper for the category ",
+          labelForIndex(newWrapper.catIndex));
       }
-      /*if (!checkbox.checked) {
-        CategoriesLayout.showNewPicture(points, picture, true);
-      }*/
+      App.CategoriesLayout.notifyNewPictureAvailable(newWrapper);
     }
 
-
-    var deleteAPictureWrapperFromACat = function(catIndexOrLabelName, listOfIndex) {
-
-      var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
-      var catLabel = labelForIndex(catIndex);
-
-      var imagesToDelete = [];
-
-      listOfIndex.forEach(function(elementIndex){
-        var imgId = picturesWrappers[catIndex][elementIndex].uuid;
-
-        var imgToDel = {};
-        imgToDel.catLabel = catLabel;
-        imgToDel.userId = userId;
-        imgToDel.imageId = imgId;
-        imagesToDelete.push(imgToDel);
-        picturesWrappers[catIndex].splice(elementIndex, 1);
-      });
-
-      Firebase.deleteImages(imagesToDelete);
-
-      if (verbose) {
-        console.log("CategoriesStorage: just deleted some picture wrapper for the category " +
-          catLabel + " : " + listOfIndex);
-      }
-      CategoriesLayout.showPicturesForACat(picturesTakenForACat());
+    var deleteSomePictureFromACat = function(imageIdSet) {
+      picturesWrappers = picturesWrappers.filter(wrapper => !imageIdSet.has(wrapper.imageId));
     }
 
-    /*Return all the pictures that were previously stored for a particula category*/
-    var picturesTakenForACat = function(catIndexOrLabelName) {
+    var wrappersTakenForACat = function(catIndexOrLabelName) {
+      var catIndex = Number.isInteger(catIndexOrLabelName) ? catIndexOrLabelName : indexForLabel(catIndexOrLabelName);
 
-      var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
-
-      var picturesTaken = []
-      picturesWrappers[catIndex].forEach(function(pw) {
-        if (pw.picture) {
-          picturesTaken.push(pw);
-        }
-      })
-      if (verbose) {
-        console.log("CategoriesStorage: returning the pictures wrappers taken for category of index " + catIndex + "(" +
-          picturesTaken.length + " pictures)");
+      if(verbose){
+        console.log("CategoriesStorage: will provide all wrappers for the category with index ", catIndex)
       }
-      return picturesTaken;
-    }
 
-
-    /*Return all the pictures that were previously stored for a particula category*/
-    var pointsTakenForACat = function(catIndexOrLabelName) {
-
-      var catIndex = getRealIndexFromNbOrString(catIndexOrLabelName);
-
-      var pointsTaken = []
-      picturesWrappers[catIndex].forEach(function(pw) {
-        if (pw.points) {
-          pointsTaken.push(pw.points)
-        }
-      })
-      if (verbose) {
-        console.log("CategoriesStorage: returning the points taken for category of index " + catIndex + "(" +
-          pointsTaken.lenght + " points)");
-      }
-      return pointsTaken;
+      return picturesWrappers.filter(wrapper => wrapper.catIndex == catIndex);
     }
 
     var getActualCategory = function() {
       return actualCategoryIndex < 0 ? null : categories[actualCategoryIndex];
     }
 
-    var randomCategory = function() {
-      var randomIndex = Math.floor(Math.random() * categories.length);
-      return randomIndex;
+    var randomCategoryIndex = function() {
+      return Math.floor(Math.random() * categories.length);
     }
 
     var getCategorySuggestionFromServer = function() {
@@ -183,59 +95,50 @@
     }
 
     var proposeNextCategory = function() {
-      if (selector.selectedIndex != 0) {
-        //manual propostion
-        actualCategoryIndex = selector.selectedIndex - 1;
-      } else {
-        //propostion from the server
-        var fromServer = getCategorySuggestionFromServer();
-        if (Number.isInteger(fromServer)) {
-          actualCategoryIndex = fromServer;
+      if(categorySelector.selectedIndex == 0){
+        //automatic suggestion
+        var fromServerIndex = getCategorySuggestionFromServer();
+        if (Number.isInteger(fromServerIndex)) {
+          actualCategoryIndex = fromServerIndex;
         } else {
-          actualCategoryIndex = randomCategory();
+          actualCategoryIndex = randomCategoryIndex();
         }
+
+      }else {
+        //the user choosed the category to perform
+        actualCategoryIndex = categorySelector.selectedIndex - 1;
       }
     }
 
-    var getCatLabels = function(){
-      return categories.map(el=>el.label)
-    }
+
 
     //-------------FROM HERE EVERYTHING ABOUT THE LAYOUT----------
 
-    var selector = document.getElementById("categorySelector");
+    var categorySelector = document.getElementById("categorySelector");
 
     categories.forEach(function(cat) {
-      selector.insertAdjacentHTML("beforeend", '<option>' + cat.title + '</option>')
+      categorySelector.insertAdjacentHTML("beforeend", '<option>' + cat.title + '</option>')
     })
 
-    selector.selectedIndex = 1
-
-    selector.addEventListener("change", function() {
+    categorySelector.addEventListener("change", function() {
       proposeNextCategory();
-      CategoriesLayout.displayCategory(getActualCategory());
-      CategoriesLayout.showPicturesForACat(picturesTakenForACat());
+      App.CategoriesLayout.displayCategoryTitleAndPicture(getActualCategory());
+      App.CategoriesLayout.displayAllPictures();
     })
 
-
-    //proposeNextCategory();
-    //CategoriesLayout.displayCategory(getActualCategory());
-
-
-
+    categorySelector.selectedIndex = 1
+    proposeNextCategory();
 
     return {
       categories: categories,
-      appendPictureWrapperToACat: appendPictureWrapperToACat,
-      deleteAPictureWrapperFromACat: deleteAPictureWrapperFromACat,
-      picturesTakenForACat: picturesTakenForACat,
-      pointsTakenForACat: pointsTakenForACat,
-      getActualCategory: getActualCategory,
-      proposeNextCategory: proposeNextCategory,
-      setUserId: setUserId,
-      indexForLabel: indexForLabel,
+      getCatLabels:getCatLabels,
+      indexForLabel:indexForLabel,
       labelForIndex:labelForIndex,
-      catLabels : getCatLabels
+      appendPictureWrapperToACat: appendPictureWrapperToACat,
+      deleteSomePictureFromACat:deleteSomePictureFromACat,
+      wrappersTakenForACat:wrappersTakenForACat,
+      getActualCategory:getActualCategory,
+      proposeNextCategory:proposeNextCategory
     }
 
   })();

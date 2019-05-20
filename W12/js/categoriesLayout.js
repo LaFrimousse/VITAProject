@@ -3,13 +3,17 @@
 
   var App = window.App;
   var PointsDrawing = App.PointsDrawing;
-  var Storage = App.Storage;
+  var CategoriesStorage = App.CategoriesStorage;
 
   var CategoriesLayout = (function() {
-    var verbose = false;
+    var verbose = true;
 
     var nbOfPictureSelected = 0;
+    var allPicturesToDisplay = [];
     var urlToClean = [];
+
+    var userWantsToSeeThePoints = true;
+    var userWantsToSeeTheImages = true;
 
     //DOM ELEMENTS
     var title = document.getElementById("postureToAdaptTitle");
@@ -19,15 +23,13 @@
     var picturesWrapper = document.getElementById("picturesWrapper");
     var deleteButton = document.getElementById("deletePicture");
 
-
-
-    var displayCategory = function(cat) {
+    var displayCategoryTitleAndPicture = function(cat) {
       if (verbose) {
-        console.log("CategoriesLayout: displaying the category ",cat,"  to the user");
+        console.log("CategoriesLayout: displaying the category ", cat, "  to the user");
       }
       var initialTitle = ""
       var initialImgSrc = "images/questionMark.jpg"
-      actualCategoryDisplayed = cat;
+
       if (cat != null) {
         initialTitle = cat.title
         initialImgSrc = cat.imageURL
@@ -55,12 +57,12 @@
 
     var hideOrShowDeleteButton = function() {
       if (nbOfPictureSelected == 0) {
-        if(verbose){
+        if (verbose) {
           console.log("CategoriesLayout: hidding the delete button");
         }
         hide(deleteButton)
       } else {
-        if(verbose){
+        if (verbose) {
           console.log("CategoriesLayout: showing the delete button");
         }
         show(deleteButton)
@@ -68,18 +70,34 @@
     }
 
     var hide = function(element) {
-        element.classList.add("notDisplayed");
+      element.classList.add("notDisplayed");
     }
 
     var show = function(element) {
-        element.classList.remove("notDisplayed");
+      element.classList.remove("notDisplayed");
     }
 
-    /*var showPicturesForACat = function(pictsWraps, displayPoints) {
+    var notifyNewPictureAvailable = function(pictWrapper) {
       if (verbose) {
-        console.log("CategoriesLayout: showing " + pictsWraps.length + " pictures to the user for a category");
+        console.log("CategoriesLayout: notified we have a new  picture wrapper available ", pictWrapper);
       }
-      displayPoints = true;
+
+      var actualCat = CategoriesStorage.getActualCategory();
+      var actualCatIndex = CategoriesStorage.indexForLabel(actualCat.label)
+      if(actualCatIndex == pictWrapper.catIndex){
+        addAPhotoToPicturesTaken(pictWrapper);
+      }
+    }
+
+    var displayAllPictures = function() {
+
+      var actualCat = CategoriesStorage.getActualCategory();
+      var actualCatIndex = CategoriesStorage.indexForLabel(actualCat.label);
+      allPicturesToDisplay = CategoriesStorage.wrappersTakenForACat(actualCatIndex);
+
+      if (verbose) {
+        console.log("CategoriesLayout: will show all picture for the category ", actualCat.label, "(", allPicturesToDisplay.length, " pictures)")
+      }
 
       nbOfPictureSelected = 0;
       hideOrShowDeleteButton();
@@ -88,44 +106,39 @@
       while (picturesWrapper.firstChild) {
         picturesWrapper.removeChild(picturesWrapper.firstChild);
       }
-      urlToClean.forEach(function(el){
+
+      //TODO: be sure to clean the url when you manually delete some pictures
+      urlToClean.forEach(function(el) {
         window.URL.revokeObjectURL(el);
       })
       urlToClean = []
 
-
       //and fill with the new pictures if availables
-      pictsWraps.forEach(function(wrapper) {
-        addAPhotoToPicturesTaken(wrapper, displayPoints);
+      allPicturesToDisplay.forEach(function(wrapper) {
+        addAPhotoToPicturesTaken(wrapper);
       })
-      if (pictsWraps.length > 0) {
-        show(picturesWrapper);
+
+      if (allPicturesToDisplay.length > 0) {
+        showGlobalWrapper();
       } else {
-        hide(picturesWrapper);
+        hideGlobalWrapper();
       }
     }
 
-    var showNewPicture = function(points, picture, displayPoints){
-      var wrapper = {}
-      wrapper.picture = picture;
-      wrapper.points = points;
-      addAPhotoToPicturesTaken(wrapper, displayPoints);
-        show(picturesWrapper);
-    }
-
-    var addAPhotoToPicturesTaken = function(wrapper, displayPoints) {
+    var addAPhotoToPicturesTaken = function(wrapper) {
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
+      newImg.setAttribute("data-image_id", wrapper.imageId);
       var url = URL.createObjectURL(wrapper.picture);
+      urlToClean.push(url);
 
-      if(!displayPoints || wrapper.points == null){
+      if (!userWantsToSeeThePoints || wrapper.points == null) {
         newImg.src = url
-      }else{
-        var callback = function(url2){
+      } else {
+        var callback = function(url2) {
           newImg.src = url2;
         }
         PointsDrawing.addPointsInImage(url, wrapper.points, callback);
       }
-      urlToClean.push(url);
 
       picturesWrapper.appendChild(newImg)
 
@@ -142,26 +155,6 @@
       })
     }
 
-    var hidePicturesTaken = function() {
-      if (verbose) {
-        console.log("CategoriesLayout: hidding the pictures displayed");
-      }
-      removeSelection();
-      hide(picturesWrapper);
-      hide(deleteButton);
-    }
-
-
-    deleteButton.addEventListener("click", function() {
-      deleteImages();
-    });
-
-    document.addEventListener("keydown", function(e) {
-      if (e.keyCode == 8) {
-        deleteImages();
-      }
-    });
-
     var removeSelection = function() {
       nbOfPictureSelected = 0;
       hide(deleteButton);
@@ -174,12 +167,14 @@
       });
     }
 
+
+
     var deleteImages = function() {
       if (nbOfPictureSelected == 0) {
         //to save if the user want's to delete a picture using the keyboard
         return;
       }
-      if(verbose){
+      if (verbose) {
         console.log("CategoriesLayout: deleting the selected images");
       }
       var childrenList = picturesWrapper.children;
@@ -190,19 +185,34 @@
         }
       });
 
-        categoryStorage.deleteAPictureWrapperFromACat(null, indexes.reverse());
+      categoryStorage.deleteAPictureWrapperFromACat(null, indexes.reverse());
 
       // UI reloaded from categriesStorage
     }
 
 
 
-*/
+
+
+
+    displayCategoryTitleAndPicture(CategoriesStorage.getActualCategory());
+
+    deleteButton.addEventListener("click", function() {
+      deleteImages();
+    });
+
+    document.addEventListener("keydown", function(e) {
+      if (e.keyCode == 8) {
+        deleteImages();
+      }
+    });
 
     return {
-      displayCategory:displayCategory,
+      displayCategoryTitleAndPicture: displayCategoryTitleAndPicture,
       hideGlobalWrapper: hideGlobalWrapper,
-      showGlobalWrapper:showGlobalWrapper,
+      showGlobalWrapper: showGlobalWrapper,
+      displayAllPictures: displayAllPictures,
+      notifyNewPictureAvailable: notifyNewPictureAvailable
 
       /*
       displayCategory: displayCategory,

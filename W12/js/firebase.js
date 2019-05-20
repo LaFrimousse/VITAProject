@@ -15,7 +15,13 @@
     var storage = firebase.storage();
     var storageRef = storage.ref();
 
-    var saveImage = function(userId, imageId, imageFile, categoryName, date, browserId, points) {
+    var saveImage = function(userId, wrapper) {
+      imageId = wrapper.imageId;
+      imageFile = wrapper.picture;
+      categoryName = App.CategoriesStorage.labelForIndex(wrapper.catIndex);
+      date = wrapper.date;
+      browserId = wrapper.browserDescription;
+      points = wrapper.points;
 
       putImgFileInFirebase(categoryName, imageId, imageFile).then(function(snapshot) {
         if (verbose) {

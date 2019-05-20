@@ -1,4 +1,4 @@
-.categoryDisplayWrapper {
+.pictureAndButtonsWrapper {
   margin-top: 5px;
   border: 1px solid black;
   padding: 5px;
@@ -10,21 +10,6 @@
   justify-content: space-between;
 }
 
-#proposalModeCheckBox{
-  margin-right: 5px;
-}
-
-.pictureDisplayWrapper{
-  margin-top: 5px;
-  background-color: rgb(199, 200, 201);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#categorySelector{
-  background-color: rgb(230,230,230);
-}
 
 .categoryModeCheckBoxWrapper {
   margin-left: 15px;
@@ -36,13 +21,13 @@
 .deletePicture {
   margin-top: 5px;
   margin-bottom: 3px;
-  padding: 5px;
+  padding: 20px;
   background-color: rgb(244, 69, 66);
   border-radius: 3px;
   border: 1px solid rgb(224, 49, 46);
 }
 
-.pictures {
+.picturesWrapper {
   display: flex;
   flex-wrap: wrap-reverse;
   align-items: baseline;
@@ -50,39 +35,16 @@
   padding: 3px;
 }
 
-.pictures img {
+.picturesWrapper img {
   display: block;
   padding: 3px;
   margin-bottom: 3px;
   background-color: black;
   box-sizing: border-box;
-  max-width: 33%;
+  max-width: 24.8%;
   height: auto;
 }
 
-.pictures .selected {
+.picturesWrapper .selected {
   background-color: red;
-}
-
-.notDisplayed {
-  display: none;
-}
-
-@media all and (min-width: 768px) {
-  .categoryDisplayWrapper {
-    padding: 10px;
-  }
-
-  .categorySelectCheckBoxWrapper {
-    display: flex;
-    padding: 10px;
-    justify-content: space-around;
-  }
-
-  .deletePicture {
-    padding: 20px;
-  }
-  .pictures img {
-    max-width: 24.8%;
-  }
 }

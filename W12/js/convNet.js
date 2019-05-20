@@ -13,7 +13,7 @@
     /*One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.*/
     const EPOCHS = 2;
 
-    const classNames = CategoriesStorage.catLabels()
+    const classNames = CategoriesStorage.getCatLabels()
     const NB_CATEGORIES = classNames.length;
     var trainedOnceAlready = false;
     var isRecognitionModeActivated = false;
