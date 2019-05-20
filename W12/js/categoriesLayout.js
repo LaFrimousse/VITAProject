@@ -2,8 +2,10 @@
   'use strict';
 
   var App = window.App;
+  var Device = App.Device;
   var PointsDrawing = App.PointsDrawing;
   var CategoriesStorage = App.CategoriesStorage;
+  var Firebase = App.Firebase;
 
   var CategoriesLayout = (function() {
     var verbose = true;
@@ -179,16 +181,28 @@
         console.log("CategoriesLayout: deleting the selected images");
       }
       var childrenList = picturesWrapper.children;
-      var imageIdsToDel = [];
+
+      var setOfIdToDel = new Set()
+      var imagesToDel = [];
       [].slice.call(childrenList).forEach(function(item, index) {
         if (item.classList.contains("selected")) {
-          imageIdsToDel.push(item.getAttribute("data-image_id"))
+          var imgId = item.getAttribute("data-image_id")
+          setOfIdToDel.add(imgId);
           item.remove();
+          var inMemoryImg = CategoriesStorage.imgForId(imgId);
+          console.log(inMemoryImg);
+          var imToDel = {
+            catLabel: CategoriesStorage.labelForIndex(inMemoryImg.catIndex),
+            userId: Device.clientId,
+            imageId:imgId
+          }
+          imagesToDel.push(imToDel);
         }
       });
-      var setOfIdToDel = new Set(imageIdsToDel)
+
       CategoriesStorage.deleteSomePictureFromACat(setOfIdToDel);
-      // UI reloaded from categriesStorage
+      Firebase.deleteImages(imagesToDel);
+
     }
 
 

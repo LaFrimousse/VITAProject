@@ -82,6 +82,10 @@
       return picturesWrappers.filter(wrapper => wrapper.catIndex == catIndex);
     }
 
+    var imgForId = function(imageId){
+      return  picturesWrappers.filter(wrapper => wrapper.imageId == imageId)[0];
+    }
+
     var getActualCategory = function() {
       return actualCategoryIndex < 0 ? null : categories[actualCategoryIndex];
     }
@@ -138,6 +142,7 @@
       appendPictureWrapperToACat: appendPictureWrapperToACat,
       deleteSomePictureFromACat:deleteSomePictureFromACat,
       wrappersTakenForACat:wrappersTakenForACat,
+      imgForId:imgForId,
       getActualCategory:getActualCategory,
       proposeNextCategory:proposeNextCategory
     }
