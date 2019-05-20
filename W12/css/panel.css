@@ -1,6 +1,7 @@
 .globalPanel {
   border: 1px solid brown;
   display: flex;
+  margin: 50px;
 }
 
 .leftPanel{

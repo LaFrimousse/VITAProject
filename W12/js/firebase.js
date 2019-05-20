@@ -16,12 +16,12 @@
     var storageRef = storage.ref();
 
     var saveImage = function(userId, wrapper) {
-      imageId = wrapper.imageId;
-      imageFile = wrapper.picture;
-      categoryName = App.CategoriesStorage.labelForIndex(wrapper.catIndex);
-      date = wrapper.date;
-      browserId = wrapper.browserDescription;
-      points = wrapper.points;
+      var imageId = wrapper.imageId;
+      var imageFile = wrapper.picture;
+      var categoryName = App.CategoriesStorage.labelForIndex(wrapper.catIndex);
+      var date = wrapper.date;
+      var browserId = wrapper.browserDescription;
+      var points = wrapper.points;
 
       putImgFileInFirebase(categoryName, imageId, imageFile).then(function(snapshot) {
         if (verbose) {

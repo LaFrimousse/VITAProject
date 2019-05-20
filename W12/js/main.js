@@ -22,7 +22,6 @@
     var drawLivePoints = false;
 
     (function() {
-      return;
       //load from firebase the picture the user took in previous session
       var allCat = CategoriesStorage.categories
       allCat.forEach(function(cat) {
@@ -31,7 +30,15 @@
           listIds.forEach(function(pictId) {
             Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper) {
               Firebase.getPointsForAPicture(pictId).then(function(points) {
-                CategoriesStorage.appendPictureWrapperToACat(wrapper.catIndex, wrapper.imageId, points, wrapper.blob);
+                var newWrapper = {
+                  catIndex: CategoriesStorage.indexForLabel(catName),
+                  imageId: pictId,
+                  points: points,
+                  picture: wrapper.blob,
+                  date: wrapper.date,
+                  browserDescription: wrapper.browserDescription
+                }
+                CategoriesStorage.appendPictureWrapperToACat(newWrapper);
                 //(catIndex, imageId, points, picture, date, browserDescription)
               }).catch(function(error) {
                 console.error("Cannot download the points for the image " + catName, " ", pictId, " ", error);

@@ -135,9 +135,10 @@
         newImg.src = url
       } else {
         var callback = function(url2) {
-          newImg.src = url2;
+         newImg.src = url2;
+         urlToClean.push(url2);
         }
-        PointsDrawing.addPointsInImage(url, wrapper.points, callback);
+        PointsDrawing.addPointsInImage(url, wrapper.points, callback, userWantsToSeeTheImages);
       }
 
       picturesWrapper.appendChild(newImg)

@@ -122,6 +122,7 @@
 
     categorySelector.addEventListener("change", function() {
       proposeNextCategory();
+      //TODO: no listener for the automatic propostion héhé
       App.CategoriesLayout.displayCategoryTitleAndPicture(getActualCategory());
       App.CategoriesLayout.displayAllPictures();
     })

@@ -70,7 +70,7 @@
       canvas.height = height
       var context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
-      if(pointsToDraw != null){
+      if (pointsToDraw != null) {
         pointsToDraw.forEach(function(points) {
           drawPointsInCanvas(points.coordinates, canvas, width, height)
         });
@@ -171,7 +171,7 @@
       }
     }
 
-    var addPointsInImage = function(imageURL, points, callback) {
+    var addPointsInImage = function(imageURL, points, callback, pictureWanted) {
       var context = canvasUsedToAddPointsInPictures.getContext('2d');
       context.clearRect(0, 0, canvasUsedToAddPointsInPictures.width, canvasUsedToAddPointsInPictures.height)
 
@@ -184,7 +184,9 @@
         imgHeight = img.naturalHeight;
         canvasUsedToAddPointsInPictures.width = imgWidth;
         canvasUsedToAddPointsInPictures.height = imgHeight;
-        context.drawImage(img, 0, 0)
+        if (pictureWanted) {
+          context.drawImage(img, 0, 0)
+        }
         points.forEach(function(pts) {
           drawPointsInCanvas(pts.coordinates, canvasUsedToAddPointsInPictures, imgWidth, imgHeight);
         });
