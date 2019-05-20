@@ -121,9 +121,9 @@
       })
 
       if (allPicturesToDisplay.length > 0) {
-        showGlobalWrapper();
+        show(picturesWrapper);
       } else {
-        hideGlobalWrapper();
+        hide(picturesWrapper);
       }
     }
 
@@ -202,6 +202,9 @@
 
       CategoriesStorage.deleteSomePictureFromACat(setOfIdToDel);
       Firebase.deleteImages(imagesToDel);
+
+      nbOfPictureSelected = 0;
+      hideOrShowDeleteButton();
 
     }
 

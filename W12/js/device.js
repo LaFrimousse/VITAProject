@@ -4,7 +4,7 @@
   var Helper = App.Helper;
   var Device = (function() {
 
-    var verbose = true;
+    var verbose = false;
     var CLIENT_ID_COOKIE_NAME = "clientIdCookieName";
     var clientId = null;
     var hasMultipleCamera = null;

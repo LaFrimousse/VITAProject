@@ -5,22 +5,27 @@
   background-color: rgb(105, 109, 106);
 }
 
-.categorySelectCheckBoxWrapper {
+.pictureAndButtonsWrapper .controlBar{
+  min-height: 80px;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-end;
 }
 
+.checkBoxWrappers{
+  right: 10px;
+  display: inline-block;
+  margin: 3px;
+  margin-right: 20px;
+}
 
-.categoryModeCheckBoxWrapper {
-  margin-left: 15px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+.checkBoxWrappers * {
+  margin: 3px;
 }
 
 .deletePicture {
-  margin-top: 5px;
-  margin-bottom: 3px;
+  margin: auto;
+  margin-top: 10px;
   padding: 20px;
   background-color: rgb(244, 69, 66);
   border-radius: 3px;

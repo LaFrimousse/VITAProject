@@ -5,6 +5,7 @@
 
   var CategoriesStorage = (function() {
     var verbose = false;
+    var automaticCategoryProposal = true;
 
     var categories = [{
         "title": "Strech out your arms",
@@ -65,7 +66,10 @@
         console.log("CategoriesStorage: just appened a picture wrapper for the category ",
           labelForIndex(newWrapper.catIndex));
       }
-      App.CategoriesLayout.notifyNewPictureAvailable(newWrapper);
+      if(!automaticCategoryProposal){
+          App.CategoriesLayout.notifyNewPictureAvailable(newWrapper);
+      }
+
     }
 
     var deleteSomePictureFromACat = function(imageIdSet) {
@@ -126,12 +130,18 @@
 
     categorySelector.addEventListener("change", function() {
       proposeNextCategory();
-      //TODO: no listener for the automatic propostion héhé
+      automaticCategoryProposal = categorySelector.selectedIndex == 0;
+
       App.CategoriesLayout.displayCategoryTitleAndPicture(getActualCategory());
-      App.CategoriesLayout.displayAllPictures();
+      if(!automaticCategoryProposal){
+        App.CategoriesLayout.showGlobalWrapper();
+        App.CategoriesLayout.displayAllPictures();
+      }else{
+        App.CategoriesLayout.hideGlobalWrapper();
+      }
     })
 
-    categorySelector.selectedIndex = 1
+    //categorySelector.selectedIndex = 1
     proposeNextCategory();
 
     return {

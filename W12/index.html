@@ -108,12 +108,21 @@
 
 
 
-  <div class="pictureAndButtonsWrapper">
-    <button id="deletePicture" class="buttonBehavior deletePicture notDisplayed">Delete Pictures</button>
-    <input type="checkbox" name="seeThePointsCheckBox" id="seeThePointsCheckBox" checked/>
-    <label for="seeThePointsCheckBox">See the points</label>
-    <input type="checkbox" name="seeThePicturesCheckBox" id="seeThePicturesCheckBox" checked/>
-    <label for="seeThePicturesCheckBox">See the pictures</label>
+  <div class="pictureAndButtonsWrapper notDisplayed">
+    <div class="controlBar">
+      <button id="deletePicture" class="buttonBehavior deletePicture notDisplayed">Delete Pictures</button>
+      <div class="checkBoxWrappers">
+      <div class="checkBoxWrapper">
+        <input type="checkbox" name="seeThePointsCheckBox" id="seeThePointsCheckBox" checked />
+        <label for="seeThePointsCheckBox">See the points</label>
+      </div>
+      <div class="checkBoxWrapper">
+        <input type="checkbox" name="seeThePicturesCheckBox" id="seeThePicturesCheckBox" checked />
+        <label for="seeThePicturesCheckBox">See the pictures</label>
+      </div>
+      </div>
+    </div>
+
     <div class="picturesWrapper notDisplayed" id="picturesWrapper"></div>
   </div>
 
