@@ -122,7 +122,10 @@
     var noticeCameraJustOpenned = function() {
 
       CameraLayout.showElement("closeCameraButton");
-      CameraLayout.showElement("skeletons");
+      if(ALLOW_LIVE_POINTS){
+        CameraLayout.showElement("skeletons");
+      }
+
 
       Device.hasMultipleCamera().then(function(res){
         if(res){
@@ -175,7 +178,9 @@
       }
 
       CameraLayout.replaceButtonInVideoElement();
-      console.log("CameraEvents: noticed that the camera just closed")
+      if(verbose){
+        console.log("CameraEvents: noticed that the camera just closed")
+      }
     }
 
 
@@ -312,7 +317,6 @@
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("switchCameraWrapper");
       CameraLayout.hideElement("skeletons");
-      CategoriesLayout.hideElements();
       updateCounter(RecordsButtons.delay());
       if (verbose) {
         console.log("CameraEvents: just started taking pictures");
@@ -322,14 +326,23 @@
 
     var stopTakingPicture = function() {
       cancelTakingPictureWithDelay();
-      CameraLayout.showElement("mirrorButton");
       CameraLayout.showElement("closeCameraButton");
-      CameraLayout.showElement("switchCameraWrapper");
       if (ALLOW_LIVE_POINTS) {
         CameraLayout.showElement("skeletons");
       }
-      CategoriesLayout.showElements();
       RecordsButtons.setButtonRed();
+
+      Device.hasMultipleCamera().then(function(res){
+        if(res){
+          CameraLayout.showElement("switchCameraWrapper");
+          if(!Camera.isUsingBackCamera()){
+            CameraLayout.showElement("mirrorButton");
+          }
+        }else{
+          CameraLayout.showElement("mirrorButton");
+        }
+      });
+
       isTakingPicture = false;
       if (verbose) {
         console.log("CameraEvents: just stopped taking pictures");
