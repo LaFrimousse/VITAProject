@@ -1,6 +1,7 @@
 (function(window) {
   'use strict'
   var App = window.App;
+  var Device = App.Device;
   var Camera = App.Camera;
   var CameraLayout = App.CameraLayout;
   var RecordsButtons = App.RecordsButtons;
@@ -121,10 +122,23 @@
     var noticeCameraJustOpenned = function() {
 
       CameraLayout.showElement("closeCameraButton");
-      CameraLayout.showElement("mirrorButton");
-      CameraLayout.showElement("switchCameraWrapper");
       CameraLayout.showElement("skeletons");
-      CameraLayout.addImageOpacityListener();
+
+      Device.hasMultipleCamera().then(function(res){
+        if(res){
+          CameraLayout.showElement("switchCameraWrapper");
+          if(!Camera.isUsingBackCamera()){
+            CameraLayout.showElement("mirrorButton");
+          }
+        }else{
+          CameraLayout.showElement("mirrorButton");
+        }
+      });
+
+
+      if (Device.isDeviceAMobile()) {
+        CameraLayout.addImageOpacityListener();
+      }
 
       CameraLayout.replaceButtonInVideoElement();
 
@@ -149,9 +163,12 @@
 
       CameraLayout.hideElement("closeCameraButton");
       CameraLayout.hideElement("mirrorButton");
-      CameraLayout.hideElement("switchCameraWrapper");
       CameraLayout.hideElement("skeletons");
-      CameraLayout.removeImageOpacityListener();
+      CameraLayout.hideElement("switchCameraWrapper");
+      if (Device.isDeviceAMobile()) {
+        CameraLayout.removeImageOpacityListener();
+      }
+
       if (isMirrored) {
         CameraLayout.mirrorElements();
         isMirrored = false;
@@ -352,7 +369,7 @@
       manager = m;
     }
 
-    //openCamera();
+    openCamera();
 
     return {
       userClickedRedButton: userClickedRedButton,

@@ -5,17 +5,7 @@
   var Camera = App.Camera;
 
   var CameraLayout = (function() {
-    var verbose = false;
-
-    var shouldDisplayCameraSwitch = false;
-
-    (function() { // init code
-      if (Device.hasMultipleCamera()) {
-        shouldDisplayCameraSwitch = true;
-      }
-
-    })();
-
+    var verbose = true;
 
 
     //The DOMS elements
@@ -48,7 +38,7 @@
         postureToAdoptImg.classList.add("alpha02");
       } else if (postureToAdoptImg.classList.contains("alpha02")) {
         postureToAdoptImg.classList.remove("alpha02");
-      }else{
+      } else {
         postureToAdoptImg.classList.add("alpha04");
       }
     }
@@ -102,35 +92,16 @@
     }
 
     var hide = function(element) {
-      if (!element.classList.contains("notDisplayed")) {
-        element.classList.add("notDisplayed");
-      }
+      element.classList.add("notDisplayed");
     }
 
     var show = function(element) {
-      if (element == switchCameraWrapper && !shouldDisplayCameraSwitch) {
-        if (verbose) {
-          console.log("CameraLayout: not showing the switchCamera switch");
-        }
-        return;
-      }
-
-      if (element == mirrorVideoButton && Camera.isUsingBackCamera() &&
-        Device.hasMultipleCamera()) {
-        if (verbose) {
-          console.log("CameraLayout: not showing the mirror button for a back camera");
-        }
-        return;
-      }
-
-      if (element.classList.contains("notDisplayed")) {
-        element.classList.remove("notDisplayed");
-      }
+      element.classList.remove("notDisplayed");
     }
 
 
     var mirrorElements = function() {
-      var elemsToMirror = [videoElement, canvasForLivePoints, mirrorVideoButton, postureToAdoptImg];
+      var elemsToMirror = [videoElement, canvasForLivePoints, mirrorVideoButton, postureToAdoptImg, showLivePointsButton];
 
       elemsToMirror.forEach(function(el) {
         if (el.classList.contains("mirrored")) {
