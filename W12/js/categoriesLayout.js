@@ -179,15 +179,15 @@
         console.log("CategoriesLayout: deleting the selected images");
       }
       var childrenList = picturesWrapper.children;
-      var indexes = [];
+      var imageIdsToDel = [];
       [].slice.call(childrenList).forEach(function(item, index) {
         if (item.classList.contains("selected")) {
-          indexes.push(index)
+          imageIdsToDel.push(item.getAttribute("data-image_id"))
+          item.remove();
         }
       });
-
-      categoryStorage.deleteAPictureWrapperFromACat(null, indexes.reverse());
-
+      var setOfIdToDel = new Set(imageIdsToDel)
+      CategoriesStorage.deleteSomePictureFromACat(setOfIdToDel);
       // UI reloaded from categriesStorage
     }
 
@@ -214,14 +214,6 @@
       showGlobalWrapper: showGlobalWrapper,
       displayAllPictures: displayAllPictures,
       notifyNewPictureAvailable: notifyNewPictureAvailable
-
-      /*
-      displayCategory: displayCategory,
-      showElements: showElements,
-      hideElements: hideElements,
-      showPicturesForACat: showPicturesForACat,
-      showNewPicture:showNewPicture,
-      hidePicturesTaken: hidePicturesTaken,*/
     }
   })();
   App.CategoriesLayout = CategoriesLayout;
