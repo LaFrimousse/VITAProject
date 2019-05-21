@@ -26,7 +26,7 @@
 
   <div class="topBar">
     <button type="button" id="changeModeButton" class="notDisplayed">Recognition Mode</button>
-    <button type="button" id="createMyModel" class="notDisplayed" >Create My Model</button>
+    <button type="button" id="createMyModel" class="notDisplayed">Create My Model</button>
   </div>
 
 
@@ -111,14 +111,14 @@
     <div class="controlBar">
       <button id="deletePicture" class="buttonBehavior deletePicture notDisplayed">Delete Pictures</button>
       <div class="checkBoxWrappers">
-      <div class="checkBoxWrapper">
-        <input type="checkbox" name="seeThePointsCheckBox" id="seeThePointsCheckBox" checked />
-        <label for="seeThePointsCheckBox">See the points</label>
-      </div>
-      <div class="checkBoxWrapper">
-        <input type="checkbox" name="seeThePicturesCheckBox" id="seeThePicturesCheckBox" checked />
-        <label for="seeThePicturesCheckBox">See the pictures</label>
-      </div>
+        <div class="checkBoxWrapper">
+          <input type="checkbox" name="seeThePointsCheckBox" id="seeThePointsCheckBox" checked />
+          <label for="seeThePointsCheckBox">See the points</label>
+        </div>
+        <div class="checkBoxWrapper">
+          <input type="checkbox" name="seeThePicturesCheckBox" id="seeThePicturesCheckBox" checked />
+          <label for="seeThePicturesCheckBox">See the pictures</label>
+        </div>
       </div>
     </div>
 
@@ -137,15 +137,16 @@
   <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-firestore.js"></script>
 
   <script>
-    var config = {
-      apiKey: "AIzaSyDXJjzFxhMFeypgptKs-WE3jzikbtOWcWE",
-      authDomain: "vita-project-f8d92.firebaseapp.com",
-      databaseURL: "https://<DATABASE_NAME>.firebaseio.com",
-      projectId: "vita-project-f8d92",
-      storageBucket: "gs://vita-project-f8d92.appspot.com/",
-      messagingSenderId: "<SENDER_ID>",
+    var firebaseConfig = {
+      apiKey: "AIzaSyClQNj93cVjsbm_6XIMPxUAO3cJrr5tAmc",
+      authDomain: "vita-project-359d4.firebaseapp.com",
+      databaseURL: "https://vita-project-359d4.firebaseio.com",
+      projectId: "vita-project-359d4",
+      storageBucket: "vita-project-359d4.appspot.com",
+      messagingSenderId: "437335547655",
+      appId: "1:437335547655:web:9bc27c97c628e03a"
     };
-    firebase.initializeApp(config);
+    firebase.initializeApp(firebaseConfig);
   </script>
 
   <script src="js/helper.js"></script>
@@ -173,7 +174,7 @@
 
 
 
-<script src="js/recoverPoints.js"></script>
+  <script src="js/recoverPoints.js"></script>
 </body>
 
 </html>

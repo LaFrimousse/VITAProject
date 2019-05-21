@@ -4,6 +4,7 @@
   var ConvNet = App.ConvNet;
   var CategoriesStorage = App.CategoriesStorage;
   var CategoriesLayout = App.CategoriesLayout;
+  var RecordsButtons = App.RecordsButtons;
 
   var ConvNetLayout = (function() {
     var verbose = true;
@@ -31,10 +32,12 @@
 
       if(isInRecoMode){
         CategoriesLayout.hideGlobalWrapper();
+        RecordsButtons.hideElements();
       }else{
         if(!CategoriesStorage.isAutomaticCategoryProposal()){
           CategoriesLayout.showGlobalWrapper();
         }
+        RecordsButtons.showElements();
       }
     });
 
