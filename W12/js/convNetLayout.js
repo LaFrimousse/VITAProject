@@ -30,6 +30,19 @@
       return isInRecoMode;
     }
 
+    var displayRecoResult = function(result, forPicture){
+      console.log(forPicture)
+      result.data().then(function(arr){
+        if(isInRecoMode){
+          if(verbose){
+            console.log("ConvNetLayout: will display a recognition result ", arr);
+          }
+          //suite ici
+        }
+      });
+    }
+
+
     changeModeButton.addEventListener("click", function() {
       isInRecoMode = !isInRecoMode;
 
@@ -59,11 +72,14 @@
       ConvNet.trainUserModel();
     });
 
+    var fakeResult = [0.12454298138618469, 0.2329123467206955, 0.14344632625579834, 0.12855647504329681, 0.37054187059402466];
+
 
     return {
       isInRecoMode:getRecoMode,
       notifyGlobalModelIsReady: notifyGlobalModelIsReady,
       notifyUserModelIsReady: notifyUserModelIsReady,
+      displayRecoResult: displayRecoResult,
     }
   })();
   App.ConvNetLayout = ConvNetLayout;

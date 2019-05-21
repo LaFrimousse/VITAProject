@@ -1,0 +1,5 @@
+.leftPanel{
+  background-color: #4286f4;
+  min-width: 100px;
+  flex: 1;
+}

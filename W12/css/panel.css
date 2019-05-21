@@ -2,9 +2,3 @@
   border: 1px solid brown;
   display: flex;
 }
-
-.leftPanel{
-  background-color: #4286f4;
-  min-width: 100px;
-  flex: 1;
-}

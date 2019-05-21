@@ -127,7 +127,8 @@
           if (drawLivePoints) {
             PointsDrawing.addPointsOverVideo(points);
           }
-          console.log("send points to convnet here")
+          var convNetResult = App.ConvNet.testAPicForRecognition(points);
+          App.ConvNetLayout.displayRecoResult(convNetResult, data);
         }
       } else if (drawLivePoints) {
 
@@ -145,8 +146,6 @@
         }
         reader.readAsDataURL(data);
       }
-
-
 
     }
 

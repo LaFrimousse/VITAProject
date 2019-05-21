@@ -305,9 +305,9 @@
       return [preds, labels];
     }
 
-    var testAPicForRecognition = function(points, usingUserModel) {
+    var testAPicForRecognition = function(points) {
       var tensor = getTensorForRecoMode(points);
-      const preds = model.predict(tensor.inputs) //.argMax([-1]);
+      const preds = usedModel.predict(tensor.inputs) //.argMax([-1]);
       return preds;
     }
 
@@ -330,14 +330,10 @@
 
 
 
-
-
-
     return {
       trainUserModel: trainUserModel,
       aModelIsReady: aModelIsReady,
-      /*isRecognitionModeActivated: isRecognitionModeActivated,*/
-      /*testAPicForRecognition: testAPicForRecognition*/
+      testAPicForRecognition: testAPicForRecognition,
     }
   })();
   App.ConvNet = ConvNet;
