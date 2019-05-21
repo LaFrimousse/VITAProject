@@ -197,11 +197,29 @@
       }
     }
 
+    var get2urls = function(url, points) {
+      var promise = new Promise(function(resolve, reject) {
+        var cb1 = function(url1) {
+          var cb2 = function(url2) {
+            resolve(url1, url2);
+          }
+          addPointsInImage(url, points, cb2, false);
+        }
+        addPointsInImage(url, points, cb1, true);
+
+      }).catch(function(error) {
+        reject(error);
+      });
+      return promise;
+    }
+
+
 
     return {
       addPointsOverVideo: addPointsOverVideo,
       removePointsFromVideo: removePointsFromVideo,
       addPointsInImage: addPointsInImage,
+      get2urls: get2urls,
       refresh: refresh
     }
 

@@ -37,7 +37,6 @@
     }
 
     var willDisplayRecoResult = function(result, url1, url2) {
-      console.log(forPicture)
       result.data().then(function(arr) {
         if (isInRecoMode) {
           displayRecoResult(arr, url1, url2);

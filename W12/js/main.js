@@ -128,17 +128,13 @@
             PointsDrawing.addPointsOverVideo(points);
           }
           var convNetResult = App.ConvNet.testAPicForRecognition(points);
-            
+
+          var url = Helper.blobToUrl(data);
+            App.PointsDrawing.get2urls(url, points).then(function(url1, url2){
+              App.ConvNetLayout.displayRecoResult(convNetResult, url2, url1);
+            })
 
 
-
-
-
-
-
-
-
-          App.ConvNetLayout.displayRecoResult(convNetResult, data);
         }
       } else if (drawLivePoints) {
 
