@@ -200,7 +200,6 @@
 
 
     window.addEventListener("resize", function() {
-      console.log("Window is beeing resized");
       replaceButtonInVideoElement();
     })
 

@@ -66,8 +66,8 @@
         console.log("CategoriesStorage: just appened a picture wrapper for the category ",
           labelForIndex(newWrapper.catIndex));
       }
-      if(!automaticCategoryProposal){
-          App.CategoriesLayout.notifyNewPictureAvailable(newWrapper);
+      if (!automaticCategoryProposal) {
+        App.CategoriesLayout.notifyNewPictureAvailable(newWrapper);
       }
 
     }
@@ -79,15 +79,15 @@
     var wrappersTakenForACat = function(catIndexOrLabelName) {
       var catIndex = Number.isInteger(catIndexOrLabelName) ? catIndexOrLabelName : indexForLabel(catIndexOrLabelName);
 
-      if(verbose){
+      if (verbose) {
         console.log("CategoriesStorage: will provide all wrappers for the category with index ", catIndex)
       }
 
       return picturesWrappers.filter(wrapper => wrapper.catIndex == catIndex);
     }
 
-    var imgForId = function(imageId){
-      return  picturesWrappers.filter(wrapper => wrapper.imageId == imageId)[0];
+    var imgForId = function(imageId) {
+      return picturesWrappers.filter(wrapper => wrapper.imageId == imageId)[0];
     }
 
     var getActualCategory = function() {
@@ -103,7 +103,7 @@
     }
 
     var proposeNextCategory = function() {
-      if(categorySelector.selectedIndex == 0){
+      if (categorySelector.selectedIndex == 0) {
         //automatic suggestion
         var fromServerIndex = getCategorySuggestionFromServer();
         if (Number.isInteger(fromServerIndex)) {
@@ -112,7 +112,7 @@
           actualCategoryIndex = randomCategoryIndex();
         }
 
-      }else {
+      } else {
         //the user choosed the category to perform
         actualCategoryIndex = categorySelector.selectedIndex - 1;
       }
@@ -133,11 +133,17 @@
       automaticCategoryProposal = categorySelector.selectedIndex == 0;
 
       App.CategoriesLayout.displayCategoryTitleAndPicture(getActualCategory());
-      if(!automaticCategoryProposal){
+      if (!automaticCategoryProposal) {
         App.CategoriesLayout.showGlobalWrapper();
         App.CategoriesLayout.displayAllPictures();
-      }else{
+      } else {
         App.CategoriesLayout.hideGlobalWrapper();
+      }
+    })
+    categorySelector.addEventListener("click", function() {
+      if (categorySelector.selectedIndex == 0) {
+        proposeNextCategory();
+        App.CategoriesLayout.displayCategoryTitleAndPicture(getActualCategory())
       }
     })
 
@@ -146,15 +152,15 @@
 
     return {
       categories: categories,
-      getCatLabels:getCatLabels,
-      indexForLabel:indexForLabel,
-      labelForIndex:labelForIndex,
+      getCatLabels: getCatLabels,
+      indexForLabel: indexForLabel,
+      labelForIndex: labelForIndex,
       appendPictureWrapperToACat: appendPictureWrapperToACat,
-      deleteSomePictureFromACat:deleteSomePictureFromACat,
-      wrappersTakenForACat:wrappersTakenForACat,
-      imgForId:imgForId,
-      getActualCategory:getActualCategory,
-      proposeNextCategory:proposeNextCategory
+      deleteSomePictureFromACat: deleteSomePictureFromACat,
+      wrappersTakenForACat: wrappersTakenForACat,
+      imgForId: imgForId,
+      getActualCategory: getActualCategory,
+      proposeNextCategory: proposeNextCategory
     }
 
   })();

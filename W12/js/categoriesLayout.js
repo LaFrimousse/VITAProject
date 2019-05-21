@@ -133,7 +133,7 @@
       var url = URL.createObjectURL(wrapper.picture);
       urlToClean.push(url);
 
-      if (!seePointsCheckBox.checked || wrapper.points == null) {
+      if (!seePointsCheckBox.checked || wrapper.points == null || wrapper.points == undefined) {
         newImg.src = url
       } else {
         var callback = function(url2) {
@@ -190,7 +190,6 @@
           setOfIdToDel.add(imgId);
           item.remove();
           var inMemoryImg = CategoriesStorage.imgForId(imgId);
-          console.log(inMemoryImg);
           var imToDel = {
             catLabel: CategoriesStorage.labelForIndex(inMemoryImg.catIndex),
             userId: Device.clientId,
