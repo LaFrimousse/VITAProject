@@ -308,7 +308,7 @@
     }
 
     async function getAllImagesMetaDataForAUser(userId) {
-      var allCatNames = App.CategoriesStorage.catLabels()
+      var allCatNames = App.CategoriesStorage.getCatLabels()
       var allImagesIdsForUser = []
       var i;
       for (i = 0; i < allCatNames.length; i++) {

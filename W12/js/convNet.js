@@ -2,9 +2,10 @@
   'use strict';
   var App = window.App || {};
   var Firebase = App.Firebase;
-
+  var Device = App.Device;
   var CategoriesStorage = App.CategoriesStorage;
   var ConvNet = (function() {
+    var verbose = true;
     /*batchSize refers to the size of the data subsets that the model will see on each iteration of training. Common batch sizes tend to be in the range 32-512. There isn't really an ideal batch size for all problems and it is beyond the scope of this tutorial to describe the mathematical motivations for various batch sizes.*/
     /*Total number of training examples present in a single batch.
     As I said, you can’t pass the entire dataset into the neural net at once. So, you divide dataset into Number of Batches or sets or parts.*/
@@ -15,42 +16,26 @@
 
     const classNames = CategoriesStorage.getCatLabels()
     const NB_CATEGORIES = classNames.length;
-    var trainedOnceAlready = false;
-    var isRecognitionModeActivated = false;
-    var model = null;
+
+    var globalModel = null;
+    var userModel = null;
 
 
-    var createModelButton = document.getElementById("createModel");
-    var createModelJustWithUserPicturesButton = document.getElementById("createModelJustForThisUser");
-    var showOrHideModelButton = document.getElementById("showOrHideModelButton");
-    var goToRecoModeButton = document.getElementById("startRecognition");
-
-    var hideCreateModelButtons = function() {
-      createModelButton.classList.add("notDisplayed");
-      createModelJustWithUserPicturesButton.classList.add("notDisplayed");
-    }
-
-    var showCreateModelButtons = function() {
-      createModelButton.classList.remove("notDisplayed");
-      createModelJustWithUserPicturesButton.classList.remove("notDisplayed");
-    }
-
-
-
-    async function run(onlyThisUserData) {
-      var data = await getData(onlyThisUserData);
+    async function run(forUserModel) {
+      var data = await getData(forUserModel);
       // TODO: VERIFY SIZE OF INPUT
-      /*if(onlyThisUserData){
+      /*if(forUserModel){
         console.log(data)
         alert("verify size of data")
       }*/
 
-      // Create the model
-       model = createModel();
-      tfvis.show.modelSummary({
-        name: 'Model Summary',
-        tab: "Model Summary"
-      }, model);
+      var model = createModel();
+      if (forUserModel) {
+        tfvis.show.modelSummary({
+          name: 'Model Summary',
+          tab: "Model Summary"
+        }, model);
+      }
 
       var tensors = convertToTensors(data);
 
@@ -62,28 +47,39 @@
         test_inputs,
         test_labels
       } = tensors;
-      console.log(test_inputs)
-      await trainModel(model, training_inputs, training_labels, validation_inputs, validation_labels);
-      console.log('Done Training');
-      /*const saveResult = await model.save('localstorage://my-model-1');
-      console.log("model saved")
-      console.log(saveResult)*/
 
-      await showAccuracy(model, test_inputs, test_labels);
-      await showConfusion(model, test_inputs, test_labels);
+      if (verbose) {
+        console.log("ConvNet: just converted the downloaded inputs to tensors. (Only for this user", forUserModel, ")", test_inputs);
+      }
 
-      trainedOnceAlready = true;
-      showCreateModelButtons();
-      showOrHideModelButton.classList.remove("notDisplayed");
+      await trainModel(model, training_inputs, training_labels, validation_inputs, validation_labels, forUserModel);
+
+
+      if (verbose) {
+        console.log("ConvNet: Done training the model. (Only for this user", forUserModel, ")");
+      }
+
+      if (forUserModel) {
+        await showAccuracy(model, test_inputs, test_labels);
+        await showConfusion(model, test_inputs, test_labels);
+      }
+
+      if(forUserModel){
+        userModel = model;
+        App.ConvNetLayout.notifyUserModelIsReady()
+      }else{
+        globalModel = model;
+        App.ConvNetLayout.notifyGlobalModelIsReady()
+      }
     }
 
 
     //TODO: Flatten when we have more thant one array of points per image
-    async function getData(onlyThisUserData) {
+    async function getData(forUserModel) {
 
       var listMetaData = null;
-      if (onlyThisUserData) {
-        listMetaData = await Firebase.getAllImagesMetaDataForAUser(App.Manager.clientId);
+      if (forUserModel) {
+        listMetaData = await Firebase.getAllImagesMetaDataForAUser(Device.clientId);
       } else {
         listMetaData = await Firebase.getAllImagesMetaData();
       }
@@ -98,7 +94,12 @@
             arr[l] = 1
             return arr;
           })(),
-          coordinates: data.points[0].coordinates,
+          coordinates : (function() {
+              if(data.points == null || data.points == undefined || data.points.length == 0){
+                return null;
+              }
+            return data.points[0].coordinates
+          })(),
         }))
         .filter(data => (data.label != null && data.coordinates != null));
       return cleaned;
@@ -120,10 +121,9 @@
 
       //  model.add(tf.layers.flatten());
 
-      const NUM_OUTPUT_CLASSES = 5; //because we have 5 positions
       model.add(tf.layers.dense({
         /*Integer or Long, dimensionality of the output space.*/
-        units: NUM_OUTPUT_CLASSES,
+        units: NB_CATEGORIES,
         kernelInitializer: 'varianceScaling',
         /*because we want the outputs to sum to one in the last layer, that gives us the detection probabliities*/
         activation: 'softmax'
@@ -179,6 +179,9 @@
         const [trainingInputs, validationInputs, testInputs] = tf.split(normalizedInputs, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
         const [trainingLabels, validationLabels, testLabels] = tf.split(normalizedLabels, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
 
+
+
+
         return {
           training_inputs: trainingInputs,
           training_labels: trainingLabels,
@@ -196,7 +199,7 @@
     }
 
 
-    var getTensorForRecoMode = function(points){
+    var getTensorForRecoMode = function(points) {
       return tf.tidy(() => {
 
         // Step 2. Convert data to Tensor
@@ -217,7 +220,7 @@
 
     }
 
-    async function trainModel(model, trainingInputs, trainingLabels, validationInputs, validationLabels) {
+    async function trainModel(model, trainingInputs, trainingLabels, validationInputs, validationLabels, isUserDataOnly) {
 
       /*Here we decide which metrics we are going to monitor. We will monitor loss and accuracy on the training set as well as loss and accuracy on the validation set */
       const metrics = ['loss', 'val_loss', 'acc', 'val_acc'];
@@ -228,7 +231,7 @@
           height: '1000px'
         }
       };
-      const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
+      const fitCallbacks = isUserDataOnly ? tfvis.show.fitCallbacks(container, metrics) : null;
 
 
 
@@ -299,59 +302,28 @@
       return [preds, labels];
     }
 
-    var testAPicForRecognition = function(points){
+    var testAPicForRecognition = function(points, usingUserModel) {
       var tensor = getTensorForRecoMode(points);
-      const preds = model.predict(tensor.inputs)//.argMax([-1]);
+      const preds = model.predict(tensor.inputs) //.argMax([-1]);
       return preds;
     }
 
-    createModelButton.addEventListener("click", function() {
-      hideCreateModelButtons();
-      if (trainedOnceAlready) {
-        tfvis.visor().setActiveTab("Training")
-        if (!tfvis.visor().isOpen()) {
-          tfvis.visor().toggle()
-        }
+    var trainUserModel = function(){
+      if(userModel != null){
+        console.error("ConvNet: cannot train a user model twice in a single session")
+        return;
       }
-      run(false);
-    });
-    createModelJustWithUserPicturesButton.addEventListener("click", function() {
-      hideCreateModelButtons();
-
-      if (trainedOnceAlready) {
-        tfvis.visor().setActiveTab("Training")
-        if (!tfvis.visor().isOpen()) {
-          tfvis.visor().toggle()
-        }
-      }
-
       run(true);
-    });
-
-    showOrHideModelButton.addEventListener("click", function() {
-      tfvis.visor().toggle()
-    });
-
-    goToRecoModeButton.addEventListener("click", function() {
-      isRecognitionModeActivated = !isRecognitionModeActivated
-      var text = !isRecognitionModeActivated ? "Go to recognition mode" : "Leave recognition mode"
-      goToRecoModeButton.innerHTML = text;
-      if(isRecognitionModeActivated){
-        App.CategoriesLayout.hideElements()
-        App.RecordsButtons.hideElements()
-        App.CameraLayout.hideElement("postureImage")
-      }else{
-        App.CategoriesLayout.showElements()
-        App.RecordsButtons.showElements()
-        App.CameraLayout.showElement("postureImage")
-      }
-    });
+    }
 
 
-    //run();
+
+  //run(false);
+
     return {
-      isRecognitionModeActivated:isRecognitionModeActivated,
-      testAPicForRecognition: testAPicForRecognition
+      trainUserModel: trainUserModel,
+      /*isRecognitionModeActivated: isRecognitionModeActivated,*/
+      /*testAPicForRecognition: testAPicForRecognition*/
     }
   })();
   App.ConvNet = ConvNet;

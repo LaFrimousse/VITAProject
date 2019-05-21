@@ -7,6 +7,7 @@
 
   <link rel="stylesheet" href="css/slider.css" />
   <link rel="stylesheet" href="css/range.css" />
+  <link rel="stylesheet" href="css/topBar.css" />
   <link rel="stylesheet" href="css/panel.css" />
   <link rel="stylesheet" href="css/centerPanel.css" />
   <link rel="stylesheet" href="css/rightPanel.css" />
@@ -24,10 +25,8 @@
 <body>
 
   <div class="topBar">
-    <button type="button" id="createModel">Create Global Model</button>
-    <button type="button" id="createModelJustForThisUser">Create My Model</button>
-    <button type="button" id="showOrHideModelButton" class="notDisplayed">Show/Hide Model</button>
-    <button type="button" id="startRecognition" class="notDsisplayed">Go to recognition mode</button>
+    <button type="button" id="changeModeButton" class="notDisplayed">Recognition Mode</button>
+    <button type="button" id="createMyModel" class="notDisplayed" >Create My Model</button>
   </div>
 
 
@@ -75,7 +74,7 @@
 
           <div id="loopingWrapper">
             <input type="checkbox" name="loopingBox" id="loopingBox" />
-            <label for="loopingBox">Looping</label>
+            <label for="loopingBox">Looped</label>
           </div>
         </div>
 
@@ -156,14 +155,9 @@
   <script src="js/pointsDrawing.js"></script>
   <script src="js/categoriesLayout.js"></script>
 
-
-
-
-
   <script src="js/camera.js"></script>
   <script src="js/cameraLayout.js"></script>
   <script src="js/recordsButtons.js"></script>
-
 
   <script src="js/cameraEvents.js"></script>
   <script src="js/server.js"></script>
@@ -175,6 +169,7 @@
   <!-- Import tfjs-vis -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
   <script src="js/convNet.js"></script>
+  <script src="js/convNetLayout.js"></script>
 
 
 

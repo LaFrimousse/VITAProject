@@ -5,7 +5,6 @@
 
   var CategoriesStorage = (function() {
     var verbose = false;
-    var automaticCategoryProposal = true;
 
     var categories = [{
         "title": "Strech out your arms",
@@ -66,7 +65,7 @@
         console.log("CategoriesStorage: just appened a picture wrapper for the category ",
           labelForIndex(newWrapper.catIndex));
       }
-      if (!automaticCategoryProposal) {
+      if (!automaticCategoryProposal()) {
         App.CategoriesLayout.notifyNewPictureAvailable(newWrapper);
       }
 
@@ -130,10 +129,9 @@
 
     categorySelector.addEventListener("change", function() {
       proposeNextCategory();
-      automaticCategoryProposal = categorySelector.selectedIndex == 0;
 
       App.CategoriesLayout.displayCategoryTitleAndPicture(getActualCategory());
-      if (!automaticCategoryProposal) {
+      if (!automaticCategoryProposal()) {
         App.CategoriesLayout.showGlobalWrapper();
         App.CategoriesLayout.displayAllPictures();
       } else {
@@ -147,8 +145,14 @@
       }
     })
 
+    var  automaticCategoryProposal = function(){
+      return categorySelector.selectedIndex == 0;
+    }
+
     //categorySelector.selectedIndex = 1
     proposeNextCategory();
+
+
 
     return {
       categories: categories,
@@ -160,7 +164,8 @@
       wrappersTakenForACat: wrappersTakenForACat,
       imgForId: imgForId,
       getActualCategory: getActualCategory,
-      proposeNextCategory: proposeNextCategory
+      proposeNextCategory: proposeNextCategory,
+      isAutomaticCategoryProposal:automaticCategoryProposal,
     }
 
   })();
