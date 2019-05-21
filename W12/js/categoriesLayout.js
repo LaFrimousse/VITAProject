@@ -29,7 +29,7 @@
       if (verbose) {
         console.log("CategoriesLayout: displaying the category ", cat, "  to the user");
       }
-      var initialTitle = ""
+      var initialTitle = "Posture Recognized: "
       var initialImgSrc = "images/questionMark.jpg"
 
       if (cat != null) {

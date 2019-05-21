@@ -382,10 +382,17 @@
       manager = m;
     }
 
+    var stopTakingPictureIfDoing = function(){
+      if (isTakingPicture) {
+        stopTakingPicture();
+      }
+    }
+
     openCamera();
 
     return {
       userClickedRedButton: userClickedRedButton,
+      stopTakingPicture: stopTakingPictureIfDoing,
       setManager: setManager
     }
 

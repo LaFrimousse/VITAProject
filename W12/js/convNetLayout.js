@@ -18,7 +18,6 @@
         console.log("ConvNetLayout: get notified that the global model is ready")
       }
       changeModeButton.classList.remove("notDisplayed");
-      createMyModelButton.classList.remove("notDisplayed");
     }
 
     var notifyUserModelIsReady = function() {
@@ -27,26 +26,42 @@
       }
     }
 
+    var getRecoMode = function(){
+      return isInRecoMode;
+    }
+
     changeModeButton.addEventListener("click", function() {
       isInRecoMode = !isInRecoMode;
 
       if(isInRecoMode){
+        createMyModelButton.classList.remove("notDisplayed");
+        changeModeButton.innerHTML = "Training Mode"
         CategoriesLayout.hideGlobalWrapper();
         RecordsButtons.hideElements();
+        App.CameraEvents.stopTakingPicture();
+        CategoriesLayout.displayCategoryTitleAndPicture()
+        document.getElementById("categorySelector").classList.add("notDisplayed");
       }else{
+          changeModeButton.innerHTML = "Recognition Mode"
         if(!CategoriesStorage.isAutomaticCategoryProposal()){
           CategoriesLayout.showGlobalWrapper();
         }
+        createMyModelButton.classList.add("notDisplayed");
         RecordsButtons.showElements();
+        CategoriesLayout.displayCategoryTitleAndPicture(CategoriesStorage.getActualCategory());
+        document.getElementById("categorySelector").classList.remove("notDisplayed");
       }
     });
 
 
 
+    createMyModelButton.addEventListener("click", function() {
+      ConvNet.trainUserModel();
+    });
 
 
-    notifyGlobalModelIsReady();
     return {
+      isInRecoMode:getRecoMode,
       notifyGlobalModelIsReady: notifyGlobalModelIsReady,
       notifyUserModelIsReady: notifyUserModelIsReady,
     }

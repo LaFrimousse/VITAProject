@@ -57,16 +57,6 @@
 
     var userTookPicture = function(picture) {
 
-      /*if (false) {
-        getPointsFromPifPaf(data).then(function(points) {
-
-          var prediction = App.ConvNet.testAPicForRecognition(points);
-          console.log("The prediction is", prediction)
-          console.log("Async gives", prediction.dataSync())
-        });
-        return;
-      }*/
-
       var catLabel = CategoriesStorage.getActualCategory().label
 
       var newWrapper = {
@@ -128,6 +118,10 @@
     var systemTookPicture = function(data, drawLivePoints) {
       if (verbose) {
         console.log("Manager: The system took a picture");
+      }
+
+      if(App.ConvNetLayout.isInRecoMode && App.ConvNet.aModelIsReady()){
+        console.log("reco")
       }
 
       if (drawLivePoints) {

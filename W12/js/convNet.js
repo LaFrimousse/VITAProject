@@ -19,6 +19,7 @@
 
     var globalModel = null;
     var userModel = null;
+    var usedModel = null;
 
 
     async function run(forUserModel) {
@@ -64,11 +65,13 @@
         await showConfusion(model, test_inputs, test_labels);
       }
 
-      if(forUserModel){
+      if (forUserModel) {
         userModel = model;
+        usedModel = userModel;
         App.ConvNetLayout.notifyUserModelIsReady()
-      }else{
+      } else {
         globalModel = model;
+        usedModel = globalModel;
         App.ConvNetLayout.notifyGlobalModelIsReady()
       }
     }
@@ -94,10 +97,10 @@
             arr[l] = 1
             return arr;
           })(),
-          coordinates : (function() {
-              if(data.points == null || data.points == undefined || data.points.length == 0){
-                return null;
-              }
+          coordinates: (function() {
+            if (data.points == null || data.points == undefined || data.points.length == 0) {
+              return null;
+            }
             return data.points[0].coordinates
           })(),
         }))
@@ -308,8 +311,8 @@
       return preds;
     }
 
-    var trainUserModel = function(){
-      if(userModel != null){
+    var trainUserModel = function() {
+      if (userModel != null) {
         console.error("ConvNet: cannot train a user model twice in a single session")
         return;
       }
@@ -317,11 +320,22 @@
     }
 
 
+    var aModelIsReady = function() {
+      return usedModel != null;
+    }
 
-  //run(false);
+    window.setTimeout(function(){
+      run(false)
+    }, 2000)
+
+
+
+
+
 
     return {
       trainUserModel: trainUserModel,
+      aModelIsReady: aModelIsReady,
       /*isRecognitionModeActivated: isRecognitionModeActivated,*/
       /*testAPicForRecognition: testAPicForRecognition*/
     }
