@@ -5,7 +5,7 @@
   var Device = App.Device;
   var CategoriesStorage = App.CategoriesStorage;
   var ConvNet = (function() {
-    var verbose = true;
+    var verbose = false;
     /*batchSize refers to the size of the data subsets that the model will see on each iteration of training. Common batch sizes tend to be in the range 32-512. There isn't really an ideal batch size for all problems and it is beyond the scope of this tutorial to describe the mathematical motivations for various batch sizes.*/
     /*Total number of training examples present in a single batch.
     As I said, you can’t pass the entire dataset into the neural net at once. So, you divide dataset into Number of Batches or sets or parts.*/
@@ -306,6 +306,10 @@
     }
 
     var testAPicForRecognition = function(points) {
+      if(verbose){
+        console.log("ConvNet: was asked to perform a position recognition for the points ", points)
+      }
+
       var tensor = getTensorForRecoMode(points);
       const preds = usedModel.predict(tensor.inputs) //.argMax([-1]);
       return preds;

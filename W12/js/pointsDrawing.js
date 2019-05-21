@@ -198,7 +198,6 @@
     }
 
 
-
     return {
       addPointsOverVideo: addPointsOverVideo,
       removePointsFromVideo: removePointsFromVideo,

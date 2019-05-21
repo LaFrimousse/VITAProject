@@ -128,6 +128,16 @@
             PointsDrawing.addPointsOverVideo(points);
           }
           var convNetResult = App.ConvNet.testAPicForRecognition(points);
+            
+
+
+
+
+
+
+
+
+
           App.ConvNetLayout.displayRecoResult(convNetResult, data);
         }
       } else if (drawLivePoints) {

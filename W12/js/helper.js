@@ -43,11 +43,16 @@
         s4() + '-' + s4() + s4() + s4();
     }
 
+    var blobToUrl = function(blob){
+      return URL.createObjectURL(blob);
+    }
+
 
     return {
       setCookie: setCookie,
       getCookie: getCookie,
-      UUID: UUID
+      UUID: UUID,
+      blobToUrl:blobToUrl,
     }
   })();
   App.Helper = Helper;
