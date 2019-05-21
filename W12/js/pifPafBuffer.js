@@ -13,12 +13,15 @@
     var nbOfPendingRequest = 0;
     var nextPictureToSend = null;
     var stop = true;
+    var callback = null;
 
-    var sendPictureToPifPaf = function(picture) {
+    var sendPictureToPifPaf = function(picture, cb) {
+
       if (verbose) {
         console.log("PifPafBuffer: noticed we have a new picture to send, with actually ",
           nbOfPendingRequest, " pending request");
       }
+      callback = cb;
       stop = false;
       nextPictureToSend = picture;
       if (nbOfPendingRequest < MAX_NB_OF_PENDING_REQUEST) {
@@ -51,10 +54,8 @@
       if (verbose) {
         console.log("PifPafBuffer: received some points from the pif paf server that will be drawn ", points);
       }
-      PointsDrawing.addPointsOverVideo(points);
+      callback(points);
     }
-
-
 
 
 

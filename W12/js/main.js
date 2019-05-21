@@ -120,19 +120,34 @@
         console.log("Manager: The system took a picture");
       }
 
-      if(App.ConvNetLayout.isInRecoMode && App.ConvNet.aModelIsReady()){
-        console.log("reco")
+      var callback = null;
+
+      if (App.ConvNetLayout.isInRecoMode() && App.ConvNet.aModelIsReady()) {
+        callback = function(points) {
+          if (drawLivePoints) {
+            PointsDrawing.addPointsOverVideo(points);
+          }
+          console.log("send points to convnet here")
+        }
+      } else if (drawLivePoints) {
+
+        callback = function(points) {
+          PointsDrawing.addPointsOverVideo(points);
+        }
       }
 
-      if (drawLivePoints) {
+      if (callback != null) {
         var reader = new FileReader();
         reader.onload = function() {
           var json = {};
           json.image = reader.result;
-          PifPafBuffer.sendPictureToPifPaf(json);
+          PifPafBuffer.sendPictureToPifPaf(json, callback);
         }
         reader.readAsDataURL(data);
       }
+
+
+
     }
 
     return {
