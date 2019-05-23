@@ -116,7 +116,7 @@
       return promise;
     }
 
-    var systemTookPicture = function(data, drawLivePoints) {
+    var systemTookPicture = function(blob, drawLivePoints) {
       if (verbose) {
         console.log("Manager: The system took a picture");
       }
@@ -130,7 +130,7 @@
           }
           var convNetResult = App.ConvNet.testAPicForRecognition(points);
 
-          var url = Helper.blobToUrl(data);
+          var url = Helper.blobToUrl(blob);
             App.PointsDrawing.get2urls(url, points).then(function(url1, url2){
               App.ConvNetLayout.displayRecoResult(convNetResult, url2, url1);
             })
@@ -151,7 +151,7 @@
           json.image = reader.result;
           PifPafBuffer.sendPictureToPifPaf(json, callback);
         }
-        reader.readAsDataURL(data);
+        reader.readAsDataURL(blob);
       }
 
     }

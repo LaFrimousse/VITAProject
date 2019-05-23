@@ -70,7 +70,7 @@
       canvas.height = height
       var context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
-      if (pointsToDraw != null) {
+      if (pointsToDraw) {
         pointsToDraw.forEach(function(points) {
           drawPointsInCanvas(points.coordinates, canvas, width, height)
         });

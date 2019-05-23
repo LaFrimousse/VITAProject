@@ -30,7 +30,7 @@
     /*open the camera and ask to update the UI accordingly*/
     var openCamera = function(callback) {
 
-      if (Camera.isCameraOpen) {
+      if (Camera.isCameraOpen()) {
         if (verbose) {
           console.log("CameraEvents: Was asked to open the camera that was already open");
         }
@@ -68,7 +68,7 @@
         stopTakingPicture();
       }
 
-      if (!Camera.isCameraOpen) {
+      if (!Camera.isCameraOpen()) {
         if (verbose) {
           console.log("CameraEvents: Was asked to close the camera that was already closed");
         }
@@ -101,7 +101,7 @@
 
 
     var switchCamera = function() {
-      if (!Camera.isCameraOpen) {
+      if (!Camera.isCameraOpen()) {
         Camera.switchCamera();
       } else {
         var callback = function(success) {
@@ -192,7 +192,7 @@
 
     /*add an event listener on the openCloseCameraButton to open or close the camera*/
     closeCameraButton.addEventListener("click", function() {
-      if (Camera.isCameraOpen) {
+      if (Camera.isCameraOpen()) {
         closeCamera()
       }
     })
@@ -357,7 +357,7 @@
       } else {
         var delay = RecordsButtons.delay();
 
-        if (!Camera.isCameraOpen) {
+        if (!Camera.isCameraOpen()) {
           openCamera();
         } else {
           //check a category is selectedIndex

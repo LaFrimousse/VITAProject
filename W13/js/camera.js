@@ -63,11 +63,16 @@
       }
     }
 
+    var getCameraOpen = function(){
+      return isCameraOpen;
+    }
+
+
     /* the callback is called with a true value iff the camera was closed before the call of this function
     and will be open after the call of this function*/
     var openCamera = function(callback) {
 
-      if (this.isCameraOpen || !hasUserMedia()) {
+      if (isCameraOpen || !hasUserMedia()) {
         console.error("Camera: Cannot open the camera if it is already open or not available")
         if (typeof(callback) != "undefined") {
           callback(false)
@@ -83,7 +88,7 @@
 
       navigator.mediaDevices.getUserMedia(actualContraint).then((stream) => {
         videoElement.srcObject = stream
-        this.isCameraOpen = true
+        isCameraOpen = true
 
         if (verbose) {
           console.log("Camera: Just opened the camera")
@@ -108,7 +113,7 @@
     /* the callback is called with a true value iff the camera was open before the call of this function and will be closed after the call of this function*/
     var closeCamera = function(callback) {
 
-      if (!this.isCameraOpen) {
+      if (!isCameraOpen) {
         if (typeof(callback) != "undefined") {
           callback(false)
         }
@@ -131,7 +136,7 @@
       });
 
       videoElement.srcObject = null;
-      this.isCameraOpen = false
+      isCameraOpen = false
 
       if (verbose) {
         console.log("Camera: Just closed the camera")
@@ -146,8 +151,16 @@
     }
 
     var takePictureAsBlob = function(callback) {
-      //cannot take picture if camera is closed
-      if (!this.isCameraOpen || actuallyOpeningOrClosing) {
+      takePicture(callback);
+    }
+
+    var takePictureAsURL = function() {
+      return takePicture();
+    }
+
+    var takePicture = function(callback) {
+      /*Takes a picture. Return synchronously an URL. If the callback is not null, then it turns the picture into a blob and call the callback with the blob later*/
+      if (!isCameraOpen || actuallyOpeningOrClosing) {
         console.error("Camera: Cannot take a picture if the camera is closed or beeing open or closed")
         return null
       }
@@ -160,19 +173,18 @@
       canvas.height = height;
       context.drawImage(videoElement, 0, 0, width, height)
 
-      //full quality
-      var data = canvas.toDataURL('image/jpeg', 1.0)
-
       if (verbose) {
         console.log("Camera: Took a picture, rendered it in a canvas of size" + width +
           " (width) X " + height + " (height)")
       }
 
-      canvas.toBlob(function(blob) {
-        if (callback) {
+      if (callback) {
+        canvas.toBlob(function(blob) {
           callback(blob);
-        }
-      });
+        });
+      }
+
+      return canvas.toDataURL('image/jpeg', 1.0)
     }
 
     var switchCamera = function() {
@@ -193,8 +205,10 @@
     return {
       open: openCamera,
       close: closeCamera,
-      isCameraOpen: isCameraOpen,
+      isCameraOpen: getCameraOpen,
+      takePicture:takePicture,
       takePictureAsBlob: takePictureAsBlob,
+      takePictureAsURL: takePictureAsURL,
       switchCamera: switchCamera,
       isUsingBackCamera: isUsingBackCamera
     }

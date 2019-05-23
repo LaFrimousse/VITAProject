@@ -106,6 +106,7 @@
 .cameraRecordButtons {
   width: 100%;
   border: 1px solid black;
+  /*box-sizing: border-box;*/
   background-color: rgb(105, 109, 106);
   height: 80px;
   display: flex;
@@ -114,6 +115,7 @@
   overflow: hidden;
   position: absolute;
   bottom: 0px;
+  right: 0px;
   justify-content: space-between;
 }
 
