@@ -11,7 +11,7 @@
       d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
       var expires = "expires=" + d.toUTCString();
       document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-      if(verbose){
+      if (verbose) {
         console.log("Helper: just setted a cookie");
       }
     }
@@ -43,8 +43,24 @@
         s4() + '-' + s4() + s4() + s4();
     }
 
-    var blobToUrl = function(blob){
-      return URL.createObjectURL(blob);
+    var blobToUrl = function(blob) {
+      var promise = new Promise(function(resolve, reject) {
+
+        var reader = new FileReader();
+
+        reader.onload = function() {
+          resolve(reader.result);
+        }
+
+        reader.onerror = function(err) {
+          reader.abort();
+          reject(err);
+        }
+
+        reader.readAsDataURL(blob);
+
+      });
+      return promise;
     }
 
 
@@ -52,7 +68,7 @@
       setCookie: setCookie,
       getCookie: getCookie,
       UUID: UUID,
-      blobToUrl:blobToUrl,
+      blobToUrl: blobToUrl,
     }
   })();
   App.Helper = Helper;

@@ -116,15 +116,34 @@
       return promise;
     }
 
-    var systemTookPicture = function(blob, drawLivePoints) {
+    var systemTookPicture = function(url, shouldDrawLivePoints) {
+
       if (verbose) {
         console.log("Manager: The system took a picture");
       }
 
+      var shouldShowAReco = App.ConvNetLayout.isInRecoMode() && App.ConvNet.aModelIsReady();
+
+      if (shouldShowAReco || shouldDrawLivePoints) {
+        //then in any case we need to compute the points
+
+        var callback = function(points) {
+          if (shouldDrawLivePoints) {
+            PointsDrawing.addPointsOverVideo(points);
+          }
+
+        }
+
+        var json = {image: url}
+         PifPafBuffer.sendPictureToPifPaf(json, callback);
+
+      }
+      return;
+
 
       var callback = null;
 
-      if (App.ConvNetLayout.isInRecoMode() && App.ConvNet.aModelIsReady()) {
+      if (false) {
         callback = function(points) {
           if (drawLivePoints) {
             PointsDrawing.addPointsOverVideo(points);
@@ -132,13 +151,13 @@
           var convNetResult = App.ConvNet.testAPicForRecognition(points);
 
           var url = Helper.blobToUrl(blob);
-            App.PointsDrawing.get2urls(url, points).then(function(url1, url2){
-              App.ConvNetLayout.displayRecoResult(convNetResult, url2, url1);
-            })
+          App.PointsDrawing.get2urls(url, points).then(function(url1, url2) {
+            App.ConvNetLayout.displayRecoResult(convNetResult, url2, url1);
+          })
 
 
         }
-      } else if (drawLivePoints) {
+      } else if (shouldDrawLivePoints) {
 
         callback = function(points) {
           PointsDrawing.addPointsOverVideo(points);
