@@ -13,9 +13,6 @@
   var PointsDrawing = App.PointsDrawing;
   var PifPafBuffer = App.PifPafBuffer;
 
-  /*var CategoriesManager = App.CategoriesManager;
-  var Server = App.Server;
-  var PointsDrawing = App.PointsDrawing;*/
 
   var Manager = (function() {
     var verbose = false;
@@ -132,48 +129,18 @@
             PointsDrawing.addPointsOverVideo(points);
           }
 
-        }
-
-        var json = {image: url}
-         PifPafBuffer.sendPictureToPifPaf(json, callback);
-
-      }
-      return;
-
-
-      var callback = null;
-
-      if (false) {
-        callback = function(points) {
-          if (drawLivePoints) {
-            PointsDrawing.addPointsOverVideo(points);
+          if (shouldShowAReco) {
+            var convNetResult = App.ConvNet.testAPicForRecognition(points);
+            //App.ConvNetLayout.displayRecoResult(convNetResult, url2, url1);
           }
-          var convNetResult = App.ConvNet.testAPicForRecognition(points);
-
-          var url = Helper.blobToUrl(blob);
-          App.PointsDrawing.get2urls(url, points).then(function(url1, url2) {
-            App.ConvNetLayout.displayRecoResult(convNetResult, url2, url1);
-          })
-
-
         }
-      } else if (shouldDrawLivePoints) {
 
-        callback = function(points) {
-          PointsDrawing.addPointsOverVideo(points);
+        var json = {
+          image: url
         }
+        PifPafBuffer.sendPictureToPifPaf(json, callback);
+
       }
-
-      if (callback != null) {
-        var reader = new FileReader();
-        reader.onload = function() {
-          var json = {};
-          json.image = reader.result;
-          PifPafBuffer.sendPictureToPifPaf(json, callback);
-        }
-        reader.readAsDataURL(blob);
-      }
-
     }
 
     return {
