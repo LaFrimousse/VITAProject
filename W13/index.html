@@ -35,14 +35,8 @@
 
   <div class="globalPanel">
     <div class="leftPanel">
-      <div class="twoPicturesWrappers">
-        <img id="firstPictureReco" src="images/mirror.png">
-        <img id="secondPictureReco" src="images/mirror.png">
-      </div>
-      <p class="probaTitle">Probablilities:</p>
-      <div class="probabilitiesDisplayer" id = "probabilitiesDisplayer" >
-
-      </div>
+      <img id="firstPictureReco" class="notDisplayed" src="images/mirror.png">
+      <img id="secondPictureReco" class="notDisplayed" src="images/mirror.png">
 
     </div>
     <div class="centerPanel">
@@ -104,6 +98,9 @@
       <select name="categoryChoosen" id="categorySelector">
         <option> -- Automatic Selection-- </option>
       </select>
+
+      <p class="probaTitle notDisplayed" id = "probaTitle">Probablilities:</p>
+      <div class="probabilitiesDisplayer notDisplayed" id="probabilitiesDisplayer"></div>
 
       <!--End of rightPanel-->
     </div>

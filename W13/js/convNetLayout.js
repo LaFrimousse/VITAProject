@@ -4,6 +4,7 @@
   var ConvNet = App.ConvNet;
   var CategoriesStorage = App.CategoriesStorage;
   var CategoriesLayout = App.CategoriesLayout;
+  var CameraLayout = App.CameraLayout;
   var RecordsButtons = App.RecordsButtons;
   var Helper = App.Helper;
 
@@ -92,8 +93,13 @@
         CategoriesLayout.hideGlobalWrapper();
         RecordsButtons.hideElements();
         App.CameraEvents.stopTakingPicture();
+        CameraLayout.hideElement("closeCameraButton");
         CategoriesLayout.displayCategoryTitleAndPicture()
         document.getElementById("categorySelector").classList.add("notDisplayed");
+        document.getElementById("probabilitiesDisplayer").classList.remove("notDisplayed");
+        document.getElementById("probaTitle").classList.remove("notDisplayed");
+        document.getElementById("firstPictureReco").classList.remove("notDisplayed");
+        document.getElementById("secondPictureReco").classList.remove("notDisplayed");
       } else {
         changeModeButton.innerHTML = "Recognition Mode"
         if (!CategoriesStorage.isAutomaticCategoryProposal()) {
@@ -103,7 +109,14 @@
         RecordsButtons.showElements();
         CategoriesLayout.displayCategoryTitleAndPicture(CategoriesStorage.getActualCategory());
         document.getElementById("categorySelector").classList.remove("notDisplayed");
+        document.getElementById("probabilitiesDisplayer").classList.add("notDisplayed");
+        document.getElementById("probaTitle").classList.add("notDisplayed");
+        document.getElementById("firstPictureReco").classList.add("notDisplayed");
+        document.getElementById("secondPictureReco").classList.add("notDisplayed");
+
+
       }
+      CameraLayout.replaceButtonInVideoElement();
     });
 
 
@@ -115,6 +128,10 @@
     var fakeResult = [0.12454298138618469, 0.2329123467206955, 0.14344632625579834, 0.12855647504329681, 0.37054187059402466];
 
     displayRecoResult(fakeResult, null);
+    notifyGlobalModelIsReady();
+    window.setTimeout(function(){
+      changeModeButton.click();
+    }, 500)
 
 
     return {

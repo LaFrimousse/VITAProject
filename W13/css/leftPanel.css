@@ -4,37 +4,18 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.twoPicturesWrappers {
-  background-color: gray;
-  flex: 1;
-  display: flex;
   justify-content: space-around;
   align-items: center;
 }
 
-.twoPicturesWrappers img{
+
+
+.leftPanel img{
   display: block;
-  max-width: 45%;
-  background-color: red;
+  max-width: 100%;
+  background-color: #00c6c9;
 }
 
-.leftPanel .probaTitle{
-  text-align: center;
-  font-size: large;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.probabilitiesDisplayer{
-  flex: 1;
-  background: white;
-  min-width: 100px;
-  min-height: 100px;
-}
-
-.probabilitiesDisplayer p{
-  margin-left: 5px;
-  margin-right: 5px;
+.leftPanel .notDisplayed{
+  display: none;
 }

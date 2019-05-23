@@ -329,6 +329,7 @@
     }
 
     window.setTimeout(function(){
+      return;
       run(false)
     }, 2000)
 
