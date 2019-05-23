@@ -1,0 +1,88 @@
+#titleCameraButtonWrapper {
+  border: 1px solid black;
+  padding: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+#postureToAdaptTitle {
+  font-size: large;
+  text-align: center;
+  margin: 0px;
+  font-family: Arial, Comic Sans MS, serif;
+  border-bottom: 1px solid black;
+  background-color: rgb(253, 255, 193);
+}
+
+
+
+
+
+
+
+/*The element used to draw some points on top of the live video*/
+#canvasForLivePoints {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+
+  /*background-color: blue;
+  opacity: 0.4*/
+}
+
+
+
+
+
+
+
+
+
+
+
+#postureToAdoptImg {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  max-width: 50px;
+}
+
+
+
+.redCounter {
+  color: red;
+}
+
+/*--------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+@media all and (min-width: 768px) {
+  #videoElement{
+    max-height: 80vh;
+  }
+
+  #delaySlider {
+    margin-bottom: 15px;
+    margin-top: 0px;
+  }
+
+  #takePictureButton {
+    margin-top: 5px;
+  }
+  #postureToAdaptTitle{
+    font-size: xx-large;
+  }
+
+}

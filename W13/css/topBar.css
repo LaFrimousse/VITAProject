@@ -1,0 +1,12 @@
+.topBar{
+  border: 1px solid black;
+  min-height: 50px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row-reverse;
+  background-color: #cfcfd1;
+}
+
+.topBar button{
+  margin: 5px;
+}

@@ -1,0 +1,55 @@
+.pictureAndButtonsWrapper {
+  margin-top: 5px;
+  border: 1px solid black;
+  padding: 5px;
+  background-color: rgb(105, 109, 106);
+}
+
+.pictureAndButtonsWrapper .controlBar{
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.checkBoxWrappers{
+  right: 10px;
+  display: inline-block;
+  margin: 3px;
+  margin-right: 20px;
+}
+
+.checkBoxWrappers * {
+  margin: 3px;
+}
+
+.deletePicture {
+  margin: auto;
+  margin-top: 10px;
+  padding: 20px;
+  background-color: rgb(244, 69, 66);
+  border-radius: 3px;
+  border: 1px solid rgb(224, 49, 46);
+}
+
+.picturesWrapper {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 3px;
+}
+
+.picturesWrapper img {
+  display: block;
+  padding: 3px;
+  margin-bottom: 3px;
+  background-color: black;
+  box-sizing: border-box;
+  max-width: 24.8%;
+  height: auto;
+}
+
+.picturesWrapper .selected {
+  background-color: red;
+}

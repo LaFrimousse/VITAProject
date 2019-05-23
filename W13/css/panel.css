@@ -1,0 +1,4 @@
+.globalPanel {
+  border: 1px solid brown;
+  display: flex;
+}
