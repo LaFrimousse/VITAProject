@@ -206,7 +206,6 @@
       open: openCamera,
       close: closeCamera,
       isCameraOpen: getCameraOpen,
-      takePicture:takePicture,
       takePictureAsBlob: takePictureAsBlob,
       takePictureAsURL: takePictureAsURL,
       switchCamera: switchCamera,

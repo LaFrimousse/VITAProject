@@ -152,7 +152,7 @@
         console.log("CameraEvents: noticed that the camera just opened");
       }
       systemPictureInterval = window.setInterval(function() {
-        takeInstantPicture(false)
+        takeInstantPicture(false, true)
       }, systemPictureIntervalTime);
 
     }
@@ -223,28 +223,26 @@
 
 
 
-    var takeInstantPicture = function(userAction) {
-      var systemCallBack = function(data) {
+    var takeInstantPicture = function(animationWanted, urlWanted) {
+
+      if(animationWanted){
+        //user took a picture
+        var userCallBack = function(data) {
+          if (manager) {
+            manager.userTookPicture(data);
+          }
+          CameraLayout.animePictureTaken();
+        }
+        Camera.takePictureAsBlob(userCallBack);
+
+      }else{
+        //system took a picture
         if (manager) {
-          manager.systemTookPicture(data, livePointsWanted);
+          manager.systemTookPicture(Camera.takePictureAsURL(), livePointsWanted);
         }
       }
 
-      var userCallBack = function(data) {
-        if (manager) {
-          manager.userTookPicture(data);
-        }
-      }
 
-      var callback = userAction ? userCallBack : systemCallBack;
-      //var data = Camera.takePicture();
-
-      if (userAction) {
-        CameraLayout.animePictureTaken();
-      }
-      Camera.takePictureAsBlob(callback);
-
-      //callback(data);
     }
 
 
@@ -261,7 +259,7 @@
       CameraLayout.updateCounter(remainingTime / 1000);
 
       if (remainingTime <= 0) {
-        takeInstantPicture(true);
+        takeInstantPicture(true, false);
 
         if (RecordsButtons.isLooping()) {
           var nextDelay = RecordsButtons.delay();
@@ -369,7 +367,7 @@
           if (delay > 0) {
             startTakingPicture();
           } else {
-            takeInstantPicture(true);
+            takeInstantPicture(true, false);
           }
         }
       }

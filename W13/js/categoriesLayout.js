@@ -80,11 +80,14 @@
     }
 
     var notifyNewPictureAvailable = function(pictWrapper) {
-      if (verbose) {
-        console.log("CategoriesLayout: notified we have a new  picture wrapper available ", pictWrapper);
-      }
 
       var actualCat = CategoriesStorage.getActualCategory();
+
+      if (verbose) {
+        console.log("CategoriesLayout: notified we have a new  picture wrapper available ", pictWrapper,
+      "while the actual category displayed is ",actualCat);
+      }
+
       var actualCatIndex = CategoriesStorage.indexForLabel(actualCat.label)
       if(actualCatIndex == pictWrapper.catIndex){
         addAPhotoToPicturesTaken(pictWrapper);
@@ -128,6 +131,7 @@
     }
 
     var addAPhotoToPicturesTaken = function(wrapper) {
+      show(picturesWrapper);
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
       newImg.setAttribute("data-image_id", wrapper.imageId);
       var url = URL.createObjectURL(wrapper.picture);
