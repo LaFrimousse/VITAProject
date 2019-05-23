@@ -116,7 +116,7 @@
       return promise;
     }
 
-    var systemTookPicture = function(url, drawLivePoints) {
+    var systemTookPicture = function(blob, drawLivePoints) {
       if (verbose) {
         console.log("Manager: The system took a picture");
       }

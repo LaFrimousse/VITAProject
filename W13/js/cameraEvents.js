@@ -237,9 +237,12 @@
 
       }else{
         //system took a picture
-        if (manager) {
-          manager.systemTookPicture(Camera.takePictureAsURL(), livePointsWanted);
+        var systemCallBack = function(data) {
+          if (manager) {
+            manager.systemTookPicture(data,livePointsWanted);
+          }
         }
+        Camera.takePictureAsBlob(systemCallBack);
       }
 
 
