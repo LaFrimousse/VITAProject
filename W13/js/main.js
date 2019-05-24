@@ -19,6 +19,7 @@
     var drawLivePoints = false;
 
     (function() {
+      return;
       //load from firebase the picture the user took in previous session
       var allCat = CategoriesStorage.categories
       allCat.forEach(function(cat) {
@@ -113,7 +114,7 @@
     }
 
     var systemTookPicture = function(url, shouldDrawLivePoints) {
-
+        return;
       if (verbose) {
         console.log("Manager: The system took a picture");
       }
@@ -128,18 +129,25 @@
             PointsDrawing.addPointsOverVideo(points);
           }
 
-          PointsDrawing.addPointsInImage(url, points, true).then(function(url1){
-            PointsDrawing.addPointsInImage(url, points, false).then(function(url2){
-              App.ConvNetLayout.displayRecoResult(null, url1, url2);
+          if (shouldShowAReco) {
+            //TODO: DELETE ME
+            PointsDrawing.addPointsInImage(url, points, true).then(function(url1){
+              PointsDrawing.addPointsInImage(url, points, false).then(function(url2){
+                App.ConvNetLayout.displayRecoResult(null, url1, url2);
+              })
             })
+          }
 
-          })
 
 
 
           if (shouldShowAReco) {
             var convNetResult = App.ConvNet.testAPicForRecognition(points);
-            //App.ConvNetLayout.displayRecoResult(convNetResult, url2, url1);
+            PointsDrawing.addPointsInImage(url, points, true).then(function(url1){
+              PointsDrawing.addPointsInImage(url, points, false).then(function(url2){
+                App.ConvNetLayout.displayRecoResult(convNetResult, url1, url2);
+              })
+            })
           }
         }
 

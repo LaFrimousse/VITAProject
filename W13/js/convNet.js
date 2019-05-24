@@ -5,7 +5,7 @@
   var Device = App.Device;
   var CategoriesStorage = App.CategoriesStorage;
   var ConvNet = (function() {
-    var verbose = false;
+    var verbose = true;
     /*batchSize refers to the size of the data subsets that the model will see on each iteration of training. Common batch sizes tend to be in the range 32-512. There isn't really an ideal batch size for all problems and it is beyond the scope of this tutorial to describe the mathematical motivations for various batch sizes.*/
     /*Total number of training examples present in a single batch.
     As I said, you can’t pass the entire dataset into the neural net at once. So, you divide dataset into Number of Batches or sets or parts.*/
@@ -39,7 +39,12 @@
         }, model);
       }
 
-      var tensors = convertToTensors(data);
+      var tensors = null;
+      if (forUserModel) {
+        tensors = convertToTensors(data);
+      } else {
+        tensors = convertToTensorsForGlobalModel(data);
+      }
 
       var {
         training_inputs,
@@ -146,6 +151,100 @@
       return model;
     }
 
+
+    function convertToTensorsForGlobalModel(data) {
+      var TRAINING_DATASET_RATIO = 0.7;
+      //no test set here.
+
+      if (verbose) {
+        console.log("ConvNet: will convert to tensor a data of size", data.length)
+      }
+
+      var dataPerCat = {}
+
+      //split the original data into a dictionary: each entry is a category
+      classNames.forEach(function(cat, index) {
+        dataPerCat[cat] = data.filter(dt => dt.label[index] == 1)
+      })
+
+
+      //find the category for the one we have the less data
+      var minNumberOfData = dataPerCat[classNames[0]].length;
+      classNames.forEach(function(cat) {
+        if (dataPerCat[cat].length < minNumberOfData) {
+          minNumberOfData = dataPerCat[cat].length
+        }
+        //and suffle each entry of the dictionary
+        tf.util.shuffle(dataPerCat[cat]);
+      })
+
+      if (verbose) {
+        console.log("ConvNet: all the available metadata was separtated into", dataPerCat, " the min size is ", minNumberOfData)
+      }
+
+      //discard some data points for the categories that have more data than the minimum one
+      var discarded = dataPerCat;
+      classNames.forEach(function(cat) {
+        discarded[cat] = discarded[cat].slice(0, minNumberOfData)
+      })
+
+      if (verbose) {
+        console.log("ConvNet: reduced the size of the input data to have a balanced set between classes ", discarded)
+      }
+
+      /*compute the effective number of training sample and validation sample based on the ratio declared at the begining of this function*/
+      var NUM_TRAIN_ELEMENTS = minNumberOfData * TRAINING_DATASET_RATIO;
+      var NUM_VALIDATION_ELEMENTS = minNumberOfData - NUM_TRAIN_ELEMENTS;
+
+      //preparte 2 arrays in the one the dictionary will be distributed
+      var trainingDatas = [];
+      var validationDatas = [];
+
+      classNames.forEach(function(cat) {
+        //for each category, split the entries of the dico in the 2 above arrays
+        var inputPart = discarded[cat].slice(0, NUM_TRAIN_ELEMENTS)
+        var validPart = discarded[cat].slice(NUM_TRAIN_ELEMENTS, minNumberOfData)
+        trainingDatas.push(inputPart);
+        validationDatas.push(validPart);
+      });
+
+      trainingDatas = trainingDatas.flat();
+      validationDatas = validationDatas.flat();
+
+      tf.util.shuffle(trainingDatas);
+      tf.util.shuffle(validationDatas);
+
+      return tf.tidy(() => {
+
+        var testData = trainingDatas.map(d => d.coordinates.flat());
+        var testLabel = trainingDatas.map(d => d.label);
+        var validData = validationDatas.map(d => d.coordinates.flat());
+        var validLabel = validationDatas.map(d => d.label);
+
+        var trainingInputs = tf.tensor2d(testData, [testData.length, 3 * 17]);
+        var trainingLabels = tf.tensor2d(testLabel, [testLabel.length, NB_CATEGORIES]);
+        var validationInputs = tf.tensor2d(validData, [validData.length, 3 * 17]);
+        var validationLabels = tf.tensor2d(validLabel, [validLabel.length, NB_CATEGORIES]);
+        //Step 3. Normalize the data to the range 0 - 1 using min-max scaling
+        //const inputMax = inputTensor.max();
+        //const inputMin = inputTensor.min();
+
+        /*const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
+
+        const [trainingInputs, validationInputs, testInputs] = tf.split(normalizedInputs, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
+        const [trainingLabels, validationLabels, testLabels] = tf.split(normalizedLabels, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);*/
+
+        return {
+          training_inputs: trainingInputs,
+          training_labels: trainingLabels,
+          validation_inputs: validationInputs,
+          validation_labels: validationLabels,
+        }
+      });
+    }
+
+
+
     function convertToTensors(data) {
       var TRAINING_DATASET_RATIO = 0.7;
       var VALIDATION_DATASET_RATIO = 0.2;
@@ -155,6 +254,8 @@
       var NUM_TRAIN_ELEMENTS = Math.floor(TRAINING_DATASET_RATIO * NUM_DATASET_ELEMENTS);
       var NUM_VALIDATION_ELEMENTS = Math.floor(VALIDATION_DATASET_RATIO * NUM_DATASET_ELEMENTS);
       var NUM_TEST_ELEMENTS = NUM_DATASET_ELEMENTS - NUM_TRAIN_ELEMENTS - NUM_VALIDATION_ELEMENTS;
+
+
 
 
 
@@ -174,14 +275,14 @@
         //Step 3. Normalize the data to the range 0 - 1 using min-max scaling
         const inputMax = inputTensor.max();
         const inputMin = inputTensor.min();
-        const labelMax = labelTensor.max();
-        const labelMin = labelTensor.min();
+        //const labelMax = labelTensor.max();
+        //const labelMin = labelTensor.min();
 
         const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
-        const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
+        //const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
 
         const [trainingInputs, validationInputs, testInputs] = tf.split(normalizedInputs, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
-        const [trainingLabels, validationLabels, testLabels] = tf.split(normalizedLabels, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
+        const [trainingLabels, validationLabels, testLabels] = tf.split(labelTensor, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
 
 
 
@@ -194,10 +295,10 @@
           test_inputs: testInputs,
           test_labels: testLabels,
           // Return the min/max bounds so we can use them later.
-          inputMax,
+          /*inputMax,
           inputMin,
           labelMax,
-          labelMin,
+          labelMin,*/
         }
       });
     }
@@ -307,7 +408,7 @@
     }
 
     var testAPicForRecognition = function(points) {
-      if(verbose){
+      if (verbose) {
         console.log("ConvNet: was asked to perform a position recognition for the points ", points)
       }
 
@@ -330,19 +431,18 @@
       return usedModel != null;
     }
 
-    var isUserModelAlreadyTrained = function(){
+    var isUserModelAlreadyTrained = function() {
       return !userModelStillNotTrained;
     }
 
-    window.setTimeout(function(){
-      return;
+    window.setTimeout(function() {
       run(false)
-    }, 2000)
+    }, 500)
 
 
 
     return {
-      isUserModelAlreadyTrained : isUserModelAlreadyTrained,
+      isUserModelAlreadyTrained: isUserModelAlreadyTrained,
       trainUserModel: trainUserModel,
       aModelIsReady: aModelIsReady,
       testAPicForRecognition: testAPicForRecognition,
