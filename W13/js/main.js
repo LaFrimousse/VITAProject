@@ -54,6 +54,7 @@
 
 
     var userTookPicture = function(picture) {
+      return;
 
       var catLabel = CategoriesStorage.getActualCategory().label
 
@@ -114,7 +115,7 @@
     }
 
     var systemTookPicture = function(url, shouldDrawLivePoints) {
-        return;
+
       if (verbose) {
         console.log("Manager: The system took a picture");
       }
