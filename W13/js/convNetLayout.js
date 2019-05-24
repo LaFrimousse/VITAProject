@@ -38,11 +38,18 @@
     }
 
     var willDisplayRecoResult = function(result, url1, url2) {
-      result.data().then(function(arr) {
-        if (isInRecoMode) {
-          displayRecoResult(arr, url1, url2);
-        }
-      });
+      if(result){
+        result.data().then(function(arr) {
+          if (isInRecoMode) {
+            displayRecoResult(arr, url1, url2);
+          }
+        });
+      }else{
+        var len = App.CategoriesStorage.categories.length;
+        var arr = new Array(len).fill(0);
+        displayRecoResult(arr, url1, url2);
+      }
+
     }
 
     var displayRecoResult = function(result, url1, url2) {
@@ -130,7 +137,7 @@
     displayRecoResult(fakeResult, null);
     notifyGlobalModelIsReady();
     window.setTimeout(function(){
-      //changeModeButton.click();
+      changeModeButton.click();
     }, 500)
 
 

@@ -171,55 +171,42 @@
       }
     }
 
-    var addPointsInImage = function(imageURL, points, callback, pictureWanted) {
-      var context = canvasUsedToAddPointsInPictures.getContext('2d');
-      context.clearRect(0, 0, canvasUsedToAddPointsInPictures.width, canvasUsedToAddPointsInPictures.height)
-
-      var img = new Image();
-      img.src = imageURL;
-      img.onload = function() {
-        var imgWidth = points[0].width_height[0];
-        var imgHeight = points[0].width_height[1];
-        imgWidth = img.naturalWidth;
-        imgHeight = img.naturalHeight;
-        canvasUsedToAddPointsInPictures.width = imgWidth;
-        canvasUsedToAddPointsInPictures.height = imgHeight;
-        if (pictureWanted) {
-          context.drawImage(img, 0, 0)
-        }
-        points.forEach(function(pts) {
-          drawPointsInCanvas(pts.coordinates, canvasUsedToAddPointsInPictures, imgWidth, imgHeight);
-        });
-
-        if (typeof(callback) != "undefined") {
-          callback(canvasUsedToAddPointsInPictures.toDataURL('image/jpeg', 1.0))
-        }
-      }
-    }
-
-    var get2urls = function(url, points) {
+    var addPointsInImage = function(imageURL, points, pictureWanted) {
       var promise = new Promise(function(resolve, reject) {
-        var cb1 = function(url1) {
-          var cb2 = function(url2) {
-            resolve(url1, url2);
-          }
-          addPointsInImage(url, points, cb2, false);
-        }
-        addPointsInImage(url, points, cb1, true);
 
-      }).catch(function(error) {
-        reject(error);
+        var context = canvasUsedToAddPointsInPictures.getContext('2d');
+        context.clearRect(0, 0, canvasUsedToAddPointsInPictures.width, canvasUsedToAddPointsInPictures.height)
+
+        var img = new Image();
+        img.src = imageURL;
+        img.onload = function() {
+          var imgWidth = points[0].width_height[0];
+          var imgHeight = points[0].width_height[1];
+          imgWidth = img.naturalWidth;
+          imgHeight = img.naturalHeight;
+          canvasUsedToAddPointsInPictures.width = imgWidth;
+          canvasUsedToAddPointsInPictures.height = imgHeight;
+          if (pictureWanted) {
+            context.drawImage(img, 0, 0)
+          }
+          points.forEach(function(pts) {
+            drawPointsInCanvas(pts.coordinates, canvasUsedToAddPointsInPictures, imgWidth, imgHeight);
+          });
+
+          resolve(canvasUsedToAddPointsInPictures.toDataURL('image/jpeg', 1.0));
+        }
+
       });
       return promise;
-    }
 
+
+    }
 
 
     return {
       addPointsOverVideo: addPointsOverVideo,
       removePointsFromVideo: removePointsFromVideo,
       addPointsInImage: addPointsInImage,
-      get2urls: get2urls,
       refresh: refresh
     }
 

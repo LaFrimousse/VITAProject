@@ -144,7 +144,9 @@
          newImg.src = url2;
          urlToClean.push(url2);
         }
-        PointsDrawing.addPointsInImage(url, wrapper.points, callback, seePicturesCheckBox.checked);
+        PointsDrawing.addPointsInImage(url, wrapper.points, seePicturesCheckBox.checked).then(function(url){
+          callback(url);
+        });
       }
 
       picturesWrapper.appendChild(newImg)

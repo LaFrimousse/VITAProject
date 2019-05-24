@@ -129,6 +129,12 @@
             PointsDrawing.addPointsOverVideo(points);
           }
 
+          PointsDrawing.addPointsInImage(url, points, true).then(function(url1){
+            App.ConvNetLayout.displayRecoResult(null, url, url1);
+          })
+
+
+
           if (shouldShowAReco) {
             var convNetResult = App.ConvNet.testAPicForRecognition(points);
             //App.ConvNetLayout.displayRecoResult(convNetResult, url2, url1);
