@@ -143,7 +143,7 @@
     displayRecoResult(fakeResult, null);
     notifyGlobalModelIsReady();
     window.setTimeout(function(){
-      changeModeButton.click();
+      //changeModeButton.click();
     }, 500)
 
 
