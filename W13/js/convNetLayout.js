@@ -129,7 +129,13 @@
 
 
     createMyModelButton.addEventListener("click", function() {
-      ConvNet.trainUserModel();
+      if(!ConvNet.isUserModelAlreadyTrained()){
+        ConvNet.trainUserModel();
+        createMyModelButton.innerHTML = "hide/show model"
+      }else{
+        tfvis.visor().toggle();
+      }
+
     });
 
     var fakeResult = [0.12454298138618469, 0.2329123467206955, 0.14344632625579834, 0.12855647504329681, 0.37054187059402466];

@@ -20,6 +20,7 @@
     var globalModel = null;
     var userModel = null;
     var usedModel = null;
+    var userModelStillNotTrained = true;
 
 
     async function run(forUserModel) {
@@ -316,16 +317,21 @@
     }
 
     var trainUserModel = function() {
-      if (userModel != null) {
+      if (!userModelStillNotTrained) {
         console.error("ConvNet: cannot train a user model twice in a single session")
         return;
       }
+      userModelStillNotTrained = false;
       run(true);
     }
 
 
     var aModelIsReady = function() {
       return usedModel != null;
+    }
+
+    var isUserModelAlreadyTrained = function(){
+      return !userModelStillNotTrained;
     }
 
     window.setTimeout(function(){
@@ -336,6 +342,7 @@
 
 
     return {
+      isUserModelAlreadyTrained : isUserModelAlreadyTrained,
       trainUserModel: trainUserModel,
       aModelIsReady: aModelIsReady,
       testAPicForRecognition: testAPicForRecognition,

@@ -130,7 +130,10 @@
           }
 
           PointsDrawing.addPointsInImage(url, points, true).then(function(url1){
-            App.ConvNetLayout.displayRecoResult(null, url, url1);
+            PointsDrawing.addPointsInImage(url, points, false).then(function(url2){
+              App.ConvNetLayout.displayRecoResult(null, url1, url2);
+            })
+
           })
 
 
