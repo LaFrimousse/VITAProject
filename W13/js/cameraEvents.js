@@ -28,7 +28,7 @@
 
 
     /*open the camera and ask to update the UI accordingly*/
-    var openCamera = function(callback) {
+    var openCamera = function(callback, layoutWanted) {
 
       if (Camera.isCameraOpen()) {
         if (verbose) {
@@ -46,7 +46,7 @@
 
       var cb = function(success) {
         if (success) {
-          noticeCameraJustOpenned();
+          noticeCameraJustOpenned(layoutWanted == false);
 
           if (callback) {
             callback(true);
@@ -119,21 +119,24 @@
     })
 
 
-    var noticeCameraJustOpenned = function() {
+    var noticeCameraJustOpenned = function(layoutNotWanted) {
 
-      CameraLayout.showElement("closeCameraButton");
-      if(ALLOW_LIVE_POINTS){
+      if (!layoutNotWanted) {
+        CameraLayout.showElement("closeCameraButton");
+      }
+
+      if (ALLOW_LIVE_POINTS) {
         CameraLayout.showElement("skeletons");
       }
 
 
-      Device.hasMultipleCamera().then(function(res){
-        if(res){
+      Device.hasMultipleCamera().then(function(res) {
+        if (res) {
           CameraLayout.showElement("switchCameraWrapper");
-          if(!Camera.isUsingBackCamera()){
+          if (!Camera.isUsingBackCamera()) {
             CameraLayout.showElement("mirrorButton");
           }
-        }else{
+        } else {
           CameraLayout.showElement("mirrorButton");
         }
       });
@@ -142,6 +145,8 @@
       if (Device.isDeviceAMobile()) {
         CameraLayout.addImageOpacityListener();
       }
+
+
 
       CameraLayout.replaceButtonInVideoElement();
 
@@ -178,7 +183,7 @@
       }
 
       CameraLayout.replaceButtonInVideoElement();
-      if(verbose){
+      if (verbose) {
         console.log("CameraEvents: noticed that the camera just closed")
       }
     }
@@ -225,7 +230,7 @@
 
     var takeInstantPicture = function(animationWanted, urlWanted) {
 
-      if(animationWanted){
+      if (animationWanted) {
         //user took a picture
         var userCallBack = function(data) {
           if (manager) {
@@ -235,9 +240,9 @@
         }
         Camera.takePictureAsBlob(userCallBack);
 
-      }else{
+      } else {
         //system took a picture
-        manager.systemTookPicture(Camera.takePictureAsURL(),livePointsWanted);
+        manager.systemTookPicture(Camera.takePictureAsURL(), livePointsWanted);
       }
 
 
@@ -328,13 +333,13 @@
       }
       RecordsButtons.setButtonRed();
 
-      Device.hasMultipleCamera().then(function(res){
-        if(res){
+      Device.hasMultipleCamera().then(function(res) {
+        if (res) {
           CameraLayout.showElement("switchCameraWrapper");
-          if(!Camera.isUsingBackCamera()){
+          if (!Camera.isUsingBackCamera()) {
             CameraLayout.showElement("mirrorButton");
           }
-        }else{
+        } else {
           CameraLayout.showElement("mirrorButton");
         }
       });
@@ -345,7 +350,7 @@
       }
     }
 
-    var userClickedRedButton = function() {
+    var userClickedRedButton = function(layoutWanted) {
       stopLivePoints()
 
       if (isTakingPicture) {
@@ -354,7 +359,7 @@
         var delay = RecordsButtons.delay();
 
         if (!Camera.isCameraOpen()) {
-          openCamera();
+          openCamera(null, layoutWanted);
         } else {
           //check a category is selectedIndex
           if (CategoriesStorage.getActualCategory() == null) {
@@ -378,7 +383,7 @@
       manager = m;
     }
 
-    var stopTakingPictureIfDoing = function(){
+    var stopTakingPictureIfDoing = function() {
       if (isTakingPicture) {
         stopTakingPicture();
       }

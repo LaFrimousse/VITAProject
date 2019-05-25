@@ -104,6 +104,9 @@
       isInRecoMode = !isInRecoMode;
 
       if (isInRecoMode) {
+        if(!App.Camera.isCameraOpen()){
+          App.CameraEvents.userClickedRedButton(false)
+        }
         createMyModelButton.classList.remove("notDisplayed");
         changeModeButton.innerHTML = "Training Mode"
         CategoriesLayout.hideGlobalWrapper();
@@ -148,8 +151,8 @@
 
 
     window.setTimeout(function() {
-      changeModeButton.click();
-      document.getElementById("showLivePointsButton").click();
+      //changeModeButton.click();
+      //document.getElementById("showLivePointsButton").click();
     }, 500)
 
 
