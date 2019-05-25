@@ -12,7 +12,7 @@
     var verbose = true;
     var isInRecoMode = false;
 
-    var LIMIT_TO_SHOW_RECO_IMG = 0.3;
+    var LIMIT_TO_SHOW_RECO_IMG = 0.5;
 
     var changeModeButton = document.getElementById("changeModeButton");
     var createMyModelButton = document.getElementById("createMyModel");
@@ -38,16 +38,15 @@
     }
 
     var willDisplayRecoResult = function(result, url1, url2) {
-      if(result){
+      if (result) {
         result.data().then(function(arr) {
           if (isInRecoMode) {
             displayRecoResult(arr, url1, url2);
           }
         });
-      }else{
+      } else {
         var len = App.CategoriesStorage.categories.length;
-        var arr = new Array(len).fill(0);
-        displayRecoResult(arr, url1, url2);
+        displayRecoResult(null, url1, url2);
       }
 
     }
@@ -56,37 +55,47 @@
       if (verbose) {
         console.log("ConvNetLayout: will display a recognition result ", result);
       }
-      var resultWithLabel = App.CategoriesStorage.getCatLabels().map(function(label, index) {
-        return {
-          label: label,
-          proba: result[index]
-          }
-      });
-      resultWithLabel.sort(function(a, b){
-        return b.proba - a.proba
-      });
-      var catFound = resultWithLabel[0].label;
-      var catProb = resultWithLabel[0].proba;
-
       probabilitiesDisplayer.innerHTML = "";
-      resultWithLabel.forEach(function(el,i){
-        probabilitiesDisplayer.innerHTML +="<p> <strong>"+(i+1)+") " + el.label + ":</strong>  " +
-          Number.parseFloat(el.proba).toFixed(3)
-         + "</p>"
-      })
+      if (result) {
+        var resultWithLabel = App.CategoriesStorage.getCatLabels().map(function(label, index) {
+          return {
+            label: label,
+            proba: result[index]
+          }
+        });
+        resultWithLabel.sort(function(a, b) {
+          return b.proba - a.proba
+        });
+        var catFound = resultWithLabel[0].label;
+        var catProb = resultWithLabel[0].proba;
+
+
+
+        resultWithLabel.forEach(function(el, i) {
+          probabilitiesDisplayer.innerHTML += "<p> <strong>" + (i + 1) + ") " + el.label + ":</strong>  " +
+            Number.parseFloat(el.proba).toFixed(3) +
+            "</p>"
+        })
+
+      }
 
       var img = "images/questionMark.jpg";
-      if(catProb>=LIMIT_TO_SHOW_RECO_IMG){
+      if (catProb >= LIMIT_TO_SHOW_RECO_IMG) {
         var index = App.CategoriesStorage.indexForLabel(catFound)
         img = App.CategoriesStorage.categories[index].imageURL;
       }
       document.getElementById("postureToAdoptImg").src = img;
-      if(url1){
+      if (url1) {
         leftPict.src = url1
+        leftPict.classList.remove("notDisplayed");
       }
-      if(url2){
+      if (url2) {
         rightPict.src = url2
+        rightPict.classList.remove("notDisplayed");
       }
+
+
+      CameraLayout.replaceButtonInVideoElement()
 
     }
 
@@ -105,22 +114,21 @@
         document.getElementById("categorySelector").classList.add("notDisplayed");
         document.getElementById("probabilitiesDisplayer").classList.remove("notDisplayed");
         document.getElementById("probaTitle").classList.remove("notDisplayed");
-        document.getElementById("firstPictureReco").classList.remove("notDisplayed");
-        document.getElementById("secondPictureReco").classList.remove("notDisplayed");
       } else {
+        probabilitiesDisplayer.innerHTML = "";
         changeModeButton.innerHTML = "Recognition Mode"
         if (!CategoriesStorage.isAutomaticCategoryProposal()) {
           CategoriesLayout.showGlobalWrapper();
         }
         createMyModelButton.classList.add("notDisplayed");
         RecordsButtons.showElements();
+        CameraLayout.showElement("closeCameraButton");
         CategoriesLayout.displayCategoryTitleAndPicture(CategoriesStorage.getActualCategory());
         document.getElementById("categorySelector").classList.remove("notDisplayed");
         document.getElementById("probabilitiesDisplayer").classList.add("notDisplayed");
         document.getElementById("probaTitle").classList.add("notDisplayed");
         document.getElementById("firstPictureReco").classList.add("notDisplayed");
         document.getElementById("secondPictureReco").classList.add("notDisplayed");
-
 
       }
       CameraLayout.replaceButtonInVideoElement();
@@ -129,21 +137,19 @@
 
 
     createMyModelButton.addEventListener("click", function() {
-      if(!ConvNet.isUserModelAlreadyTrained()){
+      if (!ConvNet.isUserModelAlreadyTrained()) {
         ConvNet.trainUserModel();
         createMyModelButton.innerHTML = "hide/show model"
-      }else{
+      } else {
         tfvis.visor().toggle();
       }
 
     });
 
-    var fakeResult = [0.12454298138618469, 0.2329123467206955, 0.14344632625579834, 0.12855647504329681, 0.37054187059402466];
 
-    displayRecoResult(fakeResult, null);
-    notifyGlobalModelIsReady();
-    window.setTimeout(function(){
-      //changeModeButton.click();
+    window.setTimeout(function() {
+      changeModeButton.click();
+      document.getElementById("showLivePointsButton").click();
     }, 500)
 
 

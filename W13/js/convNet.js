@@ -435,9 +435,9 @@
       return !userModelStillNotTrained;
     }
 
-    window.setTimeout(function() {
-      run(false)
-    }, 500)
+
+    //run(false);
+
 
 
 

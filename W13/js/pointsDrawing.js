@@ -174,6 +174,11 @@
     var addPointsInImage = function(imageURL, points, pictureWanted) {
       var promise = new Promise(function(resolve, reject) {
 
+        if(!points || points.length == 0){
+          resolve(imageURL);
+          return;
+        }
+
         var context = canvasUsedToAddPointsInPictures.getContext('2d');
         context.clearRect(0, 0, canvasUsedToAddPointsInPictures.width, canvasUsedToAddPointsInPictures.height)
 

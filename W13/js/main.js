@@ -54,7 +54,6 @@
 
 
     var userTookPicture = function(picture) {
-      return;
 
       var catLabel = CategoriesStorage.getActualCategory().label
 
@@ -130,17 +129,14 @@
             PointsDrawing.addPointsOverVideo(points);
           }
 
-          if (shouldShowAReco) {
-            //TODO: DELETE ME
+
+          if (!shouldShowAReco) {
             PointsDrawing.addPointsInImage(url, points, true).then(function(url1){
               PointsDrawing.addPointsInImage(url, points, false).then(function(url2){
                 App.ConvNetLayout.displayRecoResult(null, url1, url2);
               })
             })
           }
-
-
-
 
           if (shouldShowAReco) {
             var convNetResult = App.ConvNet.testAPicForRecognition(points);
