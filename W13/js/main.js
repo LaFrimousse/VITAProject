@@ -19,12 +19,42 @@
     var drawLivePoints = false;
 
     (function() {
-      return;
       //load from firebase the picture the user took in previous session
+      Firebase.getAllImagesMetaDataForAUser(Device.clientId).then(function(allMetaDatas){
+        allMetaDatas.forEach(function(metaData){
+          var newWrapper = {
+            catIndex: CategoriesStorage.indexForLabel(metaData.catLabel),
+            imageId: metaData.pictId,
+            points: metaData.points,
+            date: metaData.date,
+            browserDescription: metaData.browserDescription,
+            isSavedOnFirebase: metaData.isSavedOnFirebase,
+            picture: null,
+          }
+
+          if(!newWrapper.isSavedOnFirebase){
+            CategoriesStorage.appendPictureWrapperToACat(newWrapper);
+          }else{
+
+            Firebase.downloadImageAsBlob(metaData.catLabel,newWrapper.imageId).then(function(result){
+              newWrapper.picture = result.blob;
+              CategoriesStorage.appendPictureWrapperToACat(newWrapper);
+            })
+          }
+
+        })
+
+      })
+      return;
+
+
+
       var allCat = CategoriesStorage.categories
       allCat.forEach(function(cat) {
         var catName = cat.label;
         Firebase.getImgListForUser(Device.clientId, catName).then(function(listIds) {
+          console.log(listIds);
+          return;
           listIds.forEach(function(pictId) {
             Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper) {
               Firebase.getPointsForAPicture(pictId).then(function(points) {
@@ -34,7 +64,8 @@
                   points: points,
                   picture: wrapper.blob,
                   date: wrapper.date,
-                  browserDescription: wrapper.browserDescription
+                  browserDescription: wrapper.browserDescription,
+                  isSavedOnFirebase: wrapper.isSavedOnFirebase,
                 }
                 CategoriesStorage.appendPictureWrapperToACat(newWrapper);
                 //(catIndex, imageId, points, picture, date, browserDescription)
@@ -63,7 +94,8 @@
         points: null,
         picture: picture,
         date: new Date(),
-        browserDescription: navigator.userAgent
+        browserDescription: navigator.userAgent,
+        isSavedOnFirebase: Firebase.willSavePicture(),
       }
 
       if (verbose) {

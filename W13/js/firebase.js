@@ -23,16 +23,21 @@
       var date = wrapper.date;
       var browserId = wrapper.browserDescription;
       var points = wrapper.points;
+      var isSavedOnFirebase = WILL_SAVE_PICTURE_IN_FIREBASE;
 
-      putImgFileInFirebase(categoryName, imageId, imageFile).then(function(snapshot) {
+      putImgFileInFirebase(categoryName, imageId, imageFile,isSavedOnFirebase).then(function(snapshot) {
         if (verbose) {
-          console.log("Just put the image ", imageId, "on firebase for the category ", categoryName);
+          if(snapshot == null){
+            console.log("Didn't stored on purpose the image file of img ", imageId, "on firebase for the category ", categoryName);
+          }else{
+            console.log("Just put the image ", imageId, "on firebase for the category ", categoryName);
+          }
         }
         addImgIdToTheListForThisUser(userId, imageId, categoryName).then(function() {
           if (verbose) {
             console.log("Just put the imageId ", imageId, " in the list of the pictures taken for the cat ", categoryName, " for this user with id ", userId);
           }
-          storeImgMetaData(imageId, date, browserId, categoryName, points).then(function() {
+          storeImgMetaData(imageId, date, browserId, categoryName, points,isSavedOnFirebase).then(function() {
             if (verbose) {
               console.log("Just stored the image MetaData for the image ", imageId, " in firebase");
             }
@@ -48,7 +53,14 @@
     }
 
 
-    var putImgFileInFirebase = function(categoryName, imageId, imageFile) {
+    var putImgFileInFirebase = function(categoryName, imageId, imageFile, isSavedOnFirebase) {
+      if(!savedOnFirebase){
+        var promise = new Promise(function(resolve, reject) {
+          resolve(null);
+        });
+        return promise;
+      }
+
       var promise = new Promise(function(resolve, reject) {
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.put(imageFile).then(function(snapshot) {
@@ -63,7 +75,15 @@
       return promise;
     }
 
-    var deleteImgFromStorage = function(categoryName, imageId) {
+    var deleteImgFromStorage = function(categoryName, imageId, imgIsStored) {
+
+      if(!imgIsStored){
+        var promise = new Promise(function(resolve, reject) {
+          resolve();
+        });
+        return promise;
+      }
+
       var promise = new Promise(function(resolve, reject) {
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.delete().then(function() {
@@ -177,14 +197,15 @@
       return promise;
     }
 
-    var storeImgMetaData = function(imageId, date, browserDescription, catLabel, points) {
+    var storeImgMetaData = function(imageId, date, browserDescription, catLabel, points, isSavedOnFirebase) {
       var promise = new Promise(function(resolve, reject) {
         var imgRef = imgsCollection.doc(imageId);
         imgRef.set({
           categoryLabel: catLabel,
           date: Date.parse(date),
           browserDescription: browserDescription,
-          points: JSON.stringify(points)
+          points: JSON.stringify(points),
+          imageSavedOnFirebase:isSavedOnFirebase
         }).then(function() {
           if (verbose) {
             console.log("Firebase : just stored the metadata of image " + imageId + "on firebase");
@@ -246,7 +267,6 @@
     }
 
     var deleteImages = function(imageArray) {
-
       var imgIdsToDelForTheUser = [];
       var catName = null;
       var userId = null;
@@ -256,8 +276,9 @@
         userId = img.userId;
         var imageId = img.imageId;
         imgIdsToDelForTheUser.push(imageId);
+        var imgIsStored = img.isSavedOnFirebase;
 
-        deleteImgFromStorage(catName, imageId).then(function() {
+        deleteImgFromStorage(catName, imageId, imgIsStored).then(function() {
           deleteImageMetaData(imageId).catch(function(error){
             console.error(error);
           });
@@ -268,22 +289,6 @@
       });
 
       deleteImgListForThisUser(userId, catName, imgIdsToDelForTheUser);
-
-
-
-      /*deleteImgFromStorage(catName, imageId).then(function() {
-        deleteImgIdToTheListForThisUser(userId, imageId, catName).then(function() {
-          deleteImageMetaData(imageId).catch(function(error) {
-            console.error(error);
-          }).catch(function(error) {
-            console.error(error);
-          });
-        }).catch(function(error) {
-          console.error(error);
-        });
-      })*/
-
-
     };
 
     var getAllImagesMetaData = function() {
@@ -297,7 +302,8 @@
               pictId: sn.id,
               date: sn.data().date,
               browserDescription: sn.data().browserDescription,
-              points: JSON.parse(sn.data().points)
+              points: JSON.parse(sn.data().points),
+              isSavedOnFirebase: !(sn.data().isSavedOnFirebase == false),
             });
           });
           resolve(back);
@@ -334,8 +340,13 @@
       return promise;
     }
 
+    var willSavePicture = function(){
+      return WILL_SAVE_PICTURE_IN_FIREBASE;
+    }
+
     return {
       verbose: verbose,
+      willSavePicture:willSavePicture,
       saveImage: saveImage,
       deleteImages: deleteImages,
       getImgListForUser: getImgListForUser,

@@ -199,7 +199,8 @@
           var imToDel = {
             catLabel: CategoriesStorage.labelForIndex(inMemoryImg.catIndex),
             userId: Device.clientId,
-            imageId:imgId
+            imageId:imgId,
+            isSavedOnFirebase:inMemoryImg.isSavedOnFirebase
           }
           imagesToDel.push(imToDel);
         }
