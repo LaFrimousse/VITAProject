@@ -124,15 +124,20 @@
       if (shouldShowAReco || shouldDrawLivePoints) {
         //then in any case we need to compute the points
 
-        var callback = function(points) {
+        var callback = function(points, forImgUrl) {
           if (shouldDrawLivePoints) {
             PointsDrawing.addPointsOverVideo(points);
           }
 
+          if (forImgUrl) {
+            url = forImgUrl.image
+          }
+
+
 
           if (!shouldShowAReco) {
-            PointsDrawing.addPointsInImage(url, points, true).then(function(url1){
-              PointsDrawing.addPointsInImage(url, points, false).then(function(url2){
+            PointsDrawing.addPointsInImage(url, points, true).then(function(url1) {
+              PointsDrawing.addPointsInImage(url, points, false).then(function(url2) {
                 App.ConvNetLayout.displayRecoResult(null, url1, url2);
               })
             })
@@ -140,8 +145,8 @@
 
           if (shouldShowAReco) {
             var convNetResult = App.ConvNet.testAPicForRecognition(points);
-            PointsDrawing.addPointsInImage(url, points, true).then(function(url1){
-              PointsDrawing.addPointsInImage(url, points, false).then(function(url2){
+            PointsDrawing.addPointsInImage(url, points, true).then(function(url1) {
+              PointsDrawing.addPointsInImage(url, points, false).then(function(url2) {
                 App.ConvNetLayout.displayRecoResult(convNetResult, url1, url2);
               })
             })

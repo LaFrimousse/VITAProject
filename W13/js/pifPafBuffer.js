@@ -34,9 +34,12 @@
       var pictWeSend = nextPictureToSend;
       nextPictureToSend = null;
 
-      Server.requestPifPafForPoints(pictWeSend).then(function(pointsText) {
+      Server.requestPifPafForPoints(pictWeSend).then(function(answer) {
+
+        var pointsText = answer.pointsText
+        var forImg = JSON.parse(answer.forImg);
         if (!stop) {
-          dealWithPointsReceived(pointsText);
+          dealWithPointsReceived(pointsText, forImg);
           if (nextPictureToSend != null) {
             sendRequestToPifPaf();
           }
@@ -49,12 +52,13 @@
 
     }
 
-    var dealWithPointsReceived = function(pointsText) {
+    var dealWithPointsReceived = function(pointsText, forImg) {
       var points = JSON.parse(pointsText);
+
       if (verbose) {
         console.log("PifPafBuffer: received some points from the pif paf server that will be drawn ", points);
       }
-      callback(points);
+      callback(points, forImg);
     }
 
 

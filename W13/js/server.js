@@ -32,13 +32,20 @@
     }
 
     var postPromise = function(url, data, isJson) {
+
       var promise = new Promise(function(resolve, reject) {
         var req = new XMLHttpRequest();
         req.open("POST", url);
         req.addEventListener("load", function() {
+
           if (req.status >= 200 && req.status < 400) {
             // Appelle la fonction callback en lui passant la réponse de la requête
-            resolve(req.responseText);
+
+            var answer = {
+              pointsText : req.responseText,
+              forImg: data,
+            }
+            resolve(answer);
           } else {
             reject(req.status + " " + req.statusText + " " + url);
           }

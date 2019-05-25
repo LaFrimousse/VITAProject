@@ -9,7 +9,7 @@
   var Helper = App.Helper;
 
   var ConvNetLayout = (function() {
-    var verbose = true;
+    var verbose = false;
     var isInRecoMode = false;
 
     var LIMIT_TO_SHOW_RECO_IMG = 0.5;
