@@ -5,6 +5,7 @@
 
   var Firebase = (function() {
     var verbose = false;
+    var WILL_SAVE_PICTURE_IN_FIREBASE = false;
 
     /*Reference to the database*/
     var firestore = firebase.firestore();

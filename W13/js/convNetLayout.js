@@ -12,7 +12,7 @@
     var verbose = false;
     var isInRecoMode = false;
 
-    var LIMIT_TO_SHOW_RECO_IMG = 0.5;
+    var LIMIT_TO_SHOW_RECO_IMG = 0.3;
 
     var changeModeButton = document.getElementById("changeModeButton");
     var createMyModelButton = document.getElementById("createMyModel");
