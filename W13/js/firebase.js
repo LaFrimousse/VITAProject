@@ -25,6 +25,13 @@
       var points = wrapper.points;
       var isSavedOnFirebase = WILL_SAVE_PICTURE_IN_FIREBASE;
 
+      if(!points && !WILL_SAVE_PICTURE_IN_FIREBASE){
+        if(verbose){
+          console.log("Firebase: nothing to store because we have neither the points nor the image")
+        }
+        return;
+      }
+
       putImgFileInFirebase(categoryName, imageId, imageFile,isSavedOnFirebase).then(function(snapshot) {
         if (verbose) {
           if(snapshot == null){
@@ -54,7 +61,7 @@
 
 
     var putImgFileInFirebase = function(categoryName, imageId, imageFile, isSavedOnFirebase) {
-      if(!savedOnFirebase){
+      if(!isSavedOnFirebase){
         var promise = new Promise(function(resolve, reject) {
           resolve(null);
         });
@@ -244,16 +251,6 @@
             imageSet.delete(el);
           })
 
-          /*for (var i = 0; i < list.length; i++) {
-            if (list[i] === imageIdToDel) {
-              if (verbose) {
-                console.log("Firebase : removing an id of the image list before storing it again. categoryName :  " + categoryName + " idToDelete : " + imageIdToDel + "actualList: " + list);
-              }
-              list.splice(i, 1);
-              i--;
-            }
-          }*/
-
           storeImgListForUser(userId, catName, Array.from(imageSet)).then(function() {
             resolve();
           }).catch(function(error) {
@@ -303,7 +300,7 @@
               date: sn.data().date,
               browserDescription: sn.data().browserDescription,
               points: JSON.parse(sn.data().points),
-              isSavedOnFirebase: !(sn.data().isSavedOnFirebase == false),
+              isSavedOnFirebase: sn.data().imageSavedOnFirebase,
             });
           });
           resolve(back);

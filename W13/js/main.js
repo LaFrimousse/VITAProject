@@ -15,7 +15,7 @@
 
 
   var Manager = (function() {
-    var verbose = false;
+    var verbose = true;
     var drawLivePoints = false;
 
     (function() {
@@ -49,7 +49,7 @@
 
 
 
-      var allCat = CategoriesStorage.categories
+      /*var allCat = CategoriesStorage.categories
       allCat.forEach(function(cat) {
         var catName = cat.label;
         Firebase.getImgListForUser(Device.clientId, catName).then(function(listIds) {
@@ -79,7 +79,7 @@
         }).catch(function(error) {
           console.error("Cannot get a list of image for the cat " + catName, " ", error);
         });
-      });
+      });*/
 
     })();
 
@@ -95,7 +95,6 @@
         picture: picture,
         date: new Date(),
         browserDescription: navigator.userAgent,
-        isSavedOnFirebase: Firebase.willSavePicture(),
       }
 
       if (verbose) {
@@ -114,11 +113,11 @@
         CategoriesStorage.appendPictureWrapperToACat(newWrapper);
         Firebase.saveImage(Device.clientId, newWrapper);
 
-      }).catch(function(error) {
+      })/*.catch(function(error) {
         console.error("Didn't receive points from the pif paf algo, but still save the picture in firebase and into memory " + error);
         CategoriesStorage.appendPictureWrapperToACat(newWrapper);
         Firebase.saveImage(Device.clientId, newWrapper);
-      })
+      })*/
 
     }
 
@@ -131,8 +130,9 @@
         reader.onload = function() {
           var json = {};
           json.image = reader.result;
+
           Server.requestPifPafForPoints(json).then(function(pointsText) {
-            var points = JSON.parse(pointsText);
+            var points = JSON.parse(pointsText.pointsText);
             resolve(points);
           }).catch(function(error) {
             reject(error);

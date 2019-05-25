@@ -85,11 +85,11 @@
 
       if (verbose) {
         console.log("CategoriesLayout: notified we have a new  picture wrapper available ", pictWrapper,
-      "while the actual category displayed is ",actualCat);
+          "while the actual category displayed is ", actualCat);
       }
 
       var actualCatIndex = CategoriesStorage.indexForLabel(actualCat.label)
-      if(actualCatIndex == pictWrapper.catIndex){
+      if (actualCatIndex == pictWrapper.catIndex) {
         addAPhotoToPicturesTaken(pictWrapper);
       }
     }
@@ -134,20 +134,45 @@
       show(picturesWrapper);
       var newImg = document.createElement("img"); //Création d'un nouvel élément de type .ELEMENT_NODE
       newImg.setAttribute("data-image_id", wrapper.imageId);
-      var url = URL.createObjectURL(wrapper.picture);
-      urlToClean.push(url);
 
-      if (!seePointsCheckBox.checked || wrapper.points == null || wrapper.points == undefined) {
+      var url = null;
+      if (wrapper.picture != null) {
+        url = URL.createObjectURL(wrapper.picture);
+        urlToClean.push(url);
+      }
+
+      if (!wrapper.points && !wrapper.picture) {
+        console.error("CategoriesLayout: cannot display a wrapper without pictures nor points");
+        return;
+      }
+
+      if (!wrapper.points) {
+        //if we have no points then we must have an image
         newImg.src = url
-      } else {
+      } else if (!wrapper.picture) {
+        //if we have no picture then we must have the points
         var callback = function(url2) {
-         newImg.src = url2;
-         urlToClean.push(url2);
+          newImg.src = url2;
+          urlToClean.push(url2);
         }
-        PointsDrawing.addPointsInImage(url, wrapper.points, seePicturesCheckBox.checked).then(function(url){
+        PointsDrawing.addPointsInImage("images/blackImg.png", wrapper.points, false).then(function(url) {
           callback(url);
         });
+      } else {
+        if (!seePointsCheckBox.checked) {
+          newImg.src = url
+        } else {
+          var callback = function(url2) {
+            newImg.src = url2;
+            urlToClean.push(url2);
+          }
+          PointsDrawing.addPointsInImage(url, wrapper.points, seePicturesCheckBox.checked).then(function(url) {
+            callback(url);
+          });
+        }
       }
+
+
 
       picturesWrapper.appendChild(newImg)
 
@@ -199,8 +224,8 @@
           var imToDel = {
             catLabel: CategoriesStorage.labelForIndex(inMemoryImg.catIndex),
             userId: Device.clientId,
-            imageId:imgId,
-            isSavedOnFirebase:inMemoryImg.isSavedOnFirebase
+            imageId: imgId,
+            isSavedOnFirebase: inMemoryImg.isSavedOnFirebase
           }
           imagesToDel.push(imToDel);
         }
