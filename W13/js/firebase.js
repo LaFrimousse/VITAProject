@@ -25,18 +25,17 @@
       var points = wrapper.points;
       var isSavedOnFirebase = WILL_SAVE_PICTURE_IN_FIREBASE;
 
-      if(!points && !WILL_SAVE_PICTURE_IN_FIREBASE){
-        if(verbose){
-          console.log("Firebase: nothing to store because we have neither the points nor the image")
-        }
+      if (!points && !WILL_SAVE_PICTURE_IN_FIREBASE) {
+        console.log("Firebase: nothing to store because we have neither the points nor the image")
+
         return;
       }
 
-      putImgFileInFirebase(categoryName, imageId, imageFile,isSavedOnFirebase).then(function(snapshot) {
+      putImgFileInFirebase(categoryName, imageId, imageFile, isSavedOnFirebase).then(function(snapshot) {
         if (verbose) {
-          if(snapshot == null){
+          if (snapshot == null) {
             console.log("Didn't stored on purpose the image file of img ", imageId, "on firebase for the category ", categoryName);
-          }else{
+          } else {
             console.log("Just put the image ", imageId, "on firebase for the category ", categoryName);
           }
         }
@@ -44,7 +43,7 @@
           if (verbose) {
             console.log("Just put the imageId ", imageId, " in the list of the pictures taken for the cat ", categoryName, " for this user with id ", userId);
           }
-          storeImgMetaData(imageId, date, browserId, categoryName, points,isSavedOnFirebase).then(function() {
+          storeImgMetaData(imageId, date, browserId, categoryName, points, isSavedOnFirebase).then(function() {
             if (verbose) {
               console.log("Just stored the image MetaData for the image ", imageId, " in firebase");
             }
@@ -61,7 +60,7 @@
 
 
     var putImgFileInFirebase = function(categoryName, imageId, imageFile, isSavedOnFirebase) {
-      if(!isSavedOnFirebase){
+      if (!isSavedOnFirebase) {
         var promise = new Promise(function(resolve, reject) {
           resolve(null);
         });
@@ -84,7 +83,7 @@
 
     var deleteImgFromStorage = function(categoryName, imageId, imgIsStored) {
 
-      if(!imgIsStored){
+      if (!imgIsStored) {
         var promise = new Promise(function(resolve, reject) {
           resolve();
         });
@@ -212,7 +211,7 @@
           date: Date.parse(date),
           browserDescription: browserDescription,
           points: JSON.stringify(points),
-          imageSavedOnFirebase:isSavedOnFirebase
+          imageSavedOnFirebase: isSavedOnFirebase
         }).then(function() {
           if (verbose) {
             console.log("Firebase : just stored the metadata of image " + imageId + "on firebase");
@@ -247,7 +246,7 @@
         getImgListForUser(userId, catName).then(function(list) {
 
           var imageSet = new Set(list);
-          imageList.forEach(function(el){
+          imageList.forEach(function(el) {
             imageSet.delete(el);
           })
 
@@ -268,7 +267,7 @@
       var catName = null;
       var userId = null;
 
-      imageArray.forEach(function(img){
+      imageArray.forEach(function(img) {
         catName = img.catLabel;
         userId = img.userId;
         var imageId = img.imageId;
@@ -276,10 +275,10 @@
         var imgIsStored = img.isSavedOnFirebase;
 
         deleteImgFromStorage(catName, imageId, imgIsStored).then(function() {
-          deleteImageMetaData(imageId).catch(function(error){
+          deleteImageMetaData(imageId).catch(function(error) {
             console.error(error);
           });
-        }).catch(function(error){
+        }).catch(function(error) {
           console.error(error);
         });
 
@@ -337,21 +336,22 @@
       return promise;
     }
 
-    var willSavePicture = function(){
+    var willSavePicture = function() {
       return WILL_SAVE_PICTURE_IN_FIREBASE;
     }
 
     return {
       verbose: verbose,
-      willSavePicture:willSavePicture,
+      willSavePicture: willSavePicture,
       saveImage: saveImage,
       deleteImages: deleteImages,
       getImgListForUser: getImgListForUser,
       downloadImageAsBlob: downloadImageAsBlob,
       getPointsForAPicture: getPointsForAPicture,
       getAllImagesMetaData: getAllImagesMetaData,
-      getAllImagesMetaDataForAUser:getAllImagesMetaDataForAUser,
-      storeImgMetaData:storeImgMetaData,/*public because needed from download.js*/
+      getAllImagesMetaDataForAUser: getAllImagesMetaDataForAUser,
+      storeImgMetaData: storeImgMetaData,
+      /*public because needed from download.js*/
     }
   })();
 

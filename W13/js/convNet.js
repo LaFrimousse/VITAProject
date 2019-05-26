@@ -5,7 +5,7 @@
   var Device = App.Device;
   var CategoriesStorage = App.CategoriesStorage;
   var ConvNet = (function() {
-    var verbose = false;
+    var verbose = true;
     /*batchSize refers to the size of the data subsets that the model will see on each iteration of training. Common batch sizes tend to be in the range 32-512. There isn't really an ideal batch size for all problems and it is beyond the scope of this tutorial to describe the mathematical motivations for various batch sizes.*/
     /*Total number of training examples present in a single batch.
     As I said, you can’t pass the entire dataset into the neural net at once. So, you divide dataset into Number of Batches or sets or parts.*/
@@ -25,6 +25,14 @@
 
     async function run(forUserModel) {
       var data = await getData(forUserModel);
+      if(verbose){
+        var model = "globalModel"
+        if(forUserModel){
+          model = "userModel"
+        }
+        console.log("ConvNet: just download the metadata from firebase to train the ",model, " : ", data);
+      }
+
       // TODO: VERIFY SIZE OF INPUT
       /*if(forUserModel){
         console.log(data)
@@ -436,7 +444,7 @@
     }
 
 
-    //run(false);
+    run(false);
 
 
 

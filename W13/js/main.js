@@ -113,11 +113,11 @@
         CategoriesStorage.appendPictureWrapperToACat(newWrapper);
         Firebase.saveImage(Device.clientId, newWrapper);
 
-      })/*.catch(function(error) {
+      }).catch(function(error) {
         console.error("Didn't receive points from the pif paf algo, but still save the picture in firebase and into memory " + error);
         CategoriesStorage.appendPictureWrapperToACat(newWrapper);
         Firebase.saveImage(Device.clientId, newWrapper);
-      })*/
+      })
 
     }
 
