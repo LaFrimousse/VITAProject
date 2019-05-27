@@ -1,0 +1,59 @@
+.rightPanel {
+  /*No padding or margin in this element since the 2 children are abolutely align.
+  But can create a parent div if a external border is really wanted*/
+  position: relative;
+  max-width: 100%;
+  padding: 0px;
+  background-color: #84f742;
+  background-color: #e3ffce;
+  flex: 1;
+  overflow: hidden;
+  border-left: 1px solid black;
+}
+
+#postureToAdaptTitle {
+  margin: 0px;
+  text-align: center;
+  font-size: x-large;
+  text-decoration: underline;
+}
+
+#postureToAdoptImg {
+  display: block;
+  max-width: 100%;
+}
+
+.catSelectAndCBWrapper{
+  display: flex;
+  background-color: white;
+  border-top: 1px solid black;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+.catSelectAndCBWrapper * {
+  margin: 2px;
+}
+
+
+
+.rightPanel .probaTitle{
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.probabilitiesDisplayer{
+  flex: 1;
+  min-width: 100px;
+  min-height: 100px;
+}
+
+.probabilitiesDisplayer p{
+  margin-left: 5px;
+  margin-right: 5px;
+}

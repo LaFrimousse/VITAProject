@@ -1,0 +1,168 @@
+.centerPanel{
+  /*No padding or margin in this element since the 2 children are abolutely align.
+  But can create a parent div if a external border is really wanted*/
+  position: relative;
+  max-width: 100%;
+  background-color: #ddf23e;
+  background-color: rgb(230,230,230);
+  /*https://stackoverflow.com/questions/20590239/maintain-aspect-ratio-of-div-but-fill-screen-width-and-height-in-css*/
+ flex: 2.5;
+  /*width: 900px;*/
+}
+
+/*the element in the one video stream is rendered*/
+#videoElement {
+  margin: auto;
+  display: block;
+  max-width: 100%;
+  max-height: calc(100% - 80px);
+}
+
+#canvasForLivePoints {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+
+  /*background-color: blue;
+  opacity: 0.4*/
+}
+
+#closeCameraButton {
+  padding: 2px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 25px;
+  height: 25px;
+}
+
+.switchBoxWrapper {
+  pointer-events: none;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+}
+
+#switchBoxWrapper p {
+  font-size: small;
+  padding: 0px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#switchBoxWrapper div {
+  margin: 0px;
+  padding: 0px;
+}
+
+#mirrorVideoButton {
+  opacity: 0.8;
+  padding: 2px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 30px;
+  height: 30px;
+}
+
+.showLivePointsButton {
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  right: 0;
+  width: 70px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+}
+
+#counter {
+  position: absolute;
+  margin: 0px;
+  margin-right: 3px;
+  bottom: 0px;
+  right: 0px;
+  font-size: xx-large;
+  border-radius: 5px;
+  background-color: rgba(255,255,255,0.5);
+}
+
+.redCounter{
+  color: red;
+}
+
+
+
+/*---------------------------------------------------*/
+.cameraRecordButtons {
+  width: 100%;
+  border-top: 1px solid black;
+  /*box-sizing: border-box;*/
+  background-color: rgb(105, 109, 106);
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  justify-content: space-between;
+}
+
+#cameraRecordButtons * {
+  margin: 0px;
+  padding:0px;
+}
+
+#delayButtonLooping {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+#takePictureButton {
+  max-width: 40px;
+  max-height: 40px;
+  display: block;
+  flex: 1;
+  margin-top: 1px;
+  margin-bottom: 15px;
+}
+
+.delayp {
+  text-align: center;
+  flex: 1;
+}
+
+#loopingWrapper {
+  text-align: center;
+  flex: 1;
+}
+
+#delaySlider {
+  display: block;
+  max-width: 80%;
+  min-width: 50%;
+  position: relative;
+  bottom: 16px;
+  /*margin-top: -10px;
+  margin-bottom: 10px;*/
+}

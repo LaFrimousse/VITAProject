@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+
+  <link rel="stylesheet" href="css/slider.css" />
+  <link rel="stylesheet" href="css/range.css" />
+  <link rel="stylesheet" href="css/topBar.css" />
+  <link rel="stylesheet" href="css/panel.css" />
+  <link rel="stylesheet" href="css/leftPanel.css" />
+  <link rel="stylesheet" href="css/centerPanel.css" />
+  <link rel="stylesheet" href="css/rightPanel.css" />
+  <link rel="stylesheet" href="css/categoriesLayout.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <!--<link rel="stylesheet" href="css/gestureProposal.css" />
+  <link rel="stylesheet" href="css/cameraLayout.css" />
+  -->
+  <title>VITA Bachelor's Project</title>
+  <!--A <meta> viewport element gives the browser instructions on how to control the page's dimensions and scaling.
+    -->
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+</head>
+
+<body>
+
+  <div class="topBar">
+    <div class="changeModelButtonWrapper">
+      <button type="button" id="changeModelButton" class="notDisplayed">Change Model</button>
+    </div>
+    <p id="infoAboutModelP" class="notDisplayed"></p>
+    <div class="topBarButtonsWrapper">
+      <button type="button" id="createMyModel" class="notDisplayed">Create My Model</button>
+      <button type="button" id="changeModeButton" class="notDisplayed">Recognition Mode</button>
+    </div>
+  </div>
+
+
+
+
+  <div class="globalPanel">
+    <div class="leftPanel">
+      <img id="firstPictureReco" class="notDisplayed" src="images/blackImg.png">
+      <img id="secondPictureReco" class="notDisplayed" src="images/blackImg.png">
+
+    </div>
+    <div class="centerPanel">
+
+      <!--For the camera module: the canvas used to render a frame from the video stream before turning it into an image when an image capture is required.-->
+      <canvas id="canvasUsedToTakePicture" style="display:none;"></canvas>
+
+      <!--For the camera module: the videoElement is the DOM element in which the video stream captured by
+        the camera is rendered-->
+      <video id="videoElement" autoplay playsinline poster="images/videoElementPoster.jpg"></video>
+
+      <!--For the pointsOverVideo module: this canvas is the DOM element in which points and lines are going to be drawn over the video frame.-->
+      <canvas id="canvasForLivePoints"></canvas>
+
+      <img id="closeCameraButton" class="notDisplayed buttonBehavior" src="images/closeCameraButton.png" />
+      <div class="switchBoxWrapper notDisplayed" id="switchBoxWrapper">
+        <p>Front camera</p>
+        <div>
+          <label class="switch">
+            <input type="checkbox" id="switchCameraCheckBox">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <p>Back camera</p>
+      </div>
+      <img id="mirrorVideoButton" src="images/mirror.png" class="notDisplayed buttonBehavior" />
+      <img id="showLivePointsButton" class="showLivePointsButton notDisplayed alpha04" src="images/skeletons.png" />
+      <p id="counter" class="notDisplayed">-1</p>
+
+      <!----------------------->
+
+      <div id="cameraRecordButtons" class="cameraRecordButtons">
+
+        <div id="delayButtonLooping">
+          <p class="delayp">Delay: <span id="delayIndicator"></span> sec</p>
+
+          <img id="takePictureButton" class="buttonBehavior" src="images/takePictureButton.png" />
+
+          <div id="loopingWrapper">
+            <input type="checkbox" name="loopingBox" id="loopingBox" />
+            <label for="loopingBox">Looped</label>
+          </div>
+        </div>
+
+
+        <input type="range" id="delaySlider" name="delaySlider" min="0" max="10" step="0.5">
+
+      </div>
+
+
+
+
+      <!--End of centerPanel-->
+    </div>
+    <div class="rightPanel">
+      <p id="postureToAdaptTitle"></p>
+      <img id="postureToAdoptImg" src="images/questionMark.jpg" />
+
+      <div class="catSelectAndCBWrapper">
+        <select name="categoryChoosen" id="categorySelector">
+          <option> -- Automatic Selection-- </option>
+        </select>
+        <div id="loopingWrapper">
+          <input type="checkbox" name="savePictOnFBCB" id="savePictOnFBCB" />
+          <label for="savePictOnFBCB">Save the picture on Firebase</label>
+        </div>
+      </div>
+
+      <p class="probaTitle notDisplayed" id="probaTitle">Probablilities:</p>
+      <div class="probabilitiesDisplayer notDisplayed" id="probabilitiesDisplayer"></div>
+
+      <!--End of rightPanel-->
+    </div>
+  </div>
+
+
+
+  <canvas id="usedToDrawPointsInPictures" style="display: none;"></canvas>
+
+
+
+
+  <div class="pictureAndButtonsWrapper notDisplayed">
+    <div class="controlBar">
+      <button id="deletePicture" class="buttonBehavior deletePicture notDisplayed">Delete Pictures</button>
+      <div class="checkBoxWrappers">
+        <div class="checkBoxWrapper">
+          <input type="checkbox" name="seeThePointsCheckBox" id="seeThePointsCheckBox" checked />
+          <label for="seeThePointsCheckBox">See the points</label>
+        </div>
+        <div class="checkBoxWrapper">
+          <input type="checkbox" name="seeThePicturesCheckBox" id="seeThePicturesCheckBox" checked />
+          <label for="seeThePicturesCheckBox">See the pictures</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="picturesWrapper notDisplayed" id="picturesWrapper"></div>
+  </div>
+
+
+
+
+
+
+
+  <!-- Firebase App is always required and must be first -->
+  <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-firestore.js"></script>
+
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyAxdloBcPJ8SvYO7nN64nTpP-neQ4C9Sww",
+      authDomain: "vita2-9b3b5.firebaseapp.com",
+      databaseURL: "https://vita2-9b3b5.firebaseio.com",
+      projectId: "vita2-9b3b5",
+      storageBucket: "vita2-9b3b5.appspot.com",
+      messagingSenderId: "484962611142",
+      appId: "1:484962611142:web:ff2e2910fe18219c"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script src="js/helper.js"></script>
+  <script src="js/device.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/categoriesStorage.js"></script>
+  <script src="js/pointsDrawing.js"></script>
+  <script src="js/categoriesLayout.js"></script>
+
+  <script src="js/camera.js"></script>
+  <script src="js/cameraLayout.js"></script>
+  <script src="js/recordsButtons.js"></script>
+
+  <script src="js/cameraEvents.js"></script>
+  <script src="js/server.js"></script>
+  <script src="js/pifPafBuffer.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Import TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+  <!-- Import tfjs-vis -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
+  <script src="js/convNet.js"></script>
+  <script src="js/convNetLayout.js"></script>
+
+
+
+  <script src="js/recoverPoints.js"></script>
+</body>
+
+</html>
