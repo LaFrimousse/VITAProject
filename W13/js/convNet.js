@@ -459,12 +459,24 @@
       return userModelWasAlreadyTrained;
     }
 
+    var changeUsedModel = function(){
+      if(globalModel && userModel){
+        usedModel = usedModel == userModel ? globalModel : userModel;
+      }
+    }
+
+    var isUserModelUsed = function(){
+      return userModel && usedModel == userModel;
+    }
+
     return {
       run: run,
       trainUserModel: trainUserModel,
       aModelIsReady: aModelIsReady,
       testAPicForRecognition: testAPicForRecognition,
       userModelWasAlreadyTrained: getUserModelWasAlreadyTrained,
+      changeUsedModel: changeUsedModel,
+      isUserModelUsed: isUserModelUsed,
     }
   })();
   App.ConvNet = ConvNet;

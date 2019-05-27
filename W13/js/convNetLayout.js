@@ -19,6 +19,8 @@
     var probabilitiesDisplayer = document.getElementById("probabilitiesDisplayer");
     var leftPict = document.getElementById("firstPictureReco");
     var rightPict = document.getElementById("secondPictureReco");
+    var modelInfoP = document.getElementById("infoAboutModelP");
+    var changeModelButton = document.getElementById("changeModelButton");
 
     var notifyGlobalModelIsReady = function() {
       if (verbose) {
@@ -31,6 +33,16 @@
       if (verbose) {
         console.log("ConvNetLayout: get notified that this user model is ready")
       }
+      changeModelButton.classList.remove("notDisplayed");
+      getTextForInfoP();
+    }
+
+    var getTextForInfoP = function(){
+      var text = "You're using your model"
+      if(!ConvNet.isUserModelUsed()){
+        text = "You're using the global model"
+      }
+      modelInfoP.innerHTML = text
     }
 
     var getRecoMode = function() {
@@ -103,11 +115,17 @@
     changeModeButton.addEventListener("click", function() {
       isInRecoMode = !isInRecoMode;
 
+
       if (isInRecoMode) {
         if(!App.Camera.isCameraOpen()){
           App.CameraEvents.userClickedRedButton(false)
         }
         createMyModelButton.classList.remove("notDisplayed");
+        modelInfoP.classList.remove("notDisplayed");
+        getTextForInfoP();
+        if(ConvNet.userModelWasAlreadyTrained()){
+          changeModelButton.classList.remove("notDisplayed");
+        }
         changeModeButton.innerHTML = "Training Mode"
         CategoriesLayout.hideGlobalWrapper();
         RecordsButtons.hideElements();
@@ -124,6 +142,8 @@
           CategoriesLayout.showGlobalWrapper();
         }
         createMyModelButton.classList.add("notDisplayed");
+        modelInfoP.classList.add("notDisplayed");
+        changeModelButton.classList.add("notDisplayed");
         RecordsButtons.showElements();
         CameraLayout.showElement("closeCameraButton");
         CategoriesLayout.displayCategoryTitleAndPicture(CategoriesStorage.getActualCategory());
@@ -146,14 +166,13 @@
           tfvis.visor().open();
         }
       }
-      /*if (!ConvNet.isUserModelAlreadyTrained()) {
-
-        createMyModelButton.innerHTML = "hide/show model"
-      } else {
-        tfvis.visor().toggle();
-      }*/
 
     });
+
+    changeModelButton.addEventListener("click", function() {
+      ConvNet.changeUsedModel();
+      getTextForInfoP();
+    })
 
 
     return {
