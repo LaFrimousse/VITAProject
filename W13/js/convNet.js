@@ -27,12 +27,12 @@
     async function run(forUserModel) {
       aModelIsBeingTrained = true;
       var data = await getData(forUserModel);
-      if(verbose){
+      if (verbose) {
         var model = "globalModel"
-        if(forUserModel){
+        if (forUserModel) {
           model = "userModel"
         }
-        console.log("ConvNet: just download the metadata from firebase to train the ",model, " : ", data);
+        console.log("ConvNet: just download the metadata from firebase to train the ", model, " : ", data);
       }
 
       // TODO: VERIFY SIZE OF INPUT
@@ -69,7 +69,7 @@
         console.log("ConvNet: just converted the downloaded inputs to tensors. (Only for this user", forUserModel, ")", test_inputs);
       }
 
-      if(forUserModel && userModelWasAlreadyTrained){
+      if (forUserModel && userModelWasAlreadyTrained) {
         tfvis.visor().setActiveTab("Training")
       }
 
@@ -82,7 +82,7 @@
 
       if (forUserModel) {
 
-        if(userModelWasAlreadyTrained){
+        if (userModelWasAlreadyTrained) {
           tfvis.visor().setActiveTab("Evaluation")
         }
         await showAccuracy(model, test_inputs, test_labels);
@@ -99,7 +99,7 @@
         App.ConvNetLayout.notifyGlobalModelIsReady()
       }
       aModelIsBeingTrained = false;
-      if(forUserModel){
+      if (forUserModel) {
         userModelWasAlreadyTrained = true;
       }
     }
@@ -437,10 +437,8 @@
     }
 
     var trainUserModel = function() {
-      if (aModelIsBeingTrained){
-        if(verbose){
-          console.log("ConvNet: cannot train 2 model at a time, please wait");
-        }
+      if (aModelIsBeingTrained) {
+        console.error("ConvNet: cannot train 2 model at a time, please wait");
         return;
       }
       run(true);
@@ -454,16 +452,19 @@
 
 
 
-    //run(false);
+    run(false);
 
 
-
+    var getUserModelWasAlreadyTrained = function() {
+      return userModelWasAlreadyTrained;
+    }
 
     return {
       run: run,
       trainUserModel: trainUserModel,
       aModelIsReady: aModelIsReady,
       testAPicForRecognition: testAPicForRecognition,
+      userModelWasAlreadyTrained: getUserModelWasAlreadyTrained,
     }
   })();
   App.ConvNet = ConvNet;

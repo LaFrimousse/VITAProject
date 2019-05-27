@@ -1,10 +1,28 @@
 .topBar{
   border: 1px solid black;
+  padding: 0px;
   min-height: 50px;
   margin-bottom: 20px;
   display: flex;
-  flex-direction: row-reverse;
+  align-items: stretch;
+  justify-content: space-between;
   background-color: #cfcfd1;
+}
+
+
+.changeModelButtonWrapper{
+  flex: 1;
+  display: flex;
+}
+#infoAboutModelP{
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+}
+.topBarButtonsWrapper{
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .topBar button{

@@ -75,7 +75,7 @@
         delay = 0;
         isLooping = false;
       } else {
-        isLooping = false;
+        isLooping = true;
         delay = 0;
       }
 
