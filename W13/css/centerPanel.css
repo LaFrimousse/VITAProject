@@ -3,8 +3,8 @@
   But can create a parent div if a external border is really wanted*/
   position: relative;
   max-width: 100%;
-  padding: 1px;
   background-color: #ddf23e;
+  background-color: rgb(230,230,230);
   /*https://stackoverflow.com/questions/20590239/maintain-aspect-ratio-of-div-but-fill-screen-width-and-height-in-css*/
  flex: 2.5;
   /*width: 900px;*/
@@ -111,7 +111,7 @@
 /*---------------------------------------------------*/
 .cameraRecordButtons {
   width: 100%;
-  border: 1px solid black;
+  border-top: 1px solid black;
   /*box-sizing: border-box;*/
   background-color: rgb(105, 109, 106);
   height: 80px;
