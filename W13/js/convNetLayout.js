@@ -140,20 +140,22 @@
 
 
     createMyModelButton.addEventListener("click", function() {
-      if (!ConvNet.isUserModelAlreadyTrained()) {
-        ConvNet.trainUserModel();
+      ConvNet.trainUserModel();
+      /*if (!ConvNet.isUserModelAlreadyTrained()) {
+
         createMyModelButton.innerHTML = "hide/show model"
       } else {
         tfvis.visor().toggle();
-      }
+      }*/
 
     });
 
 
     window.setTimeout(function() {
-      //changeModeButton.click();
+      changeModeButton.click();
+      createMyModelButton.click();
       //document.getElementById("showLivePointsButton").click();
-    }, 500)
+    }, 200)
 
 
     return {

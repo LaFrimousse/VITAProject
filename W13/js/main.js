@@ -15,10 +15,11 @@
 
 
   var Manager = (function() {
-    var verbose = true;
+    var verbose = false;
     var drawLivePoints = false;
 
     (function() {
+      return;
       //load from firebase the picture the user took in previous session
       Firebase.getAllImagesMetaDataForAUser(Device.clientId).then(function(allMetaDatas){
         allMetaDatas.forEach(function(metaData){

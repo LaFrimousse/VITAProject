@@ -5,14 +5,14 @@
   var Device = App.Device;
   var CategoriesStorage = App.CategoriesStorage;
   var ConvNet = (function() {
-    var verbose = true;
+    var verbose = false;
     /*batchSize refers to the size of the data subsets that the model will see on each iteration of training. Common batch sizes tend to be in the range 32-512. There isn't really an ideal batch size for all problems and it is beyond the scope of this tutorial to describe the mathematical motivations for various batch sizes.*/
     /*Total number of training examples present in a single batch.
     As I said, you can’t pass the entire dataset into the neural net at once. So, you divide dataset into Number of Batches or sets or parts.*/
     const BATCH_SIZE = 32;
     /*epochs refers to the number of times the model is going to look at the entire dataset that you provide it. Here we will take 50 iterations through the dataset.*/
     /*One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.*/
-    const EPOCHS = 30;
+    const EPOCHS = 1;
 
     const classNames = CategoriesStorage.getCatLabels()
     const NB_CATEGORIES = classNames.length;
@@ -20,10 +20,12 @@
     var globalModel = null;
     var userModel = null;
     var usedModel = null;
-    var userModelStillNotTrained = true;
+    var aModelIsBeingTrained = false;
+    var userModelWasAlreadyTrained = false;
 
 
     async function run(forUserModel) {
+      aModelIsBeingTrained = true;
       var data = await getData(forUserModel);
       if(verbose){
         var model = "globalModel"
@@ -67,6 +69,10 @@
         console.log("ConvNet: just converted the downloaded inputs to tensors. (Only for this user", forUserModel, ")", test_inputs);
       }
 
+      if(forUserModel && userModelWasAlreadyTrained){
+        tfvis.visor().setActiveTab("Training")
+      }
+
       await trainModel(model, training_inputs, training_labels, validation_inputs, validation_labels, forUserModel);
 
 
@@ -75,6 +81,10 @@
       }
 
       if (forUserModel) {
+
+        if(userModelWasAlreadyTrained){
+          tfvis.visor().setActiveTab("Evaluation")
+        }
         await showAccuracy(model, test_inputs, test_labels);
         await showConfusion(model, test_inputs, test_labels);
       }
@@ -87,6 +97,10 @@
         globalModel = model;
         usedModel = globalModel;
         App.ConvNetLayout.notifyGlobalModelIsReady()
+      }
+      aModelIsBeingTrained = false;
+      if(forUserModel){
+        userModelWasAlreadyTrained = true;
       }
     }
 
@@ -386,9 +400,9 @@
 
     async function showConfusion(model, testInput, testLabels) {
 
-
       const [preds, labels] = doPrediction(model, testInput, testLabels);
       const confusionMatrix = await tfvis.metrics.confusionMatrix(labels, preds);
+
       const container = {
         name: 'Confusion Matrix',
         tab: 'Evaluation'
@@ -398,8 +412,6 @@
           values: confusionMatrix,
           tickLabels: classNames
         });
-
-
 
       labels.dispose();
     }
@@ -411,7 +423,6 @@
       /*Take the maximum value of the vector output by the model, the class with the highest probability*/
       const preds = model.predict(testInput).argMax([-1]);
       //preds.dispose();
-      console.log("Model prediction is ", preds, "and label was ", labels)
       return [preds, labels];
     }
 
@@ -426,11 +437,12 @@
     }
 
     var trainUserModel = function() {
-      if (!userModelStillNotTrained) {
-        console.error("ConvNet: cannot train a user model twice in a single session")
+      if (aModelIsBeingTrained){
+        if(verbose){
+          console.log("ConvNet: cannot train 2 model at a time, please wait");
+        }
         return;
       }
-      userModelStillNotTrained = false;
       run(true);
     }
 
@@ -439,18 +451,16 @@
       return usedModel != null;
     }
 
-    var isUserModelAlreadyTrained = function() {
-      return !userModelStillNotTrained;
-    }
 
 
-    run(false);
+
+    //run(false);
 
 
 
 
     return {
-      isUserModelAlreadyTrained: isUserModelAlreadyTrained,
+      run: run,
       trainUserModel: trainUserModel,
       aModelIsReady: aModelIsReady,
       testAPicForRecognition: testAPicForRecognition,
