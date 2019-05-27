@@ -3,7 +3,7 @@
   But can create a parent div if a external border is really wanted*/
   position: relative;
   max-width: 100%;
-  padding: 1px;
+  padding: 0px;
   background-color: #84f742;
   background-color: #e3ffce;
   flex: 1;
@@ -23,13 +23,22 @@
   max-width: 100%;
 }
 
-#categorySelector{
+.catSelectAndCBWrapper{
+  display: flex;
+  background-color: white;
+  border-top: 1px solid black;
+  flex-direction: column;
+  align-items: center;
   position: absolute;
-  bottom: 20px;
+  bottom: 0px;
   width: 100%;
-  height: 25px;
-  background-color: rgba(255, 255, 255, 0.8);
 }
+
+.catSelectAndCBWrapper * {
+  margin: 2px;
+}
+
+
 
 .rightPanel .probaTitle{
   text-align: center;
@@ -40,7 +49,6 @@
 
 .probabilitiesDisplayer{
   flex: 1;
-  background: white;
   min-width: 100px;
   min-height: 100px;
 }

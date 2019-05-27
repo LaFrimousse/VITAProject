@@ -5,7 +5,7 @@
 
   var Firebase = (function() {
     var verbose = false;
-    var WILL_SAVE_PICTURE_IN_FIREBASE = false;
+    var WILL_SAVE_PICT_CHECKBOX = document.getElementById("savePictOnFBCB");
 
     /*Reference to the database*/
     var firestore = firebase.firestore();
@@ -23,9 +23,9 @@
       var date = wrapper.date;
       var browserId = wrapper.browserDescription;
       var points = wrapper.points;
-      var isSavedOnFirebase = WILL_SAVE_PICTURE_IN_FIREBASE;
+      var isSavedOnFirebase = WILL_SAVE_PICT_CHECKBOX.checked;
 
-      if (!points && !WILL_SAVE_PICTURE_IN_FIREBASE) {
+      if (!points && !isSavedOnFirebase) {
         console.log("Firebase: nothing to store because we have neither the points nor the image")
 
         return;
@@ -337,7 +337,7 @@
     }
 
     var willSavePicture = function() {
-      return WILL_SAVE_PICTURE_IN_FIREBASE;
+      return WILL_SAVE_PICT_CHECKBOX.checked;
     }
 
     return {

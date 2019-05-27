@@ -14,6 +14,8 @@
 
 
 .leftPanel img{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
   display: block;
   max-width: 100%;
   background-color: #00c6c9;

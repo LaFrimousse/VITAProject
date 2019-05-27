@@ -101,11 +101,17 @@
       <p id="postureToAdaptTitle"></p>
       <img id="postureToAdoptImg" src="images/questionMark.jpg" />
 
-      <select name="categoryChoosen" id="categorySelector">
-        <option> -- Automatic Selection-- </option>
-      </select>
+      <div class="catSelectAndCBWrapper">
+        <select name="categoryChoosen" id="categorySelector">
+          <option> -- Automatic Selection-- </option>
+        </select>
+        <div id="loopingWrapper">
+          <input type="checkbox" name="savePictOnFBCB" id="savePictOnFBCB" />
+          <label for="savePictOnFBCB">Save the picture on Firebase</label>
+        </div>
+      </div>
 
-      <p class="probaTitle notDisplayed" id = "probaTitle">Probablilities:</p>
+      <p class="probaTitle notDisplayed" id="probaTitle">Probablilities:</p>
       <div class="probabilitiesDisplayer notDisplayed" id="probabilitiesDisplayer"></div>
 
       <!--End of rightPanel-->
@@ -149,15 +155,15 @@
   <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-firestore.js"></script>
 
   <script>
-  var firebaseConfig = {
-    apiKey: "AIzaSyAxdloBcPJ8SvYO7nN64nTpP-neQ4C9Sww",
-    authDomain: "vita2-9b3b5.firebaseapp.com",
-    databaseURL: "https://vita2-9b3b5.firebaseio.com",
-    projectId: "vita2-9b3b5",
-    storageBucket: "vita2-9b3b5.appspot.com",
-    messagingSenderId: "484962611142",
-    appId: "1:484962611142:web:ff2e2910fe18219c"
-  };
+    var firebaseConfig = {
+      apiKey: "AIzaSyAxdloBcPJ8SvYO7nN64nTpP-neQ4C9Sww",
+      authDomain: "vita2-9b3b5.firebaseapp.com",
+      databaseURL: "https://vita2-9b3b5.firebaseio.com",
+      projectId: "vita2-9b3b5",
+      storageBucket: "vita2-9b3b5.appspot.com",
+      messagingSenderId: "484962611142",
+      appId: "1:484962611142:web:ff2e2910fe18219c"
+    };
     firebase.initializeApp(firebaseConfig);
   </script>
 
