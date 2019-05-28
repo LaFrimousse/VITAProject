@@ -21,8 +21,8 @@
     (function() {
       return;
       //load from firebase the picture the user took in previous session
-      Firebase.getAllImagesMetaDataForAUser(Device.clientId).then(function(allMetaDatas){
-        allMetaDatas.forEach(function(metaData){
+      Firebase.getAllImagesMetaDataForAUser(Device.clientId).then(function(allMetaDatas) {
+        allMetaDatas.forEach(function(metaData) {
           var newWrapper = {
             catIndex: CategoriesStorage.indexForLabel(metaData.catLabel),
             imageId: metaData.pictId,
@@ -33,11 +33,11 @@
             picture: null,
           }
 
-          if(!newWrapper.isSavedOnFirebase){
+          if (!newWrapper.isSavedOnFirebase) {
             CategoriesStorage.appendPictureWrapperToACat(newWrapper);
-          }else{
+          } else {
 
-            Firebase.downloadImageAsBlob(metaData.catLabel,newWrapper.imageId).then(function(result){
+            Firebase.downloadImageAsBlob(metaData.catLabel, newWrapper.imageId).then(function(result) {
               newWrapper.picture = result.blob;
               CategoriesStorage.appendPictureWrapperToACat(newWrapper);
             })
@@ -168,7 +168,11 @@
 
 
           if (shouldShowAReco) {
-            var convNetResult = App.ConvNet.testAPicForRecognition(points);
+            var convNetResult = null;
+            if (points.length > 0) {
+              convNetResult = App.ConvNet.testAPicForRecognition(points);
+            }
+
             PointsDrawing.addPointsInImage(url, points, true).then(function(url1) {
               PointsDrawing.addPointsInImage(url, points, false).then(function(url2) {
                 App.ConvNetLayout.displayRecoResult(convNetResult, url1, url2);

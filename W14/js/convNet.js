@@ -452,7 +452,7 @@
 
 
 
-    //run(false);
+    run(false);
 
 
     var getUserModelWasAlreadyTrained = function() {
