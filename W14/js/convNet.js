@@ -12,7 +12,7 @@
     const BATCH_SIZE = 32;
     /*epochs refers to the number of times the model is going to look at the entire dataset that you provide it. Here we will take 50 iterations through the dataset.*/
     /*One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.*/
-    const EPOCHS = 30;
+    const EPOCHS = 20;
 
     const classNames = CategoriesStorage.getCatLabels()
     const NB_CATEGORIES = classNames.length;

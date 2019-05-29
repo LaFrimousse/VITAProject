@@ -18,11 +18,13 @@
     var verbose = false;
     var drawLivePoints = false;
 
+
+
     (function() {
       return;
       //load from firebase the picture the user took in previous session
-      Firebase.getAllImagesMetaDataForAUser(Device.clientId).then(function(allMetaDatas){
-        allMetaDatas.forEach(function(metaData){
+      Firebase.getAllImagesMetaDataForAUser(Device.clientId).then(function(allMetaDatas) {
+        allMetaDatas.forEach(function(metaData) {
           var newWrapper = {
             catIndex: CategoriesStorage.indexForLabel(metaData.catLabel),
             imageId: metaData.pictId,
@@ -33,11 +35,11 @@
             picture: null,
           }
 
-          if(!newWrapper.isSavedOnFirebase){
+          if (!newWrapper.isSavedOnFirebase) {
             CategoriesStorage.appendPictureWrapperToACat(newWrapper);
-          }else{
+          } else {
 
-            Firebase.downloadImageAsBlob(metaData.catLabel,newWrapper.imageId).then(function(result){
+            Firebase.downloadImageAsBlob(metaData.catLabel, newWrapper.imageId).then(function(result) {
               newWrapper.picture = result.blob;
               CategoriesStorage.appendPictureWrapperToACat(newWrapper);
             })
@@ -184,6 +186,46 @@
 
       }
     }
+
+    var test = function() {
+      var url = "images/vita0.png"
+      loadXHR(url).then(function(blob) {
+        getPointsFromPifPaf(blob).then(function(points) {
+          PointsDrawing.addPointsInImage(url, points, true).then(function(url1) {
+            document.getElementById("testImg").src = url1
+          })
+        })
+      });
+
+    }
+
+    function loadXHR(url) {
+
+      return new Promise(function(resolve, reject) {
+        try {
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", url);
+          xhr.responseType = "blob";
+          xhr.onerror = function() {
+            reject("Network error.")
+          };
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              resolve(xhr.response)
+            } else {
+              reject("Loading error:" + xhr.statusText)
+            }
+          };
+          xhr.send();
+        } catch (err) {
+          reject(err.message)
+        }
+      });
+    }
+
+
+    test();
+
 
     return {
       userTookPicture: userTookPicture,

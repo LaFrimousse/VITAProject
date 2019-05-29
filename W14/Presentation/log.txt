@@ -1,0 +1,101 @@
+ -added project folder for week 14 and changed the pictures for the categories
+
+-integrated a check box to decide from the UI when to save the pictures on firebase
+
+-changed UI
+
+-can change now from the user model to the global model back
+
+-done the layout of the top bar, missing the logic
+
+-stable version when we dont' want to save the pictures on firebase
+
+-can go in reco mode when the camera is closed, open automatically
+
+-now in reco mode tthe points are perfectly align with the image
+
+-first time that the model works a little bit good :)
+
+-wrote the get data function in convnet for all datas
+
+-can make model appear and ddisappear
+
+ -changed camera code for better comprehension
+
+-made the interface a bit nicer
+
+-ready to pass points to convnet to get a result
+
+-make recoverPoints.js be verbose and integrated to index.html
+
+-changed layout made the 3 pannels
+
+- now user can choose if he wants to see his pictures with or without some points
+
+-nicely remove pictures locally when delete button clicked 
+
+-able to retreive the metadata for all images for one particular user now
+
+-now the user can choose when to display the live buttons or not
+
+-can now train the model
+
+-changed the label input shape
+
+-wrote first try with tensorflow.js
+
+-speed up the display of new pictures when taking pictures in a loop
+
+-now the skeleton is completly drawn
+
+-now the points can be drawn dynamically over the video
+
+-add a new file, pifpafBuffer to optimize interaction with pif paf
+
+-make the resize event of the camera layout better by calling multiple timeouts 
+
+-now the points are fetched back when a user open his browser a second time
+
+-can take the points and save them in firebase
+
+-changed the category to make more agent circulation like
+
+-now we can delete previous pictures from firebase
+
+-the download of previously take pictures is working
+
+-changed the CORS policy to allow any image download from firebase
+
+-data and metadata correctly uploaded on firebase
+
+-added initial code to handle firebase
+
+-best layout for browser,slider wider for mobile
+
+-UI
+
+-Logical design and UI
+
+-first version working with automatical server proposal
+
+-changed the state machine to allow a transition to training a dataset for the server
+
+-now the user is able to delete the pictures he took if he believe that it is noise
+
+-End of week 3, functionaliies are the same than of week2 but the code is proper and ready to evolve 
+
+-end of week2
+
+-now able to take a sequence of photo and save them into the categories module
+
+-now able to take pictures in a time interval
+
+-UI
+
+-followed some camera tuto
+
+
+ 
+
+
+

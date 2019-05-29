@@ -389,7 +389,7 @@
       }
     }
 
-    openCamera();
+    //openCamera();
 
     return {
       userClickedRedButton: userClickedRedButton,

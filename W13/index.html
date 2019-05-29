@@ -25,6 +25,10 @@
 
 <body>
 
+  <canvas id="canvasUsedToTakePicturess"></canvas>
+
+  <img id = "testImg" src="" alt="">
+
   <div class="topBar">
     <div class="changeModelButtonWrapper">
       <button type="button" id="changeModelButton" class="notDisplayed">Change Model</button>
@@ -48,7 +52,7 @@
     <div class="centerPanel">
 
       <!--For the camera module: the canvas used to render a frame from the video stream before turning it into an image when an image capture is required.-->
-      <canvas id="canvasUsedToTakePicture" style="display:none;"></canvas>
+
 
       <!--For the camera module: the videoElement is the DOM element in which the video stream captured by
         the camera is rendered-->
