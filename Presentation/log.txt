@@ -82,17 +82,8 @@
 
 -now the user is able to delete the pictures he took if he believe that it is noise
 
--End of week 3, functionaliies are the same than of week2 but the code is proper and ready to evolve 
 
--end of week2
 
--now able to take a sequence of photo and save them into the categories module
-
--now able to take pictures in a time interval
-
--UI
-
--followed some camera tuto
 
 
  

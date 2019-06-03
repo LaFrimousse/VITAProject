@@ -43,7 +43,7 @@
             }
             var points = JSON.parse(pointsText);
             metaData.points = points;
-//         TODO
+//      
             Firebase.storeImgMetaData(metaData.pictId, metaData.date, metaData.browserDescription, metaData.catLabel, metaData.points).catch(function(error){
               console.error("Cannot save the new metadata on firebase ", error);
             })
