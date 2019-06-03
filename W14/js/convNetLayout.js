@@ -1,3 +1,4 @@
+/*Deals with the event that are triggered when the user press a button in the top bar. that's when he wants to enter or leave the "recognition mode", change the model used, and so on.*/
 (function(window) {
   'use strict';
   var App = window.App;
@@ -12,6 +13,7 @@
     var verbose = false;
     var isInRecoMode = false;
 
+    /*in "recognition mode", if the neural nework didn't find a category with equal or higher proba, then the question mark is displayed as category. */
     var LIMIT_TO_SHOW_RECO_IMG = 0.3;
 
     var changeModeButton = document.getElementById("changeModeButton");
@@ -113,6 +115,7 @@
 
 
     changeModeButton.addEventListener("click", function() {
+      //deal with the UI
       isInRecoMode = !isInRecoMode;
 
 

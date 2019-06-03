@@ -1,3 +1,4 @@
+/*Manages the event that the user might trigger with the camera. Taking picture, stopping to take picture, opening, closing, the camera, switching the camera, updating the timer,...*/
 (function(window) {
   'use strict'
   var App = window.App;
@@ -120,6 +121,7 @@
 
 
     var noticeCameraJustOpenned = function(layoutNotWanted) {
+      /*Deal with the UI and restart the interval where the system automatically takes pictues of the user*/
 
       if (!layoutNotWanted) {
         CameraLayout.showElement("closeCameraButton");
@@ -229,6 +231,7 @@
 
 
     var takeInstantPicture = function(animationWanted, urlWanted) {
+      //ask the camera module to take a picture
 
       if (animationWanted) {
         //user took a picture

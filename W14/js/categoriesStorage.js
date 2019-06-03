@@ -1,3 +1,5 @@
+/*The model: it stores the picture that the user has taken. When asked from the UI, it gives the picture recorded that have to appear in the interface.
+Also deal with the HTML select element that change the actual category selected*/
 (function(window) {
   'use strict';
 

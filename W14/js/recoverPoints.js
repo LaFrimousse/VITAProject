@@ -1,3 +1,4 @@
+/*The only module that has hopefully not to be used. It recovers the image from firebase that had no points attached to it and pass them to PifPaf and store back the points on firebase.*/
 (function(window) {
   'use strict';
 

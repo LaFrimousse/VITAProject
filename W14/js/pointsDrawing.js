@@ -1,3 +1,4 @@
+/*Draw the points and the lines over an image or over the main video element.*/
 (function(window) {
   'use strict';
 

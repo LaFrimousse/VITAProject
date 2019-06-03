@@ -1,3 +1,4 @@
+/*The class that gets pictures taken from the CameraEvents module, and pass them to the pifpaf buffer, firebase , CategoriesStorage or ConvNetLayout...*/
 (function(window) {
   'use strict';
 
@@ -47,44 +48,11 @@
       })
       return;
 
-
-
-      /*var allCat = CategoriesStorage.categories
-      allCat.forEach(function(cat) {
-        var catName = cat.label;
-        Firebase.getImgListForUser(Device.clientId, catName).then(function(listIds) {
-          console.log(listIds);
-          return;
-          listIds.forEach(function(pictId) {
-            Firebase.downloadImageAsBlob(catName, pictId).then(function(wrapper) {
-              Firebase.getPointsForAPicture(pictId).then(function(points) {
-                var newWrapper = {
-                  catIndex: CategoriesStorage.indexForLabel(catName),
-                  imageId: pictId,
-                  points: points,
-                  picture: wrapper.blob,
-                  date: wrapper.date,
-                  browserDescription: wrapper.browserDescription,
-                  isSavedOnFirebase: wrapper.isSavedOnFirebase,
-                }
-                CategoriesStorage.appendPictureWrapperToACat(newWrapper);
-                //(catIndex, imageId, points, picture, date, browserDescription)
-              }).catch(function(error) {
-                console.error("Cannot download the points for the image " + catName, " ", pictId, " ", error);
-              });
-            }).catch(function(error) {
-              console.error("Cannot download an image for the cat " + catName, " ", pictId, " ", error);
-            });
-          })
-        }).catch(function(error) {
-          console.error("Cannot get a list of image for the cat " + catName, " ", error);
-        });
-      });*/
-
     })();
 
 
     var userTookPicture = function(picture) {
+      /*Triggered when a user took actively a picture*/
 
       var catLabel = CategoriesStorage.getActualCategory().label
 
@@ -146,7 +114,7 @@
     }
 
     var systemTookPicture = function(url, shouldDrawLivePoints) {
-
+      /*Triggered automatically*/
       if (verbose) {
         console.log("Manager: The system took a picture");
       }

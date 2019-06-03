@@ -1,3 +1,4 @@
+/*Used to layout all the element that appears in the video frame of the interface*/
 (function(window) {
   'use strict';
   var App = window.App;
@@ -155,6 +156,7 @@
 
 
     var replaceButtonInVideoElement = function() {
+      /*Computes the new frame of the video element and replace all the buttons accordingly*/
       var globalPanelWidth = parseInt(getComputedStyle(globalPanel).width);
       var globalPanelHeight = parseInt(getComputedStyle(globalPanel).height);
       var centerPanelWidth = parseInt(getComputedStyle(centerPanel).width);
@@ -164,12 +166,6 @@
       var centerFlex = parseFloat(getComputedStyle(centerPanel).flex);
       var rightFlex = parseFloat(getComputedStyle(rightPanel).flex);
       var sum = leftFlex + centerFlex + rightFlex;
-
-      if (videoElementWidth < centerPanelWidth) {
-        //console.log("videoElementWidth", videoElementWidth)
-        //console.log("centerPanelWidth", centerPanelWidth)
-        //TODO: Play with the flex here !
-      }
 
       var offsetForLeftButton = (centerPanelWidth - videoElementWidth) / 2
 
@@ -187,14 +183,6 @@
 
       counter.style.right = offsetForLeftButton + "px";
       counter.style.bottom = (globalPanelHeight - videoElementHeight) + "px";
-
-      /*postureToAdoptImg.style.right = offsetForLeftButton + "px";
-      var dividor = 5; // for phones
-      if (window.innerWidth > 768) { //for browser
-        dividor = 3;
-      }
-      postureToAdoptImg.style.maxWidth = videoElementWidth / dividor + "px";
-*/
 
     }
 

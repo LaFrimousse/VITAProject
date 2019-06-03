@@ -1,3 +1,4 @@
+/*The DOM element where the user can select the delay of the pictures, if looping or not, ...*/
 (function(window) {
   'use strict';
 

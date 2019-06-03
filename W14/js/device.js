@@ -1,3 +1,4 @@
+/*Tels us if the device is a phone or not, and fetch the user cookie.*/
 (function(window) {
   'use strict';
   var App = window.App;

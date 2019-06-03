@@ -1,4 +1,4 @@
-/*The purpose of this class is to optimize the interaction with the pif paf server in order to have the more fluid behaviour possible*/
+/*The purpose of this class is to optimize the interaction with the pif paf server in order to have the more fluid behaviour possible. The rate where the browser can take a picture is higher than the one the pifpaf algo can respond, so a buffer with finite space avoid a growing delay with no responsiveness */
 (function(window) {
   'use strict';
 

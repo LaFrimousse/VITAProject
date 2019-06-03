@@ -1,3 +1,4 @@
+/*The code I wrote using two tutorials from the TensorFlow.js library. This file is responsible to get a model training a neural network and to make some predicitons from it.*/
 (function(window) {
   'use strict';
   var App = window.App || {};
@@ -25,6 +26,7 @@
 
 
     async function run(forUserModel) {
+      //trigger the procedure of traing a new model
       aModelIsBeingTrained = true;
       var data = await getData(forUserModel);
       if (verbose) {
@@ -107,6 +109,7 @@
 
     //TODO: Flatten when we have more thant one array of points per image
     async function getData(forUserModel) {
+      /*fetch the data that will be used from firebase, clean it a bit a return it */
 
       var listMetaData = null;
       if (forUserModel) {
@@ -175,7 +178,9 @@
 
 
     function convertToTensorsForGlobalModel(data) {
+      /*The function that divides all the data in a equally ratio (for each category) into two groups, the traing set data and validation set data.*/
       var TRAINING_DATASET_RATIO = 0.7;
+      //hence the validation set is composed of 0.3 cardinality
       //no test set here.
 
       if (verbose) {
@@ -268,6 +273,7 @@
 
 
     function convertToTensors(data) {
+      /*split the data into 3 part (traing, validation and test set) (not necessarily balanced between the categories)*/
       var TRAINING_DATASET_RATIO = 0.7;
       var VALIDATION_DATASET_RATIO = 0.2;
       var TEST_DATASET = 1.0 - TRAINING_DATASET_RATIO - VALIDATION_DATASET_RATIO;
@@ -276,9 +282,6 @@
       var NUM_TRAIN_ELEMENTS = Math.floor(TRAINING_DATASET_RATIO * NUM_DATASET_ELEMENTS);
       var NUM_VALIDATION_ELEMENTS = Math.floor(VALIDATION_DATASET_RATIO * NUM_DATASET_ELEMENTS);
       var NUM_TEST_ELEMENTS = NUM_DATASET_ELEMENTS - NUM_TRAIN_ELEMENTS - NUM_VALIDATION_ELEMENTS;
-
-
-
 
 
       // Wrapping these calculations in a tidy will dispose any
@@ -306,9 +309,6 @@
         const [trainingInputs, validationInputs, testInputs] = tf.split(normalizedInputs, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
         const [trainingLabels, validationLabels, testLabels] = tf.split(labelTensor, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
 
-
-
-
         return {
           training_inputs: trainingInputs,
           training_labels: trainingLabels,
@@ -327,6 +327,7 @@
 
 
     var getTensorForRecoMode = function(points) {
+      /*a helper method*/
       return tf.tidy(() => {
 
         // Step 2. Convert data to Tensor
@@ -362,21 +363,7 @@
 
 
 
-      /*model.fit is the function we call to start the training loop. It is an asynchronous function so we return the promise it gives us so that the caller can determine when training is complete.*/
-      /*return await model.fit(inputs, labels, {
-        batchSize,
-        epochs,
-        shuffle: true,
-        callbacks: tfvis.show.fitCallbacks({
-            name: 'Training Performance'
-          },
-          ['loss', 'mse'], {
-            height: 200,
-            callbacks: ['onEpochEnd']
-          }
-        )
-      });*/
-
+      /*model.fit is the function we call to start the training loop. It is an asynchronous function */
       return model.fit(trainingInputs, trainingLabels, {
         batchSize: BATCH_SIZE,
         validationData: [validationInputs, validationLabels],

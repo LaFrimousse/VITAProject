@@ -1,3 +1,4 @@
+/*Deals with the layout of the pictures a user has taken, as well as the actual category to take picture for (title and image)*/
 (function(window) {
   'use strict';
 

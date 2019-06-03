@@ -1,3 +1,4 @@
+/*The code used to store everything needed on firebase*/
 (function(window) {
   'use strict';
 
@@ -61,12 +62,14 @@
 
     var putImgFileInFirebase = function(categoryName, imageId, imageFile, isSavedOnFirebase) {
       if (!isSavedOnFirebase) {
+        //fake a save on firebase
         var promise = new Promise(function(resolve, reject) {
           resolve(null);
         });
         return promise;
       }
 
+      //store an image on firebase
       var promise = new Promise(function(resolve, reject) {
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.put(imageFile).then(function(snapshot) {
@@ -84,12 +87,14 @@
     var deleteImgFromStorage = function(categoryName, imageId, imgIsStored) {
 
       if (!imgIsStored) {
+        //fake a deletion on firebase
         var promise = new Promise(function(resolve, reject) {
           resolve();
         });
         return promise;
       }
 
+      //realy delete a file on firebase
       var promise = new Promise(function(resolve, reject) {
         var imgRef = storageRef.child("images").child(categoryName).child(imageId);
         imgRef.delete().then(function() {

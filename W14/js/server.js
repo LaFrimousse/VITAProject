@@ -1,3 +1,4 @@
+/*Provides the ajax post methods as well as a constant to change the URL of the pif paf algo to use*/
 (function(window) {
   'use strict'
 
