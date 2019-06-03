@@ -1,6 +1,4 @@
 browser-sync start --server --browser "Google Chrome" --files "css/*.css, js/*.js, *.html"
 
 
-browser-sync start --server --browser "Google Chrome" --files "css/*.css, *.js, *.html"
-
 python3 -m openpifpafwebdemo.server;

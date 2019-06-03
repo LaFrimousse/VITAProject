@@ -20,3 +20,8 @@ Once they are done with the phase of collecting new data, they can click a butto
 The TensorFlow.js library (https://www.tensorflow.org/js) is the library used to train the model and to make the predictions.
 
  ## How to get started:
+ You can just download the W14 folder, all the required code is inside it. (The other folders are like the history of the project).
+ Once you are done, you need to have a connection to a server that runs the PifPaf algorithm. You might need to change the url used to connect to the server running that algorithm. Please just reassign the local variable URL_PIF_PAF in the server.js file. <br>
+ You can download the source code of the PifPaf server at this address: https://github.com/vita-epfl/openpifpaf to run it locally.
+ Please for the best experience possible, ensure that your browser uses and stores cookies even browsing local files.
+ Enjoy ;-)
