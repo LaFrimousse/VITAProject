@@ -131,6 +131,7 @@
         }
         changeModeButton.innerHTML = "Training Mode"
         CategoriesLayout.hideGlobalWrapper();
+        document.getElementById("saveFBWrapper").classList.add("notDisplayed");
         RecordsButtons.hideElements();
         App.CameraEvents.stopTakingPicture();
         CameraLayout.hideElement("closeCameraButton");
@@ -144,6 +145,7 @@
         if (!CategoriesStorage.isAutomaticCategoryProposal()) {
           CategoriesLayout.showGlobalWrapper();
         }
+        document.getElementById("saveFBWrapper").classList.remove("notDisplayed");
         createMyModelButton.classList.add("notDisplayed");
         modelInfoP.classList.add("notDisplayed");
         changeModelButton.classList.add("notDisplayed");
