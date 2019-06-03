@@ -12,8 +12,10 @@ This can be very useful if we consider a self driving car that has to interpret 
 ## What the project does:
 This project provides a complete web interface where the users can choose between 5 different postures to adopt. For each of theses 5 categories, they can record themselves using their device's camera.
 They see the frame that were captured, and can choose to delete any pictures that they think was not adapted for the category they were supposed to record a picture for.
-![Alt text](Presentation/images/pictdet.png?raw=false "Title") Because this web interface communicates (using the HTTP protocol) with a python server running the PifPaf algorithm (https://www.epfl.ch/labs/vita/research/perception/pifpaf/), the user might also just play with the interface to see the performance that the PifPaf algorithm can reach.
-![Alt text](Presentation/images/livePoints.png?raw=false "Title")
+<br><img src="Presentation/images/pictdet.png" alt="drawing" width="200"/><br>
+
+Because this web interface communicates (using the HTTP protocol) with a python server running the PifPaf algorithm (https://www.epfl.ch/labs/vita/research/perception/pifpaf/), the user might also just play with the interface to see the performance that the PifPaf algorithm can reach.
+<br><img src="Presentation/images/livePoints.png" alt="drawing" width="200"/><br>
 
 
 This interface uses a single cookie to track the users across their sessions. This cookie is only used to fetch the previous data that was taken by the users. For privacy purpose, if somebody took 25 pictures a week before, only 25 arrays of 17 points will be automatically saved and fetched from Firebase. (Each of the 17 points indicates the x and y coordinates of 17 remarkable points on the image. The eyes, ears, nose, shoulder, wrist, elbows, hips, knees, and feet of the users).<br>
