@@ -253,13 +253,17 @@
         var validationInputs = tf.tensor2d(validData, [validData.length, 3 * 17]);
         var validationLabels = tf.tensor2d(validLabel, [validLabel.length, NB_CATEGORIES]);
         //Step 3. Normalize the data to the range 0 - 1 using min-max scaling
-        //const inputMax = inputTensor.max();
-        //const inputMin = inputTensor.min();
+        const max1 = trainingInputs.max();
+        const max2 = validationInputs.max();
+        const max = max1 > max2 ? max1 : max2;
 
-        /*const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
+        const min1 = trainingInputs.min();
+        const min2 = validationInputs.min();
+        const min = min1 < min2 ? min1 : min2;
 
-        const [trainingInputs, validationInputs, testInputs] = tf.split(normalizedInputs, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);
-        const [trainingLabels, validationLabels, testLabels] = tf.split(normalizedLabels, [NUM_TRAIN_ELEMENTS, NUM_VALIDATION_ELEMENTS, NUM_TEST_ELEMENTS], 0);*/
+        trainingInputs = trainingInputs.sub(min).div(max.sub(min));
+        validationInputs = validationInputs.sub(min).div(max.sub(min));
+        /*const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));*/
 
         return {
           training_inputs: trainingInputs,
