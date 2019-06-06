@@ -1,4 +1,4 @@
-# VITA POSE ESTIMATION PROJECT
+# Human Live Pose Estimation Using PifPaf
 A web application used to train a neural network with user's body postures, and then detects the poses the users might take.
 
 ## A propos:
