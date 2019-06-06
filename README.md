@@ -1,4 +1,4 @@
-# VITA PROJECT
+# VITA POSE ESTIMATION PROJECT
 A web application used to train a neural network with user's body postures, and then detects the poses the users might take.
 
 ## A propos:
@@ -27,8 +27,8 @@ The TensorFlow.js library (https://www.tensorflow.org/js) is the library used to
 ![Alt text](Presentation/images/liveReco.gif?raw=false "Title")
 
  ## How to get started:
- You can just download the W14 folder, all the required code is inside it. (The other folders are like the history of the project).
- Once you are done, you need to have a connection to a server that runs the PifPaf algorithm. You might need to change the url used to connect to the server running that algorithm. Please just reassign the local variable URL_PIF_PAF in the server.js file. <br>
- You can download the source code of the PifPaf server at this address: https://github.com/vita-epfl/openpifpaf to run it locally.
+ You can just download the W14 folder, all the final code is inside it. (As this project was made over 14 weeks, the 'W14' stands for 'Week 14'. The other folders act like the history of the project).
+ Before opening index.html to run the web interface, you need to have a connection to a server that runs the PifPaf algorithm. You might need to change the url used to connect to the server running that algorithm. Please just reassign the local variable URL_PIF_PAF in the server.js file. <br>
+ You can download the source code of the PifPaf server at this address: https://github.com/vita-epfl/openpifpaf to run it locally on your computer, in case you don't have access to such a server on the web. 
  Please for the best experience possible, ensure that your browser uses and stores cookies even browsing local files.
  Enjoy ;-)
